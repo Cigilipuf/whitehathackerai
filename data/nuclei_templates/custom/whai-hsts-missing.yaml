@@ -1,0 +1,22 @@
+id: whai-hsts-missing
+
+info:
+  name: Missing HSTS Header
+  author: whitehat-ai
+  severity: low
+  description: Web app missing Strict-Transport-Security
+  tags: header,hsts,security,low
+  classification:
+    cwe-id: CWE-523
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers:
+      - type: word
+        part: header
+        negative: true
+        words:
+          - "strict-transport-security"

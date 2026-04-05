@@ -1,0 +1,29 @@
+id: whai-cache-deception
+
+info:
+  name: Web Cache Deception
+  author: whitehat-ai
+  severity: high
+  description: Tests web cache deception with static file extensions
+  tags: cache,deception,high
+  classification:
+    cwe-id: CWE-525
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/account/settings/nonexistent.css"
+      - "{{BaseURL}}/profile/nonexistent.js"
+      - "{{BaseURL}}/my-account/test.css"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"email"'
+          - '"username"'
+        condition: or

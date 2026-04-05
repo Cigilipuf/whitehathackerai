@@ -1,0 +1,34 @@
+id: whai-idor-uuid-enumeration
+
+info:
+  name: IDOR via Predictable UUID/Sequential ID
+  author: whitehat-ai
+  severity: high
+  description: Tests API endpoints for IDOR by swapping sequential and UUID-based identifiers
+  tags: idor,broken-access-control,api,high
+  classification:
+    cwe-id: CWE-639
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/users/1"
+      - "{{BaseURL}}/api/users/2"
+      - "{{BaseURL}}/api/v1/accounts/1"
+      - "{{BaseURL}}/api/v1/accounts/2"
+      - "{{BaseURL}}/api/orders/1"
+      - "{{BaseURL}}/api/orders/2"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        part: body
+        words:
+          - '"id"'
+          - '"email"'
+          - '"name"'
+        condition: or

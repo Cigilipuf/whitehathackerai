@@ -1,0 +1,68 @@
+id: whai-host-header-injection
+
+info:
+  name: Host Header Injection
+  author: whitehat-ai
+  severity: medium
+  description: Detects host header injection for password reset poisoning and cache poisoning
+  tags: host-header,injection,cache-poisoning,password-reset
+  reference:
+    - https://portswigger.net/web-security/host-header
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+    headers:
+      Host: "evil-whaitest.com"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+          - 301
+          - 302
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)evil-whaitest\\.com"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+    headers:
+      X-Forwarded-Host: "evil-whaitest.com"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)evil-whaitest\\.com"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+    headers:
+      X-Forwarded-For: "127.0.0.1"
+      X-Originating-IP: "127.0.0.1"
+      X-Remote-IP: "127.0.0.1"
+      X-Remote-Addr: "127.0.0.1"
+      X-Client-IP: "127.0.0.1"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(admin|dashboard|internal|restricted)"

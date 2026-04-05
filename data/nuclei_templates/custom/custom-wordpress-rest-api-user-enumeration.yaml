@@ -1,0 +1,21 @@
+id: wordpress-rest-api-user-enum
+info:
+  name: WordPress REST API User Enumeration
+  author: custom
+  severity: medium
+  description: Detects exposed WordPress REST API user enumeration functionality via /wp-json/wp/v2/users endpoint
+  tags: wordpress,restapi,user-enumeration
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/wp-json/wp/v2/users"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "\"name\":\""
+          - "\"slug\":\""
+        part: body
+      - type: status
+        status:
+          - 200

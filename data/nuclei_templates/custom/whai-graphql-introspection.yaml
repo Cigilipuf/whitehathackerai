@@ -1,0 +1,43 @@
+id: whai-graphql-introspection
+
+info:
+  name: GraphQL Introspection Enabled
+  author: whitehat-ai
+  severity: medium
+  description: Detects enabled GraphQL introspection which reveals the entire schema
+  tags: graphql,introspection,api,misconfiguration
+  reference:
+    - https://graphql.org/learn/introspection/
+    - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/12-API_Testing/01-Testing_GraphQL
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/graphql"
+      - "{{BaseURL}}/graphql/v1"
+      - "{{BaseURL}}/api/graphql"
+      - "{{BaseURL}}/v1/graphql"
+      - "{{BaseURL}}/query"
+      - "{{BaseURL}}/gql"
+    headers:
+      Content-Type: "application/json"
+    body: '{"query":"{\n  __schema {\n    types {\n      name\n      fields {\n        name\n      }\n    }\n  }\n}"}'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        part: body
+        words:
+          - "__schema"
+          - "types"
+          - "fields"
+        condition: and
+
+      - type: word
+        part: header
+        words:
+          - "application/json"

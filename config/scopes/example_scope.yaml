@@ -1,0 +1,111 @@
+# ============================================================
+# WhiteHatHacker AI — Example Scope Definition
+# ============================================================
+# Her bug bounty programı için ayrı scope dosyası oluşturulur.
+
+program:
+  name: "Example Program"
+  platform: "hackerone"  # hackerone | bugcrowd | generic
+  program_handle: "example_corp"
+  url: "https://hackerone.com/example_corp"
+
+scope:
+  # Dahil edilecek hedefler
+  in_scope:
+    domains:
+      - "*.example.com"
+      - "api.example.com"
+      - "app.example.com"
+    
+    ips:
+      - "203.0.113.0/24"
+    
+    urls:
+      - "https://example.com/*"
+      - "https://api.example.com/v1/*"
+      
+    ports:
+      - "80"
+      - "443"
+      - "8080"
+      - "8443"
+  
+  # Hariç tutulanlar
+  out_of_scope:
+    domains:
+      - "staging.example.com"
+      - "internal.example.com"
+      - "*.cdn.example.com"
+    
+    ips:
+      - "10.0.0.0/8"
+      - "192.168.0.0/16"
+    
+    urls:
+      - "https://example.com/admin/*"
+    
+    # Yasaklanan test türleri
+    forbidden_tests:
+      - "dos"
+      - "ddos"
+      - "social_engineering"
+      - "physical"
+
+rules:
+  # Maksimum RPS
+  max_requests_per_second: 10
+  
+  # İzin verilen saatler (UTC)
+  allowed_hours:
+    start: "00:00"
+    end: "23:59"
+  
+  # Özel notlar
+  notes:
+    - "Do not test accounts belonging to other users"
+    - "Report any PII exposure immediately"
+    - "Destructive testing is NOT allowed"
+
+# ── Authenticated scanning (optional) ──
+# Uncomment and configure to run scans with an authenticated session.
+# auth:
+#   auth_type: form_login  # none | form_login | bearer_token | api_key | custom_headers | oauth2_client
+#
+#   # ── Form login ──
+#   login_url: "https://example.com/login"
+#   username: "test_user"
+#   password: "test_password"
+#   username_field: "username"   # HTML form field name
+#   password_field: "password"
+#   extra_fields: {}             # Additional POST fields
+#   csrf_enabled: false
+#   csrf_field: "_token"
+#
+#   # ── Bearer / API key ──
+#   # token: "your-token-here"
+#   # header_name: "Authorization"
+#   # header_prefix: "Bearer"
+#
+#   # ── OAuth2 client credentials ──
+#   # token_url: "https://example.com/oauth/token"
+#   # client_id: "xxx"
+#   # client_secret: "xxx"
+#   # scopes: ["read", "write"]
+#
+#   # ── Custom headers ──
+#   # custom_headers:
+#   #   X-Custom-Auth: "value"
+#
+#   # ── Multi-role auth (for IDOR pairwise testing) ──
+#   # Define multiple roles to test privilege escalation between them.
+#   # Each role inherits parent auth fields (auth_type, header_name, etc.),
+#   # but can override them individually.
+#   # roles:
+#   #   - role_name: admin
+#   #     token: "admin-bearer-token-here"
+#   #   - role_name: regular_user
+#   #     token: "user-bearer-token-here"
+#   #   - role_name: viewer
+#   #     token: "viewer-bearer-token-here"
+#   #     auth_type: api_key          # Override auth_type for this role
+#   #     header_name: "X-API-Key"

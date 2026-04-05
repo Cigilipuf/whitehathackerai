@@ -1,0 +1,21 @@
+id: whai-java-deserialization
+
+info:
+  name: Java Deserialization Detection
+  author: whitehat-ai
+  severity: critical
+  description: Detects Java deserialization endpoints
+  tags: deserialization,java,critical
+  classification:
+    cwe-id: CWE-502
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers:
+      - type: word
+        part: header
+        words:
+          - "application/x-java-serialized-object"

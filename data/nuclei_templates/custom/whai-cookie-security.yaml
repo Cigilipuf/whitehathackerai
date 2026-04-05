@@ -1,0 +1,40 @@
+id: whai-cookie-security
+
+info:
+  name: Insecure Cookie Configuration
+  author: whitehat-ai
+  severity: medium
+  description: Detects cookies missing security flags (HttpOnly, Secure, SameSite)
+  tags: cookie,security,session,misconfiguration
+  reference:
+    - https://owasp.org/www-community/controls/SecureCookieAttribute
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+      - "{{BaseURL}}/login"
+      - "{{BaseURL}}/api/auth"
+
+    matchers-condition: or
+    matchers:
+      - type: regex
+        part: header
+        regex:
+          - "(?i)set-cookie:(?!.*httponly).*(?:session|token|auth|jwt|sid|csrf)"
+
+      - type: regex
+        part: header
+        regex:
+          - "(?i)set-cookie:(?!.*secure).*(?:session|token|auth|jwt|sid|csrf)"
+
+      - type: regex
+        part: header
+        regex:
+          - "(?i)set-cookie:(?!.*samesite).*(?:session|token|auth|jwt|sid|csrf)"
+
+    extractors:
+      - type: regex
+        part: header
+        regex:
+          - "(?i)(set-cookie:\\s*.+)"

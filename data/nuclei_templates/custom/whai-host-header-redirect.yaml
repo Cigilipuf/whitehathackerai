@@ -1,0 +1,28 @@
+id: whai-host-header-redirect
+
+info:
+  name: Host Header Injection (Password Reset Poisoning)
+  author: whitehat-ai
+  severity: high
+  description: Tests Host header injection for password reset poisoning
+  tags: host-header,injection,password-reset,high
+  classification:
+    cwe-id: CWE-644
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/forgot-password"
+      - "{{BaseURL}}/password/reset"
+
+    headers:
+      Host: evil.com
+      X-Forwarded-Host: evil.com
+      Content-Type: application/json
+
+    body: '{"email":"test@example.com"}'
+
+    matchers:
+      - type: word
+        words:
+          - "evil.com"

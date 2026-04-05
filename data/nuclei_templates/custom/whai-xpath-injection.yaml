@@ -1,0 +1,23 @@
+id: whai-xpath-injection
+
+info:
+  name: XPath Injection
+  author: whitehat-ai
+  severity: high
+  description: Tests for XPath injection in search parameters
+  tags: xpath,injection,high
+  classification:
+    cwe-id: CWE-643
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?user=admin' or '1'='1"
+      - "{{BaseURL}}/?id=1' or ''='"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(xpath|xmldom|xml parsing)"
+        condition: or

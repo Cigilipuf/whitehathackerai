@@ -1,0 +1,24 @@
+id: whai-aspnet-error-page
+
+info:
+  name: ASP.NET Custom Error Disabled
+  author: whitehat-ai
+  severity: medium
+  description: Detects ASP.NET detailed error pages
+  tags: aspnet,error,info-disclosure,medium
+  classification:
+    cwe-id: CWE-209
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/{{randstr}}"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "Server Error in"
+          - "ASP.NET"
+          - "Stack Trace:"
+        condition: or

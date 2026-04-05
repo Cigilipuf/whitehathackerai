@@ -1,0 +1,48 @@
+# ============================================================
+# WhiteHatHacker AI — Stealth Scan Profile
+# ============================================================
+# Düşük profil, yavaş tarama. IDS/WAF tetiklememeyi hedefler.
+
+name: "stealth"
+description: "Low-profile, slow scanning to avoid detection"
+
+timing:
+  requests_per_second: 2        # Global RPS
+  requests_per_host: 1          # Host başına
+  delay_between_tools: 5        # Araçlar arası bekleme (saniye)
+  jitter: true                  # Rastgele gecikme ekle
+  jitter_range: [1, 5]          # Jitter aralığı (saniye)
+
+nmap:
+  flags: "-sS -T2 --top-ports 100 -Pn --scan-delay 200ms"
+  
+ffuf:
+  rate: 5
+  threads: 2
+  
+sqlmap:
+  level: 1
+  risk: 1
+  threads: 1
+  random_agent: true
+  
+gobuster:
+  threads: 2
+  delay: "500ms"
+
+tool_selection:
+  # Stealth modda kullanılmayacak araçlar
+  disabled:
+    - masscan        # Çok gürültülü
+    - hydra          # Brute force tespit edilebilir
+  
+  # Tercih edilen araçlar
+  preferred:
+    port_scan: "nmap"
+    directory: "ffuf"
+    
+concurrency:
+  max_parallel_tools: 2
+  
+timeouts:
+  multiplier: 2.0    # Normal timeout'un 2 katı

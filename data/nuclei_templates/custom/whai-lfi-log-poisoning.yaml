@@ -1,0 +1,24 @@
+id: whai-lfi-log-poisoning
+
+info:
+  name: LFI Log Poisoning Detection
+  author: whitehat-ai
+  severity: critical
+  description: Tests LFI reading access log files
+  tags: lfi,log-poisoning,critical
+  classification:
+    cwe-id: CWE-22
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?file=../../../../var/log/apache2/access.log"
+      - "{{BaseURL}}/?page=../../../../var/log/nginx/access.log"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "GET /"
+          - "HTTP/1."
+        condition: and

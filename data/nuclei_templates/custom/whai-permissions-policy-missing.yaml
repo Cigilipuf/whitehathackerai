@@ -1,0 +1,22 @@
+id: whai-permissions-policy-missing
+
+info:
+  name: Missing Permissions-Policy Header
+  author: whitehat-ai
+  severity: low
+  description: Missing Permissions-Policy for browser features
+  tags: header,permissions,low
+  classification:
+    cwe-id: CWE-693
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers:
+      - type: word
+        part: header
+        negative: true
+        words:
+          - "permissions-policy"

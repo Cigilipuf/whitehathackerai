@@ -1,0 +1,72 @@
+id: whai-http-method-override
+
+info:
+  name: HTTP Method Override and Verb Tampering
+  author: whitehat-ai
+  severity: medium
+  description: Detects HTTP method override via headers and verb tampering bypasses
+  tags: http-method,bypass,access-control
+  reference:
+    - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/06-Test_HTTP_Methods
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/admin"
+      - "{{BaseURL}}/api/admin"
+      - "{{BaseURL}}/api/v1/admin"
+    headers:
+      X-HTTP-Method-Override: "GET"
+      X-Method-Override: "GET"
+      X-HTTP-Method: "GET"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        negative: true
+        part: body
+        words:
+          - "forbidden"
+          - "denied"
+          - "unauthorized"
+          - "not allowed"
+        condition: and
+
+  - raw:
+      - |
+        OPTIONS {{Path}} HTTP/1.1
+        Host: {{Hostname}}
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: header
+        words:
+          - "Allow:"
+
+    extractors:
+      - type: regex
+        part: header
+        regex:
+          - "Allow:\\s*(.+)"
+
+  - raw:
+      - |
+        TRACE {{Path}} HTTP/1.1
+        Host: {{Hostname}}
+        X-Custom-Header: whai-trace-test
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        part: body
+        words:
+          - "whai-trace-test"

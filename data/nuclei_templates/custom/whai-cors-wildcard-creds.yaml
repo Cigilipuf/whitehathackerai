@@ -1,0 +1,26 @@
+id: whai-cors-wildcard-creds
+
+info:
+  name: CORS Wildcard with Credentials
+  author: whitehat-ai
+  severity: medium
+  description: Detects CORS wildcard combined with credentials
+  tags: cors,misconfig,medium
+  classification:
+    cwe-id: CWE-942
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: header
+        words:
+          - "Access-Control-Allow-Origin: *"
+      - type: word
+        part: header
+        words:
+          - "Access-Control-Allow-Credentials: true"

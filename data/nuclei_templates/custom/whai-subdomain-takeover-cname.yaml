@@ -1,0 +1,30 @@
+id: whai-subdomain-takeover-cname
+
+info:
+  name: Subdomain Takeover via Dangling CNAME
+  author: whitehat-ai
+  severity: critical
+  description: Detects subdomain takeover indicators
+  tags: subdomain,takeover,critical
+  classification:
+    cwe-id: CWE-284
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "There isn't a GitHub Pages site here"
+          - "NoSuchBucket"
+          - "No such app"
+          - "Repository not found"
+          - "This page is not available"
+          - "Fastly error: unknown domain"
+          - "There's nothing here, yet"
+          - "project not found"
+          - "The request could not be satisfied"
+        condition: or

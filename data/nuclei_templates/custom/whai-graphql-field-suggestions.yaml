@@ -1,0 +1,32 @@
+id: whai-graphql-field-suggestions
+
+info:
+  name: GraphQL Field Suggestion Information Disclosure
+  author: whitehat-ai
+  severity: low
+  description: Detects GraphQL field suggestions that leak schema information
+  tags: graphql,information-disclosure,api
+  reference:
+    - https://graphql.org/learn/introspection/
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/graphql"
+      - "{{BaseURL}}/api/graphql"
+    headers:
+      Content-Type: "application/json"
+    body: '{"query":"{ __nonexistent_field_whai }"}'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+          - 400
+
+      - type: word
+        part: body
+        words:
+          - "Did you mean"
+        condition: and

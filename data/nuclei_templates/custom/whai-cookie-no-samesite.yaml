@@ -1,0 +1,27 @@
+id: whai-cookie-no-samesite
+
+info:
+  name: Cookie Without SameSite Attribute
+  author: whitehat-ai
+  severity: low
+  description: Detects session cookies missing SameSite attribute
+  tags: cookie,csrf,security,low
+  classification:
+    cwe-id: CWE-1275
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: header
+        words:
+          - "Set-Cookie"
+      - type: word
+        part: header
+        negative: true
+        words:
+          - "SameSite"

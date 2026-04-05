@@ -1,0 +1,59 @@
+id: whai-csp-bypass
+
+info:
+  name: Content Security Policy Bypass Detection
+  author: whitehat-ai
+  severity: medium
+  description: Detects weak or bypassable Content Security Policy configurations
+  tags: csp,bypass,xss,headers
+  reference:
+    - https://portswigger.net/web-security/cross-site-scripting/content-security-policy
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers-condition: or
+    matchers:
+      - type: regex
+        part: header
+        regex:
+          - "(?i)content-security-policy:.*unsafe-inline"
+
+      - type: regex
+        part: header
+        regex:
+          - "(?i)content-security-policy:.*unsafe-eval"
+
+      - type: regex
+        part: header
+        regex:
+          - "(?i)content-security-policy:.*\\*"
+
+      - type: regex
+        part: header
+        regex:
+          - "(?i)content-security-policy:.*data:"
+
+      - type: regex
+        part: header
+        regex:
+          - "(?i)content-security-policy:.*blob:"
+
+      - type: regex
+        part: header
+        regex:
+          - "(?i)content-security-policy-report-only"
+
+      - type: regex
+        negative: true
+        part: header
+        regex:
+          - "(?i)content-security-policy:"
+
+    extractors:
+      - type: regex
+        part: header
+        regex:
+          - "(?i)(content-security-policy[^:]*:\\s*.+)"

@@ -1,0 +1,27 @@
+id: whai-verb-tampering
+
+info:
+  name: HTTP Verb Tampering Access Bypass
+  author: whitehat-ai
+  severity: high
+  description: Tests bypassing access controls via unusual HTTP methods
+  tags: verb-tampering,access-control,high
+  classification:
+    cwe-id: CWE-650
+
+http:
+  - method: PATCH
+    path:
+      - "{{BaseURL}}/admin"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "admin"
+          - "dashboard"
+        condition: or

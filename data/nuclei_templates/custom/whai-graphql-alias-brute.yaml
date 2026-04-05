@@ -1,0 +1,32 @@
+id: whai-graphql-alias-brute
+
+info:
+  name: GraphQL Alias-Based Brute Force
+  author: whitehat-ai
+  severity: medium
+  description: Tests GraphQL alias-based brute force in single request
+  tags: graphql,brute-force,api,medium
+  classification:
+    cwe-id: CWE-307
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/graphql"
+
+    headers:
+      Content-Type: application/json
+
+    body: '{"query":"{ a1: __typename a2: __typename a3: __typename a4: __typename a5: __typename }"}'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"a1"'
+          - '"a5"'
+        condition: and

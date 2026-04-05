@@ -1,0 +1,29 @@
+id: whai-directory-listing
+
+info:
+  name: Directory Listing Enabled
+  author: whitehat-ai
+  severity: medium
+  description: Detects enabled directory listing
+  tags: misconfig,directory-listing,medium
+  classification:
+    cwe-id: CWE-548
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/images/"
+      - "{{BaseURL}}/uploads/"
+      - "{{BaseURL}}/static/"
+      - "{{BaseURL}}/assets/"
+      - "{{BaseURL}}/backup/"
+      - "{{BaseURL}}/media/"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "Index of /"
+          - "Directory listing for"
+          - "Parent Directory"
+        condition: or

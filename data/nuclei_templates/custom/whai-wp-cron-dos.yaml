@@ -1,0 +1,20 @@
+id: whai-wp-cron-dos
+
+info:
+  name: WordPress wp-cron.php Exposed
+  author: whitehat-ai
+  severity: low
+  description: Detects exposed WordPress wp-cron.php
+  tags: wordpress,cron,low
+  classification:
+    cwe-id: CWE-400
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/wp-cron.php"
+
+    matchers:
+      - type: status
+        status:
+          - 200

@@ -1,0 +1,21 @@
+id: whai-oauth-redirect-mismatch
+
+info:
+  name: OAuth Redirect URI Manipulation
+  author: whitehat-ai
+  severity: high
+  description: Tests OAuth for redirect_uri manipulation
+  tags: oauth,redirect,auth,high
+  classification:
+    cwe-id: CWE-601
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/oauth/authorize?redirect_uri=https://evil.com&response_type=code&client_id=test"
+
+    matchers:
+      - type: regex
+        part: header
+        regex:
+          - "(?i)location:.*evil\\.com"

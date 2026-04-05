@@ -1,0 +1,24 @@
+id: whai-ldap-injection
+
+info:
+  name: LDAP Injection
+  author: whitehat-ai
+  severity: high
+  description: Tests for LDAP injection in search endpoints
+  tags: ldap,injection,high
+  classification:
+    cwe-id: CWE-90
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?user=*)(uid=*))(|(uid=*"
+      - "{{BaseURL}}/?search=*)(objectClass=*"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(ldap|directory|dn=|cn=)"
+          - "(?i)(invalid filter|bad search filter)"
+        condition: or

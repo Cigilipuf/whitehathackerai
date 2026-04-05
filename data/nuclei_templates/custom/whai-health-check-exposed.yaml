@@ -1,0 +1,30 @@
+id: whai-health-check-exposed
+
+info:
+  name: Health Check Endpoint Information Disclosure
+  author: whitehat-ai
+  severity: info
+  description: Detects health check endpoints exposing internal info
+  tags: health,info-disclosure,info
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/health"
+      - "{{BaseURL}}/healthz"
+      - "{{BaseURL}}/api/health"
+      - "{{BaseURL}}/status"
+      - "{{BaseURL}}/__health"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"status"'
+          - '"uptime"'
+          - '"version"'
+        condition: or

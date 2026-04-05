@@ -1,0 +1,31 @@
+id: whai-ua-access-bypass
+
+info:
+  name: User-Agent Based Access Control Bypass
+  author: whitehat-ai
+  severity: medium
+  description: Tests for access control based on User-Agent
+  tags: auth,user-agent,bypass,medium
+  classification:
+    cwe-id: CWE-290
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/admin"
+      - "{{BaseURL}}/internal"
+
+    headers:
+      User-Agent: "Googlebot/2.1 (+http://www.google.com/bot.html)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "admin"
+          - "dashboard"
+        condition: or

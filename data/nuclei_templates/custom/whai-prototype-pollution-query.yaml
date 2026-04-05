@@ -1,0 +1,22 @@
+id: whai-prototype-pollution-query
+
+info:
+  name: Prototype Pollution via Query Parameters
+  author: whitehat-ai
+  severity: medium
+  description: Tests for prototype pollution via query params
+  tags: prototype-pollution,javascript,medium
+  classification:
+    cwe-id: CWE-1321
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?__proto__[test]=polluted"
+      - "{{BaseURL}}/?constructor[prototype][test]=polluted"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "polluted"

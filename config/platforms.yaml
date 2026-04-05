@@ -1,0 +1,68 @@
+# ============================================================
+# WhiteHatHacker AI — Bug Bounty Platform Ayarları
+# ============================================================
+
+hackerone:
+  name: "HackerOne"
+  api_base: "https://api.hackerone.com/v1"
+  auth_type: "basic"
+  env_vars:
+    username: "HACKERONE_API_USERNAME"
+    token: "HACKERONE_API_TOKEN"
+  report_format: "markdown"
+  severity_mapping:
+    critical: "critical"
+    high: "high"
+    medium: "medium"
+    low: "low"
+    info: "none"
+  # SAFETY: Otomatik gönderim KALICI OLARAK devre dışıdır.
+  # Rapor gönderimi her zaman insan tarafından yapılmalıdır.
+  submit_mode: "manual_only"
+
+bugcrowd:
+  name: "Bugcrowd"
+  api_base: "https://api.bugcrowd.com"
+  auth_type: "token"
+  env_vars:
+    token: "BUGCROWD_API_TOKEN"
+  report_format: "markdown"
+  severity_mapping:
+    critical: 1
+    high: 2
+    medium: 3
+    low: 4
+    info: 5
+  # SAFETY: Otomatik gönderim KALICI OLARAK devre dışıdır.
+  submit_mode: "manual_only"
+
+intigriti:
+  name: "Intigriti"
+  api_base: "https://app.intigriti.com/api"
+  auth_url: "https://login.intigriti.com/connect/token"
+  auth_type: "bearer"  # Direct token or OAuth2 client credentials
+  env_vars:
+    token: "INTIGRITI_API_TOKEN"
+    client_id: "INTIGRITI_CLIENT_ID"
+    client_secret: "INTIGRITI_CLIENT_SECRET"
+  report_format: "markdown"
+  severity_mapping:
+    critical: "critical"
+    high: "high"
+    medium: "medium"
+    low: "low"
+    info: "informational"
+  # SAFETY: Otomatik gönderim KALICI OLARAK devre dışıdır.
+  submit_mode: "manual_only"
+
+generic:
+  name: "Generic / Custom"
+  api_base: ""
+  webhook_url: ""
+  auth_type: "bearer"
+  env_vars:
+    token: "GENERIC_API_TOKEN"
+    webhook: "GENERIC_WEBHOOK_URL"
+  report_format: "json"
+  # SAFETY: Otomatik gönderim KALICI OLARAK devre dışıdır.
+  submit_mode: "manual_only"

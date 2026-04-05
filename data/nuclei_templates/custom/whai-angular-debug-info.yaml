@@ -1,0 +1,23 @@
+id: whai-angular-debug-info
+
+info:
+  name: AngularJS Debug Info Enabled
+  author: whitehat-ai
+  severity: low
+  description: Detects AngularJS debug info enabled
+  tags: angular,javascript,low
+  classification:
+    cwe-id: CWE-489
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "ng-binding"
+          - "ng-scope"
+        condition: or

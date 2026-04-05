@@ -1,0 +1,20 @@
+id: custom-custody-api-v1-key-idor-check
+info:
+  name: Custody API v1 Key Management IDOR Check
+  author: custom
+  severity: medium
+  description: Detects potential Insecure Direct Object Reference (IDOR) vulnerabilities in Custody API v1 key management endpoints by checking for unauthorized access to specific key resources.
+  tags: custody, api, idor, key-management
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/v1/keys/123"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "\"key\":\""
+        part: body
+      - type: status
+        status:
+          - 200

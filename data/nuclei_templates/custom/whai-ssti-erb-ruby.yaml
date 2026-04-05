@@ -1,0 +1,21 @@
+id: whai-ssti-erb-ruby
+
+info:
+  name: SSTI Detection (Ruby ERB)
+  author: whitehat-ai
+  severity: critical
+  description: Tests for Ruby ERB template injection
+  tags: ssti,ruby,erb,critical
+  classification:
+    cwe-id: CWE-1336
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?name=<%25%3d+7*7+%25>"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "49"

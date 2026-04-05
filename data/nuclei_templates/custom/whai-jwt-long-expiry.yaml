@@ -1,0 +1,26 @@
+id: whai-jwt-long-expiry
+
+info:
+  name: JWT Token With Long Expiry
+  author: whitehat-ai
+  severity: low
+  description: Detects JWT tokens in responses with excessive expiry
+  tags: jwt,auth,low
+  classification:
+    cwe-id: CWE-613
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/login"
+
+    headers:
+      Content-Type: application/json
+
+    body: '{"username":"test","password":"test"}'
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - '"(access_?token|token|jwt)"\\s*:\\s*"eyJ[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]+\\.[a-zA-Z0-9_-]+"'

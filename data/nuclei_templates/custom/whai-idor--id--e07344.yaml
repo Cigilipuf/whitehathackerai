@@ -1,0 +1,64 @@
+id: custom-idor-gravatar-id-reference  
+info:  
+  name: Gravatar IDOR Vulnerability Check  
+  author: whitehat-ai  
+  severity: medium  
+  description: Tests for Insecure Direct Object References (IDOR) in Gravatar ID endpoint by validating access control mechanisms  
+  tags: idor,broken-access-control  
+http:  
+  - method: GET  
+    path:  
+      - "{{BaseURL}}/{{ID}}"  
+    matchers-condition: and  
+    matchers:  
+      - type: status  
+        status:  
+          - 200  
+      - type: word  
+        words:  
+          - "User Profile"  
+          - "Gravatar Account"  
+    extractors:  
+      - type: regex  
+        name: user_evidence  
+        regex:  
+          - "Email:\\s*([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})"  
+    payloads:  
+      id:  
+        - "12345"  # Numeric ID test  
+        - "testuser"  # String ID test  
+        - "%00admin%2500"  # Null byte injection attempt  
+  
+  - method: GET  
+    path:  
+      - "{{BaseURL}}/..//{{ID}}"  # Path traversal pattern  
+    matchers-condition: and  
+    matchers:  
+      - type: status  
+        status:  
+          - 200  
+      - type: word  
+        words:  
+          - "Access Granted"  
+    extractors:  
+      - type: regex  
+        name: access_evidence  
+        regex:  
+          - "Username:\\s*([a-zA-Z0-9._%+-]+)"  
+  
+  - method: GET  
+    path:  
+      - "{{BaseURL}}/php://filter/resource={{ID}}"  # PHP wrapper test  
+    matchers-condition: and  
+    matchers:  
+      - type: status  
+        status:  
+          - 200  
+      - type: regex  
+        regex:  
+          - "<\\?php.*?\\?>"  # PHP code detection  
+    extractors:  
+      - type: regex  
+        name: php_evidence  
+        regex:  
+          - "Source code for ([^<]+)"

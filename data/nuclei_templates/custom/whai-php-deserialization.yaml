@@ -1,0 +1,21 @@
+id: whai-php-deserialization
+
+info:
+  name: PHP Object Deserialization
+  author: whitehat-ai
+  severity: critical
+  description: Tests for PHP insecure deserialization
+  tags: deserialization,php,critical
+  classification:
+    cwe-id: CWE-502
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?data=O%3A8%3A%22stdClass%22%3A0%3A%7B%7D"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(unserialize|__wakeup|__destruct)"

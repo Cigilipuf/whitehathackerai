@@ -1,0 +1,28 @@
+id: whai-x-frame-options-missing
+
+info:
+  name: Missing Clickjacking Protection
+  author: whitehat-ai
+  severity: low
+  description: Missing X-Frame-Options and frame-ancestors
+  tags: header,clickjacking,low
+  classification:
+    cwe-id: CWE-1021
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: header
+        negative: true
+        words:
+          - "x-frame-options"
+      - type: word
+        part: header
+        negative: true
+        words:
+          - "frame-ancestors"

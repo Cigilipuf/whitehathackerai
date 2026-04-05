@@ -1,0 +1,24 @@
+id: whai-xss-event-handlers
+
+info:
+  name: XSS via HTML Event Handler Attributes
+  author: whitehat-ai
+  severity: high
+  description: Tests XSS with event handler payloads
+  tags: xss,reflected,high
+  classification:
+    cwe-id: CWE-79
+
+http:
+  - method: GET
+    path:
+      - '{{BaseURL}}/?q="><img src=x onerror=alert(1)>'
+      - '{{BaseURL}}/?q=" autofocus onfocus=alert(1) "'
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - 'onerror=alert(1)'
+          - 'onfocus=alert(1)'
+        condition: or

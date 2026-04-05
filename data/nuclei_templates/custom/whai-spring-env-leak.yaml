@@ -1,0 +1,30 @@
+id: whai-spring-env-leak
+
+info:
+  name: Spring Boot Environment Variables Leak
+  author: whitehat-ai
+  severity: critical
+  description: Detects Spring Boot environment variable exposure
+  tags: spring,java,env,critical
+  classification:
+    cwe-id: CWE-200
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/env"
+      - "{{BaseURL}}/actuator/env"
+      - "{{BaseURL}}/actuator/configprops"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"spring.datasource"'
+          - '"propertySources"'
+          - "password"
+        condition: or

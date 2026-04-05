@@ -1,0 +1,25 @@
+id: api-endpoint-enumeration
+info:
+  name: API Endpoint Enumeration Check
+  author: custom
+  severity: medium
+  description: Detects exposed or predictable API endpoints that could facilitate further reconnaissance
+  tags: api,enumeration,recon
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/v1/users"
+      - "{{BaseURL}}/api/v2/resources"
+      - "{{BaseURL}}/admin/api/config"
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+          - 403
+      - type: word
+        words:
+          - "API endpoint"
+          - "Resource not found"
+          - "Authentication required"
+        part: body

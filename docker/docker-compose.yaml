@@ -1,0 +1,154 @@
+# ─────────────────────────────────────────────────────────
+#  WhiteHatHacker AI — Full Stack Docker Compose
+# ─────────────────────────────────────────────────────────
+version: "3.9"
+
+x-common-env: &common-env
+  WHAI_MODE: ${WHAI_MODE:-semi-autonomous}
+  WHAI_SCAN_PROFILE: ${WHAI_SCAN_PROFILE:-balanced}
+  WHAI_LOG_LEVEL: ${WHAI_LOG_LEVEL:-INFO}
+  WHAI_MAX_PARALLEL_TOOLS: ${WHAI_MAX_PARALLEL_TOOLS:-5}
+  DATABASE_URL: sqlite:///output/whai.db
+  REDIS_URL: redis://redis:6379/0
+  HACKERONE_API_TOKEN: ${HACKERONE_API_TOKEN:-}
+  BUGCROWD_API_TOKEN: ${BUGCROWD_API_TOKEN:-}
+  SHODAN_API_KEY: ${SHODAN_API_KEY:-}
+  CENSYS_API_ID: ${CENSYS_API_ID:-}
+  CENSYS_API_SECRET: ${CENSYS_API_SECRET:-}
+  GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+  SLACK_WEBHOOK_URL: ${SLACK_WEBHOOK_URL:-}
+  TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+  TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
+
+services:
+  # ── Main bot (CPU) ──
+  whai:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: whai-bot
+    environment:
+      <<: *common-env
+      WHAI_PRIMARY_MODEL_PATH: /app/models/baronllm-v2-offensivesecurity-q8_0.gguf
+      WHAI_SECONDARY_MODEL_PATH: /app/models/baronllm-v2-offensivesecurity-q8_0.gguf
+      WHAI_FALLBACK_MODEL_PATH: /app/models/deephat-v1-7b-q4_k_m.gguf
+    volumes:
+      - ../models:/app/models:ro
+      - ../output:/app/output
+      - ../config:/app/config:ro
+      - ../data:/app/data:ro
+    ports:
+      - "8000:8000"
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - whai-net
+    restart: unless-stopped
+    profiles:
+      - cpu
+
+  # ── Main bot (GPU) ──
+  whai-gpu:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.gpu
+    container_name: whai-bot-gpu
+    environment:
+      <<: *common-env
+      WHAI_GPU_LAYERS: -1
+      WHAI_PRIMARY_MODEL_PATH: /app/models/baronllm-v2-offensivesecurity-q8_0.gguf
+      WHAI_SECONDARY_MODEL_PATH: /app/models/baronllm-v2-offensivesecurity-q8_0.gguf
+      WHAI_FALLBACK_MODEL_PATH: /app/models/deephat-v1-7b-q4_k_m.gguf
+    volumes:
+      - ../models:/app/models:ro
+      - ../output:/app/output
+      - ../config:/app/config:ro
+      - ../data:/app/data:ro
+    ports:
+      - "8000:8000"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - whai-net
+    restart: unless-stopped
+    profiles:
+      - gpu
+
+  # ── API Server ──
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: whai-api
+    command: ["python3", "-m", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+    environment:
+      <<: *common-env
+    volumes:
+      - ../output:/app/output
+      - ../config:/app/config:ro
+    ports:
+      - "8001:8000"
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - whai-net
+    restart: unless-stopped
+    profiles:
+      - api
+
+  # ── Redis (cache & queue) ──
+  redis:
+    image: redis:7-alpine
+    container_name: whai-redis
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - whai-net
+    restart: unless-stopped
+
+  # ── Celery Worker (task queue) ──
+  worker:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: whai-worker
+    command: ["python3", "-m", "celery", "-A", "src.integrations.queue", "worker", "--loglevel=info", "--concurrency=4"]
+    environment:
+      <<: *common-env
+    volumes:
+      - ../output:/app/output
+      - ../config:/app/config:ro
+      - ../data:/app/data:ro
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - whai-net
+    restart: unless-stopped
+    profiles:
+      - worker
+
+volumes:
+  redis-data:
+
+networks:
+  whai-net:
+    driver: bridge

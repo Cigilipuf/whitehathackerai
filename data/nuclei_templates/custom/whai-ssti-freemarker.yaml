@@ -1,0 +1,22 @@
+id: whai-ssti-freemarker
+
+info:
+  name: SSTI Detection (FreeMarker/Velocity)
+  author: whitehat-ai
+  severity: critical
+  description: Detects FreeMarker and Velocity template injection
+  tags: ssti,injection,freemarker,velocity,critical
+  classification:
+    cwe-id: CWE-1336
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?name=${7*7}"
+      - "{{BaseURL}}/?input=<#assign x=7*7>${x}"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "49"

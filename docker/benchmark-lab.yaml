@@ -1,0 +1,76 @@
+# ─────────────────────────────────────────────────────────
+#  WhiteHatHacker AI — Benchmark Lab Suite (P4-1)
+#
+#  Vulnerable-by-design applications for scanner validation.
+#  Usage:
+#    docker compose -f docker/benchmark-lab.yaml up -d
+#    python3 scripts/benchmark_runner.py --lab all
+#    docker compose -f docker/benchmark-lab.yaml down
+# ─────────────────────────────────────────────────────────
+version: "3.9"
+
+services:
+  # ── DVWA: Classic web vulns (SQLi, XSS, CSRF, LFI, etc.) ──
+  dvwa:
+    image: vulnerables/web-dvwa:latest
+    container_name: whai-lab-dvwa
+    ports:
+      - "8081:80"
+    environment:
+      MYSQL_DATABASE: dvwa
+      MYSQL_USER: dvwa
+      MYSQL_PASSWORD: p@ssw0rd
+    restart: unless-stopped
+
+  # ── OWASP Juice Shop: Modern JS app vulns ──
+  juiceshop:
+    image: bkimminich/juice-shop:latest
+    container_name: whai-lab-juiceshop
+    ports:
+      - "8082:3000"
+    restart: unless-stopped
+
+  # ── WebGoat: OWASP educational vuln app (Java/Spring) ──
+  webgoat:
+    image: webgoat/webgoat:latest
+    container_name: whai-lab-webgoat
+    ports:
+      - "8083:8080"
+      - "9090:9090"
+    restart: unless-stopped
+
+  # ── VAmPI: Vulnerable REST API (OWASP API Top 10) ──
+  vampi:
+    image: erev0s/vampi:latest
+    container_name: whai-lab-vampi
+    ports:
+      - "8084:5000"
+    environment:
+      vulnerable: "1"
+    restart: unless-stopped
+
+  # ── crAPI: Completely Ridiculous API (OWASP API vulns) ──
+  crapi-web:
+    image: crapi/crapi:latest
+    container_name: whai-lab-crapi
+    ports:
+      - "8085:8888"
+    restart: unless-stopped
+
+  # ── GraphQL: Damn Vulnerable GraphQL Application ──
+  dvga:
+    image: dolevf/dvga:latest
+    container_name: whai-lab-dvga
+    ports:
+      - "8086:5013"
+    environment:
+      WEB_HOST: "0.0.0.0"
+    restart: unless-stopped
+
+  # ── NodeGoat: OWASP Node.js vuln app ──
+  nodegoat:
+    image: owasp/nodegoat:latest
+    container_name: whai-lab-nodegoat
+    ports:
+      - "8087:4000"
+    restart: unless-stopped

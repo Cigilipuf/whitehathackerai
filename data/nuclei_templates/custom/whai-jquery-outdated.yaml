@@ -1,0 +1,23 @@
+id: whai-jquery-outdated
+
+info:
+  name: Outdated jQuery Version
+  author: whitehat-ai
+  severity: medium
+  description: Detects jQuery versions with known vulnerabilities (pre-3.5.0)
+  tags: outdated,jquery,javascript,medium
+  classification:
+    cwe-id: CWE-1104
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "jquery[/ ]v?([12]\\.[0-9]+\\.[0-9]+)"
+          - "jquery[/ ]v?(3\\.[0-4]\\.[0-9]+)"
+        condition: or

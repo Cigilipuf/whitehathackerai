@@ -1,0 +1,134 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "whitehathacker-ai"
+version = "3.5.0"
+description = "Autonomous bug bounty hunting and AI penetration testing framework with agentic recon, vulnerability validation, and report generation"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+authors = [
+    {name = "WhiteHatHacker AI Team"},
+]
+keywords = ["bug-bounty", "cybersecurity", "penetration-testing", "ai", "llm", "vulnerability-scanner", "api-security", "security-automation", "reconnaissance", "offensive-security"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Information Technology",
+    "Topic :: Security",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+
+dependencies = [
+    # LLM Engine
+    "llama-cpp-python>=0.3.0",
+    
+    # Web Framework & API
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "websockets>=13.0",
+    
+    # CLI
+    "typer[all]>=0.14.0",
+    "rich>=13.9.0",
+    "textual>=0.89.0",
+    
+    # Data Models & Validation
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.6.0",
+    
+    # Async & Concurrency
+    "aiohttp>=3.11.0",
+    "aiofiles>=24.1.0",
+    "anyio>=4.7.0",
+    
+    # Database
+    "sqlalchemy[asyncio]>=2.0.36",
+    "aiosqlite>=0.20.0",
+    "alembic>=1.14.0",
+    
+    # HTTP & Networking
+    "httpx>=0.28.0",
+    "requests>=2.32.0",
+    "urllib3>=2.2.0",
+    
+    # Configuration
+    "pyyaml>=6.0.2",
+    "ruamel.yaml>=0.18.0",
+    "python-dotenv>=1.0.1",
+    
+    # Logging
+    "loguru>=0.7.3",
+    
+    # Reporting
+    "jinja2>=3.1.4",
+    "markdown>=3.7",
+    "weasyprint>=63.0",
+    
+    # Caching & Queue
+    "redis>=5.2.0",
+    "celery>=5.4.0",
+    
+    # Utils
+    "python-dateutil>=2.9.0",
+    "tenacity>=9.0.0",
+    "tqdm>=4.67.0",
+    "beautifulsoup4>=4.12.3",
+    "lxml>=5.3.0",
+    "defusedxml>=0.7.1",
+    
+    # Security / Crypto
+    "cryptography>=43.0.0",
+    "pyjwt>=2.9.0",
+    
+    # GUI
+    "PySide6>=6.7.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.0.0",
+    "pytest-mock>=3.14.0",
+    "ruff>=0.8.0",
+    "mypy>=1.13.0",
+    "pre-commit>=4.0.0",
+    "black>=24.10.0",
+]
+gpu = [
+    "llama-cpp-python[cuda]>=0.3.0",
+]
+
+[project.scripts]
+whai = "src.cli:app"
+hunter = "src.cli:app"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "ANN", "B", "A", "SIM"]
+ignore = ["ANN101", "ANN102"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+markers = [
+    "slow: marks tests as slow",
+    "integration: marks integration tests",
+    "requires_tools: marks tests that require external tools",
+]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_return_any = true
+warn_unused_configs = true

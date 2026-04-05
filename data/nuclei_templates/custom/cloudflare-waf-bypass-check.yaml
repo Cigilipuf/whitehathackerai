@@ -1,0 +1,43 @@
+id: cloudflare-waf-bypass-check
+info:
+  name: Cloudflare WAF Bypass Detection
+  author: security-team
+  severity: high
+  description: Detects Cloudflare WAF bypass attempts using multiple evasion techniques including IP rotation, chunked encoding abuse, and custom header injection
+  tags: cloudflare,waf,bypass,vulnerability
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/"
+    headers:
+      X-Cloudflare-Bypass: "test-bypass-header"
+    matchers:
+      - type: word
+        words:
+          - "cloudflare-waf-bypass-success"
+        part: body
+  
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/test"
+    headers:
+      Transfer-Encoding: chunked
+    matchers:
+      - type: status
+        status:
+          - 204
+      - type: word
+        words:
+          - "chunked-encoding-bypass"
+        part: body
+  
+  - method: GET
+    path:
+      - "{{BaseURL}}/admin/config"
+    headers:
+      X-Forwarded-For: "1.2.3.4,5.6.7.8"
+    matchers:
+      - type: word
+        words:
+          - "ip-rotation-success"
+        part: body

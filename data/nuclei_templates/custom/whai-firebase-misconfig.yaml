@@ -1,0 +1,27 @@
+id: whai-firebase-misconfig
+
+info:
+  name: Firebase Database Misconfiguration
+  author: whitehat-ai
+  severity: high
+  description: Detects Firebase DB with open rules
+  tags: firebase,cloud,misconfig,high
+  classification:
+    cwe-id: CWE-732
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/.json"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        negative: true
+        words:
+          - '"error"'
+          - "Permission denied"

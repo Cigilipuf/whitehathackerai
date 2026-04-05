@@ -1,0 +1,34 @@
+id: whai-method-override-bypass
+
+info:
+  name: HTTP Method Override Access Control Bypass
+  author: whitehat-ai
+  severity: high
+  description: Tests if HTTP method override headers bypass access controls
+  tags: broken-access-control,method-override,high
+  classification:
+    cwe-id: CWE-650
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/admin"
+      - "{{BaseURL}}/api/admin/users"
+
+    headers:
+      X-HTTP-Method-Override: GET
+      X-Method-Override: GET
+      X-HTTP-Method: GET
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        part: body
+        words:
+          - '"users"'
+          - "dashboard"
+        condition: or

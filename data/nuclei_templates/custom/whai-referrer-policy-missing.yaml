@@ -1,0 +1,22 @@
+id: whai-referrer-policy-missing
+
+info:
+  name: Missing Referrer-Policy Header
+  author: whitehat-ai
+  severity: low
+  description: Missing Referrer-Policy leaks URL to third parties
+  tags: header,privacy,low
+  classification:
+    cwe-id: CWE-200
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers:
+      - type: word
+        part: header
+        negative: true
+        words:
+          - "referrer-policy"

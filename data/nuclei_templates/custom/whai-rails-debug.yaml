@@ -1,0 +1,25 @@
+id: whai-rails-debug
+
+info:
+  name: Ruby on Rails Debug Exposure
+  author: whitehat-ai
+  severity: high
+  description: Detects Rails debug pages leaking config
+  tags: rails,ruby,debug,high
+  classification:
+    cwe-id: CWE-209
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/rails/info/properties"
+      - "{{BaseURL}}/{{randstr}}"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "secret_key_base"
+          - "Rails.root"
+          - "Action Controller"
+        condition: or

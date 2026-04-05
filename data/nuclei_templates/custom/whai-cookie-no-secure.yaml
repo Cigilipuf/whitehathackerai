@@ -1,0 +1,27 @@
+id: whai-cookie-no-secure
+
+info:
+  name: Cookie Without Secure Flag
+  author: whitehat-ai
+  severity: low
+  description: Detects session cookies missing Secure flag
+  tags: cookie,security,low
+  classification:
+    cwe-id: CWE-614
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: header
+        words:
+          - "Set-Cookie"
+      - type: word
+        part: header
+        negative: true
+        words:
+          - "Secure"

@@ -1,0 +1,102 @@
+id: whai-subdomain-takeover-cname
+
+info:
+  name: Subdomain Takeover via Dangling CNAME
+  author: whitehat-ai
+  severity: critical
+  description: Detects potential subdomain takeover via dangling CNAME records pointing to unclaimed services
+  tags: subdomain-takeover,dns,cname,critical
+  reference:
+    - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/10-Test_for_Subdomain_Takeover
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers-condition: or
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "There isn't a GitHub Pages site here"
+          - "For root URLs (like http://example.com/) you must provide an index.html file"
+
+      - type: word
+        part: body
+        words:
+          - "NoSuchBucket"
+          - "The specified bucket does not exist"
+
+      - type: word
+        part: body
+        words:
+          - "The request could not be satisfied"
+          - "Bad request"
+          - "ERROR: The request could not be satisfied"
+
+      - type: word
+        part: body
+        words:
+          - "Heroku | No such app"
+          - "no-such-app.herokuapp.com"
+
+      - type: word
+        part: body
+        words:
+          - "Fastly error: unknown domain"
+
+      - type: word
+        part: body
+        words:
+          - "The feed has not been found"
+          - "Do you want to register"
+
+      - type: word
+        part: body
+        words:
+          - "Help Center Closed"
+          - "This help center no longer exists"
+
+      - type: word
+        part: body
+        words:
+          - "Oops - We didn't find your site"
+          - "is not a registered InCloud website"
+
+      - type: word
+        part: body
+        words:
+          - "Project doesnt exist"
+          - "project not found"
+
+      - type: word
+        part: body
+        words:
+          - "Sorry, this shop is currently unavailable"
+
+      - type: word
+        part: body
+        words:
+          - "Whatever you were looking for doesn't currently exist at this address"
+
+      - type: word
+        part: body
+        words:
+          - "The thing you were looking for is no longer here"
+          - "Please confirm you own"
+
+      - type: word
+        part: body
+        words:
+          - "Repository not found"
+
+      - type: word
+        part: body
+        words:
+          - "This UserVoice subdomain is currently available"
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(page not found|site not found|domain not configured|not.*registered)"

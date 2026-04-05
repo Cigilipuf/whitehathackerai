@@ -1,0 +1,46 @@
+id: whai-clickjacking
+
+info:
+  name: Clickjacking Detection
+  author: whitehat-ai
+  severity: medium
+  description: Detects pages vulnerable to clickjacking attacks via missing X-Frame-Options and CSP frame-ancestors
+  tags: clickjacking,framing,ui-redress,headers
+  reference:
+    - https://owasp.org/www-community/attacks/Clickjacking
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+      - "{{BaseURL}}/login"
+      - "{{BaseURL}}/settings"
+      - "{{BaseURL}}/profile"
+      - "{{BaseURL}}/account"
+      - "{{BaseURL}}/transfer"
+      - "{{BaseURL}}/payment"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        negative: true
+        part: header
+        regex:
+          - "(?i)x-frame-options:\\s*(deny|sameorigin)"
+        condition: and
+
+      - type: regex
+        negative: true
+        part: header
+        regex:
+          - "(?i)content-security-policy:.*frame-ancestors\\s+('none'|'self')"
+        condition: and
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(<form|<input|<button|<a href)"

@@ -1,0 +1,76 @@
+id: whai-docker-k8s-exposure
+
+info:
+  name: Docker and Kubernetes Exposure
+  author: whitehat-ai
+  severity: critical
+  description: Detects exposed Docker API, Kubernetes dashboard, and container escape vectors
+  tags: docker,kubernetes,container,exposure,critical
+  reference:
+    - https://owasp.org/www-project-kubernetes-top-ten/
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/version"
+      - "{{BaseURL}}/v2/_catalog"
+      - "{{BaseURL}}/_ping"
+      - "{{BaseURL}}/containers/json"
+      - "{{BaseURL}}/images/json"
+      - "{{BaseURL}}/info"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(docker|ApiVersion|GoVersion|Arch|KernelVersion)"
+          - "(?i)(\"repositories\":|\"Id\".*\"Names\".*\"Image\")"
+          - "(?i)(Containers|Images|Driver|MemTotal)"
+        condition: or
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/v1/namespaces"
+      - "{{BaseURL}}/api/v1/pods"
+      - "{{BaseURL}}/api/v1/nodes"
+      - "{{BaseURL}}/api/v1/secrets"
+      - "{{BaseURL}}/api/v1/configmaps"
+      - "{{BaseURL}}/apis"
+      - "{{BaseURL}}/api"
+      - "{{BaseURL}}/healthz"
+      - "{{BaseURL}}/dashboard/"
+      - "{{BaseURL}}/ui/"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(\"kind\":\\s*\"(NamespaceList|PodList|NodeList|SecretList)\")"
+          - "(?i)(\"apiVersion\".*\"items\")"
+          - "(?i)(kubernetes.*dashboard)"
+        condition: or
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/v2/_catalog"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        part: body
+        words:
+          - "repositories"

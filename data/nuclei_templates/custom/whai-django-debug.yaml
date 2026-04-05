@@ -1,0 +1,24 @@
+id: whai-django-debug
+
+info:
+  name: Django Debug Mode Enabled
+  author: whitehat-ai
+  severity: high
+  description: Detects Django DEBUG=True
+  tags: misconfig,django,python,debug,high
+  classification:
+    cwe-id: CWE-209
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/{{randstr}}"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "DEBUG = True"
+          - "Django Version:"
+          - "Traceback"
+        condition: or

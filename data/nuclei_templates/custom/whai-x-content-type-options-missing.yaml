@@ -1,0 +1,22 @@
+id: whai-x-content-type-options-missing
+
+info:
+  name: Missing X-Content-Type-Options Header
+  author: whitehat-ai
+  severity: low
+  description: Missing X-Content-Type-Options nosniff header
+  tags: header,mime,security,low
+  classification:
+    cwe-id: CWE-16
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers:
+      - type: word
+        part: header
+        negative: true
+        words:
+          - "x-content-type-options"

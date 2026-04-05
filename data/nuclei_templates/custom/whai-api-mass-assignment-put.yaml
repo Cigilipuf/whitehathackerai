@@ -1,0 +1,33 @@
+id: whai-api-mass-assignment-put
+
+info:
+  name: API Mass Assignment via PUT
+  author: whitehat-ai
+  severity: high
+  description: Tests API for mass assignment with privileged fields
+  tags: api,mass-assignment,high
+  classification:
+    cwe-id: CWE-915
+
+http:
+  - method: PUT
+    path:
+      - "{{BaseURL}}/api/user"
+      - "{{BaseURL}}/api/v1/profile"
+
+    headers:
+      Content-Type: application/json
+
+    body: '{"role":"admin","is_admin":true,"verified":true}'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"admin"'
+          - '"is_admin":true'
+        condition: or

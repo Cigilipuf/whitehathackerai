@@ -1,0 +1,21 @@
+id: whai-subresource-integrity-missing
+
+info:
+  name: Missing Subresource Integrity (SRI)
+  author: whitehat-ai
+  severity: low
+  description: External scripts loaded without SRI
+  tags: integrity,sri,low
+  classification:
+    cwe-id: CWE-829
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - '<script[^>]+src="https?://(?!.*integrity)[^"]*cdn[^"]*"'

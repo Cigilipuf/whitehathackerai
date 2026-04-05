@@ -1,0 +1,23 @@
+id: whai-unsafe-http-methods
+
+info:
+  name: Unsafe HTTP Methods Enabled (PUT/DELETE)
+  author: whitehat-ai
+  severity: medium
+  description: Detects enabled PUT/DELETE methods on web server
+  tags: method,misconfig,medium
+  classification:
+    cwe-id: CWE-749
+
+http:
+  - method: OPTIONS
+    path:
+      - "{{BaseURL}}"
+
+    matchers:
+      - type: word
+        part: header
+        words:
+          - "PUT"
+          - "DELETE"
+        condition: or

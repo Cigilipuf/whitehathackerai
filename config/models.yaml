@@ -1,0 +1,197 @@
+# ============================================================
+# WhiteHatHacker AI — Model Konfigürasyonları
+# ============================================================
+# Bu dosya brain engine modelleri ve routing ayarlarını tanımlar.
+# Model dosyaları models/ dizininde veya LM Studio'da bulunmalıdır.
+
+# ============================================================
+# BaronLLM v2 — Offensive Security LLM (Qwen3-14B base, Q8_0)
+# ============================================================
+# Tek model, dual-brain mimarisi:
+#   Primary:   /think modu → derin analiz, CoT reasoning
+#   Secondary: /no_think modu → hızlı triage, direkt yanıt
+#
+# Benchmark: SecBench MCQ 86.9% | CS-Eval 80.93 | SecBench Open 71.14
+# Training:  53,202 examples (offensive security focused)
+# License:   Apache 2.0 + MIT
+# ============================================================
+
+primary:
+  name: "BaronLLM-v2-Think"
+  source: "AlicanKiraz0/BaronLLM-v2-OffensiveSecurity-GGUF"
+  file: "baronllm-v2-offensivesecurity-q8_0.gguf"
+  parameters: "15B (dense, Qwen3-14B base)"
+  quantization: "Q8_0"
+  format: "GGUF"
+  
+  inference:
+    context_length: 32768         # Qwen3 native 32K context
+    gpu_layers: -1                # Apple Silicon — tüm katmanlar Metal GPU
+    threads: 8
+    temperature: 0.6              # Thinking mode — yaratıcı ama tutarlı
+    top_p: 0.95
+    top_k: 20
+    repeat_penalty: 1.1
+    max_tokens: 8192              # Uzun thinking + analiz için
+    batch_size: 512
+    thinking_mode: true           # /think prefix otomatik eklenir
+    
+  capabilities:
+    - deep_analysis
+    - exploit_strategy
+    - fp_elimination
+    - report_writing
+    - business_logic_testing
+    - complex_reasoning
+    - vulnerability_assessment
+    - code_review
+    - offensive_security          # Saldırı odaklı eğitim
+    - native_tool_calling         # Qwen3 native tool calling
+    - chain_of_thought            # Thinking mode CoT
+    
+  memory:
+    min_ram_gb: 16
+    recommended_ram_gb: 32
+    model_size_gb: 15.7           # Q8_0 quantization
+    remaining_ram_gb: 48          # Context + OS + fallback model için
+
+secondary:
+  name: "BaronLLM-v2-Fast"
+  source: "AlicanKiraz0/BaronLLM-v2-OffensiveSecurity-GGUF"
+  file: "baronllm-v2-offensivesecurity-q8_0.gguf"   # AYNI MODEL — farklı mod
+  parameters: "15B (dense, Qwen3-14B base)"
+  quantization: "Q8_0"
+  format: "GGUF"
+  
+  inference:
+    context_length: 32768
+    gpu_layers: -1
+    threads: 8
+    temperature: 0.7              # Non-thinking — genel görevler
+    top_p: 0.8
+    top_k: 20
+    repeat_penalty: 1.05
+    max_tokens: 2048              # Hızlı yanıt — kısa çıktı
+    batch_size: 512
+    thinking_mode: false          # /no_think prefix otomatik eklenir
+    
+  capabilities:
+    - fast_triage
+    - recon_decisions
+    - tool_selection
+    - scope_analysis
+    - parallel_analysis
+    - quick_assessment
+    - cve_lookup
+    - function_calling
+    - offensive_security
+    - native_tool_calling
+    
+  memory:
+    min_ram_gb: 16
+    recommended_ram_gb: 32
+    model_size_gb: 15.7           # AYNI MODEL — ek bellek yok
+    note: "Same model as primary — no additional memory needed"
+
+# ============================================================
+# DeepHat-V1-7B — Lightweight Fallback (Qwen2.5-Coder-7B base)
+# ============================================================
+# Sadece primary VE secondary her ikisi de down olduğunda devreye girer.
+# Hızlı triage ve basit araç seçimi yapabilir, derin analiz için yetersiz.
+# ============================================================
+fallback:
+  name: "DeepHat-V1-7B"
+  source: "Neanderthal/DeepHat-V1-7B-GGUF"
+  file: "deephat-v1-7b-q4_k_m.gguf"
+  parameters: "7.61B (dense, Qwen2.5-Coder-7B base)"
+  quantization: "Q4_K_M"
+  format: "GGUF"
+
+  inference:
+    context_length: 8192
+    gpu_layers: -1
+    threads: 4
+    temperature: 0.3
+    top_p: 0.9
+    top_k: 40
+    repeat_penalty: 1.1
+    max_tokens: 1024
+    batch_size: 256
+    thinking_mode: false          # No thinking mode (Qwen2.5 base)
+
+  capabilities:
+    - fast_triage
+    - tool_selection
+    - quick_assessment
+    - cve_lookup
+
+  memory:
+    min_ram_gb: 8
+    recommended_ram_gb: 16
+    model_size_gb: 4.68           # Q4_K_M quantization
+    note: "Emergency fallback only — can run alongside BaronLLM"
+
+# ============================================================
+# Brain Router — Görev-Model Eşleme
+# ============================================================
+routing:
+  # Pattern → model eşleme kuralları  
+  rules:
+    # Secondary (Hızlı — BaronLLM /no_think)
+    - pattern: "recon|enumerate|scan_config|tool_select|triage|scope"
+      brain: "secondary"
+      reason: "Hızlı karar, düşük latency"
+      
+    - pattern: "cve_lookup|quick_assess|parallel"
+      brain: "secondary"
+      reason: "Hızlı sorgu"
+    
+    # Primary (Derin — BaronLLM /think)
+    - pattern: "analyze|exploit|fp_check|report|reason|strategy"
+      brain: "primary"
+      reason: "Derin analiz, yüksek doğruluk"
+      
+    - pattern: "business_logic|code_review|impact_assess"
+      brain: "primary"
+      reason: "Karmaşık mantık gerektiren görev"
+    
+    # Ensemble (Her ikisi)
+    - pattern: "critical_decision|final_verification|high_value_target"
+      brain: "both"
+      strategy: "majority_vote"
+      reason: "Kritik karar — çift doğrulama"
+
+  # Fallback
+  default_brain: "primary"
+  
+  # Ensemble ayarları
+  ensemble:
+    strategy: "majority_vote"   # majority_vote | consensus | weighted
+    primary_weight: 0.65
+    secondary_weight: 0.35
+    require_consensus_for:
+      - "exploit_decision"
+      - "report_submission"
+      - "scope_expansion"
+
+# ============================================================
+# Model İndirme
+# ============================================================
+download:
+  # BaronLLM v2 — hem primary hem secondary olarak kullanılır
+  primary:
+    url: "https://huggingface.co/AlicanKiraz0/BaronLLM-v2-OffensiveSecurity-GGUF"
+    file: "baronllm-v2-offensivesecurity-q8_0.gguf"
+    sha256: ""  # İndirme sonrası doğrulama
+    size_gb: 15.7
+    format: "GGUF Q8_0"
+    note: "LM Studio'dan indirilir — AlicanKiraz0/BaronLLM-v2-OffensiveSecurity-GGUF"
+
+  # DeepHat-V1-7B — fallback model
+  fallback:
+    url: "https://huggingface.co/Neanderthal/DeepHat-V1-7B-GGUF"
+    file: "deephat-v1-7b-q4_k_m.gguf"
+    sha256: ""
+    size_gb: 4.68
+    format: "GGUF Q4_K_M"
+    note: "Local fallback — llama-cpp-python veya LM Studio ile"

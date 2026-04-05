@@ -1,0 +1,59 @@
+id: whai-wordpress-enumeration
+
+info:
+  name: WordPress User and Version Enumeration
+  author: whitehat-ai
+  severity: medium
+  description: Enumerates WordPress users via REST API and detects version information
+  tags: wordpress,enumeration,cms
+  reference:
+    - https://owasp.org/www-project-web-security-testing-guide/
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/wp-json/wp/v2/users"
+      - "{{BaseURL}}/?rest_route=/wp/v2/users"
+      - "{{BaseURL}}/wp-json/wp/v2/users?per_page=100"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        part: body
+        words:
+          - "\"slug\""
+          - "\"name\""
+          - "\"id\""
+        condition: and
+
+      - type: word
+        part: header
+        words:
+          - "application/json"
+
+    extractors:
+      - type: json
+        json:
+          - ".[].slug"
+          - ".[].name"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/readme.html"
+      - "{{BaseURL}}/license.txt"
+      - "{{BaseURL}}/wp-includes/version.php"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(wordpress|wp_version)"

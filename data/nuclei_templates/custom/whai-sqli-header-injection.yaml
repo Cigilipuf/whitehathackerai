@@ -1,0 +1,29 @@
+id: whai-sqli-header-injection
+
+info:
+  name: SQL Injection via HTTP Headers
+  author: whitehat-ai
+  severity: critical
+  description: Tests for SQLi through X-Forwarded-For, Referer, and User-Agent headers
+  tags: sqli,header-injection,critical
+  classification:
+    cwe-id: CWE-89
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+      - "{{BaseURL}}/login"
+
+    headers:
+      X-Forwarded-For: "1' OR '1'='1"
+      Referer: "1' OR '1'='1"
+      X-Client-IP: "1' OR '1'='1"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(sql|mysql|postgres|oracle|sqlite)"
+          - "(?i)(syntax error|unclosed quotation)"
+        condition: or

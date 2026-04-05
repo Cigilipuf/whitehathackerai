@@ -1,0 +1,29 @@
+id: whai-express-bodyparser-error
+
+info:
+  name: Express Body-Parser Error Leak
+  author: whitehat-ai
+  severity: medium
+  description: Detects Express body-parser leaking stack
+  tags: express,nodejs,error,medium
+  classification:
+    cwe-id: CWE-209
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api"
+
+    headers:
+      Content-Type: application/json
+
+    body: '{"invalid json'
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "SyntaxError"
+          - "Unexpected token"
+          - "JSON.parse"
+        condition: or

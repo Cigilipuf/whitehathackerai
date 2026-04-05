@@ -1,0 +1,26 @@
+id: whai-json-hijacking
+
+info:
+  name: JSON Array Response Hijacking
+  author: whitehat-ai
+  severity: medium
+  description: API returns sensitive data as JSON array (hijackable)
+  tags: json,hijacking,api,medium
+  classification:
+    cwe-id: CWE-200
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/users"
+      - "{{BaseURL}}/api/data"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: regex
+        part: body
+        regex:
+          - '^\\s*\\['

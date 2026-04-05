@@ -1,0 +1,37 @@
+id: whai-privilege-escalation-role
+
+info:
+  name: Privilege Escalation via Role Parameter Tampering
+  author: whitehat-ai
+  severity: critical
+  description: Tests for privilege escalation by injecting admin/role parameters
+  tags: privesc,broken-access-control,critical
+  classification:
+    cwe-id: CWE-269
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/users"
+      - "{{BaseURL}}/api/v1/register"
+      - "{{BaseURL}}/api/profile/update"
+
+    headers:
+      Content-Type: application/json
+
+    body: '{"role":"admin","is_admin":true,"privilege":"superuser"}'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+          - 201
+
+      - type: word
+        part: body
+        words:
+          - '"admin"'
+          - '"superuser"'
+          - '"is_admin":true'
+        condition: or

@@ -1,0 +1,51 @@
+id: whai-cicd-exposure
+
+info:
+  name: CI/CD Configuration Exposure
+  author: whitehat-ai
+  severity: high
+  description: Detects exposed CI/CD configuration files and pipeline secrets
+  tags: cicd,exposure,devops,misconfiguration
+  reference:
+    - https://owasp.org/www-project-web-security-testing-guide/
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/.github/workflows/"
+      - "{{BaseURL}}/.gitlab-ci.yml"
+      - "{{BaseURL}}/.travis.yml"
+      - "{{BaseURL}}/Jenkinsfile"
+      - "{{BaseURL}}/bitbucket-pipelines.yml"
+      - "{{BaseURL}}/.circleci/config.yml"
+      - "{{BaseURL}}/azure-pipelines.yml"
+      - "{{BaseURL}}/.drone.yml"
+      - "{{BaseURL}}/buildspec.yml"
+      - "{{BaseURL}}/Procfile"
+      - "{{BaseURL}}/terraform.tfstate"
+      - "{{BaseURL}}/terraform.tfvars"
+      - "{{BaseURL}}/.terraform/"
+      - "{{BaseURL}}/ansible.cfg"
+      - "{{BaseURL}}/playbook.yml"
+      - "{{BaseURL}}/vars.yml"
+      - "{{BaseURL}}/vault.yml"
+      - "{{BaseURL}}/kubernetes/"
+      - "{{BaseURL}}/k8s/"
+      - "{{BaseURL}}/helm/"
+
+    stop-at-first-match: false
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(pipeline|stage|deploy|build|test|script)"
+          - "(?i)(aws_access_key|aws_secret|docker_password|npm_token)"
+          - "(?i)(terraform|resource|provider|variable)"
+          - "(?i)(ansible|playbook|hosts|vault_password)"
+          - "(?i)(apiVersion|kind:\\s*Deployment|kind:\\s*Service)"
+        condition: or

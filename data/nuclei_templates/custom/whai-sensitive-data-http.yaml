@@ -1,0 +1,24 @@
+id: whai-sensitive-data-http
+
+info:
+  name: Sensitive Data Transmitted Over HTTP
+  author: whitehat-ai
+  severity: high
+  description: Detects login forms accepting credentials over unencrypted HTTP
+  tags: crypto,sensitive-data,http,high
+  classification:
+    cwe-id: CWE-319
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/login"
+      - "{{BaseURL}}/signin"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - 'type="password"'
+          - "password"
+        condition: or

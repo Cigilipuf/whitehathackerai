@@ -1,0 +1,23 @@
+id: whai-express-debug
+
+info:
+  name: Express.js Stack Trace Exposure
+  author: whitehat-ai
+  severity: medium
+  description: Detects Express.js leaking stack traces
+  tags: misconfig,express,nodejs,debug,medium
+  classification:
+    cwe-id: CWE-209
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/{{randstr}}"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(at \\S+ \\(.*node_modules.*\\))"
+          - "(?i)(Error: Cannot (GET|find))"
+        condition: or

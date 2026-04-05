@@ -1,0 +1,41 @@
+# ============================================================
+# WhiteHatHacker AI — Aggressive Scan Profile
+# ============================================================
+# Hızlı ve kapsamlı. Tüm araçlar tam güçte.
+
+name: "aggressive"
+description: "Fast, comprehensive scanning — maximum coverage"
+
+timing:
+  requests_per_second: 50
+  requests_per_host: 10
+  delay_between_tools: 0
+  jitter: false
+
+nmap:
+  flags: "-sV -sC -A -T4 -p- -Pn"
+  
+ffuf:
+  rate: 100
+  threads: 40
+  
+sqlmap:
+  level: 5
+  risk: 3
+  threads: 8
+  random_agent: true
+  
+gobuster:
+  threads: 30
+
+tool_selection:
+  disabled: []
+  preferred:
+    port_scan: "masscan"  # Hız öncelikli
+    directory: "ffuf"
+    
+concurrency:
+  max_parallel_tools: 8
+  
+timeouts:
+  multiplier: 0.5    # Timeout'ları yarıya indir

@@ -1,0 +1,31 @@
+id: whai-cors-preflight-bypass
+
+info:
+  name: CORS Preflight Bypass
+  author: whitehat-ai
+  severity: medium
+  description: Tests CORS bypass via simple request Content-Type
+  tags: cors,bypass,medium
+  classification:
+    cwe-id: CWE-942
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/user"
+
+    headers:
+      Content-Type: text/plain
+      Origin: https://evil.com
+
+    body: '{"action":"read"}'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: header
+        words:
+          - "Access-Control-Allow-Origin"

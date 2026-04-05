@@ -1,0 +1,26 @@
+id: whai-cmdi-chained
+
+info:
+  name: OS Command Injection via Chained Commands
+  author: whitehat-ai
+  severity: critical
+  description: Tests for command injection with various chaining operators
+  tags: cmdi,injection,critical
+  classification:
+    cwe-id: CWE-78
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?cmd=;id"
+      - "{{BaseURL}}/?exec=|id"
+      - "{{BaseURL}}/?host=127.0.0.1%0aid"
+      - "{{BaseURL}}/?ip=127.0.0.1;cat+/etc/hostname"
+      - "{{BaseURL}}/?domain=test.com%60id%60"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "uid=\\d+\\(.*\\)"
+        condition: or

@@ -1,0 +1,30 @@
+id: whai-cors-origin-reflection
+
+info:
+  name: CORS Origin Reflection
+  author: whitehat-ai
+  severity: high
+  description: Detects CORS reflecting arbitrary origin with credentials
+  tags: cors,misconfig,high
+  classification:
+    cwe-id: CWE-942
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/user"
+      - "{{BaseURL}}/api/me"
+
+    headers:
+      Origin: https://evil.com
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: header
+        words:
+          - "Access-Control-Allow-Origin: https://evil.com"
+      - type: word
+        part: header
+        words:
+          - "Access-Control-Allow-Credentials: true"

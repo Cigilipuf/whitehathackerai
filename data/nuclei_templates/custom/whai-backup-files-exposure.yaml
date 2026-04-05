@@ -1,0 +1,36 @@
+id: whai-backup-files-exposure
+
+info:
+  name: Backup File Exposure
+  author: whitehat-ai
+  severity: high
+  description: Detects exposed backup files
+  tags: backup,misconfig,high
+  classification:
+    cwe-id: CWE-530
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/backup.sql"
+      - "{{BaseURL}}/backup.zip"
+      - "{{BaseURL}}/db.sql"
+      - "{{BaseURL}}/dump.sql"
+      - "{{BaseURL}}/database.sql"
+      - "{{BaseURL}}/site.tar.gz"
+      - "{{BaseURL}}/backup.tar.gz"
+      - "{{BaseURL}}/wp-content/debug.log"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: header
+        words:
+          - "application/zip"
+          - "application/gzip"
+          - "application/sql"
+          - "text/plain"
+        condition: or

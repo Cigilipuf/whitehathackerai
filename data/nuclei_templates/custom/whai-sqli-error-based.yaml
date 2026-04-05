@@ -1,0 +1,49 @@
+id: whai-sqli-error-based
+
+info:
+  name: Error-Based SQL Injection Detection
+  author: whitehat-ai
+  severity: critical
+  description: Detects error-based SQL injection by monitoring for database error messages
+  tags: sqli,injection,error-based,critical
+  reference:
+    - https://owasp.org/www-community/attacks/SQL_Injection
+    - https://portswigger.net/web-security/sql-injection
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?id=1'"
+      - "{{BaseURL}}/?id=1%27"
+      - "{{BaseURL}}/?id=1%22"
+      - "{{BaseURL}}/?id=1%27%20OR%201=1--"
+      - "{{BaseURL}}/?page=1'"
+      - "{{BaseURL}}/?category=1'"
+      - "{{BaseURL}}/?user=admin'"
+      - "{{BaseURL}}/?search=test'"
+      - "{{BaseURL}}/?sort=name'"
+      - "{{BaseURL}}/?order=1'"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+          - 500
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(you have an error in your sql syntax)"
+          - "(?i)(warning:\\s*mysql_|warning:\\s*pg_|warning:\\s*mssql_)"
+          - "(?i)(unclosed quotation mark|quoted string not properly terminated)"
+          - "(?i)(microsoft ole db provider for sql server)"
+          - "(?i)(odbc\\s*drivers?.*error)"
+          - "(?i)(PostgreSQL.*ERROR|pg_query\\(\\).*failed)"
+          - "(?i)(ORA-\\d{5}|oracle.*error)"
+          - "(?i)(SQLite3?::(?:Exception|ConstraintException)|SQLITE_ERROR)"
+          - "(?i)(Dynamic SQL Error|SQL command not properly ended)"
+          - "(?i)(supplied argument is not a valid.*result)"
+          - "(?i)(mysql_fetch_|mysql_num_rows|mysql_connect)"
+          - "(?i)(javax\\.persistence|hibernate\\.exception)"
+        condition: or

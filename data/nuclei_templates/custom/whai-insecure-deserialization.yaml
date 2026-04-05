@@ -1,0 +1,55 @@
+id: whai-insecure-deserialization
+
+info:
+  name: Insecure Deserialization Detection
+  author: whitehat-ai
+  severity: critical
+  description: Detects potential insecure deserialization via Java, PHP, Python, and .NET serialized objects
+  tags: deserialization,rce,critical
+  reference:
+    - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/07-Input_Validation_Testing/15-Testing_for_HTTP_Incoming_Requests
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers-condition: or
+    matchers:
+      - type: regex
+        part: header
+        regex:
+          - "(?i)set-cookie:.*rO0AB"
+
+      - type: regex
+        part: body
+        regex:
+          - "rO0AB[A-Za-z0-9+/=]+"
+          - "(?i)java\\.io\\.ObjectInputStream"
+
+      - type: regex
+        part: header
+        regex:
+          - "(?i)set-cookie:.*O:[0-9]+:\""
+
+      - type: regex
+        part: body
+        regex:
+          - "O:[0-9]+:\"[a-zA-Z]+"
+
+      - type: regex
+        part: header
+        regex:
+          - "(?i)set-cookie:.*AAEAAAD"
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(__VIEWSTATE|__EVENTVALIDATION).*value=\"[A-Za-z0-9+/=]{50,}\""
+
+    extractors:
+      - type: regex
+        part: header
+        regex:
+          - "(?i)set-cookie:.*?(rO0AB[A-Za-z0-9+/=]{20,})"
+          - "(?i)set-cookie:.*?(O:[0-9]+:\"[^\"]+\")"

@@ -1,0 +1,19 @@
+id: whai-sqli-boolean-blind
+
+info:
+  name: Boolean-Based Blind SQL Injection
+  author: whitehat-ai
+  severity: high
+  description: Detects boolean-based blind SQL injection by comparing true/false response differences
+  tags: sqli,blind,boolean,high
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?id=1%20AND%201=1"
+      - "{{BaseURL}}/?id=1%20AND%201=2"
+
+    matchers:
+      - type: dsl
+        dsl:
+          - "len(body_1) != len(body_2)"

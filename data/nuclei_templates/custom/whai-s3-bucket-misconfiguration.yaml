@@ -1,0 +1,50 @@
+id: whai-s3-bucket-misconfiguration
+
+info:
+  name: S3 Bucket and Cloud Storage Misconfiguration
+  author: whitehat-ai
+  severity: high
+  description: Detects misconfigured S3 buckets and cloud storage with public access
+  tags: s3,cloud,misconfiguration,aws
+  reference:
+    - https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers-condition: or
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "<ListBucketResult"
+          - "<Contents>"
+          - "(?i)<Key>.*</Key>"
+
+      - type: regex
+        part: header
+        regex:
+          - "(?i)x-amz-bucket-region:"
+          - "(?i)x-goog-generation:"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/.well-known/security.txt"
+      - "{{BaseURL}}/crossdomain.xml"
+      - "{{BaseURL}}/clientaccesspolicy.xml"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "<allow-access-from domain=\"\\*\""
+          - "<cross-domain-policy>"
+          - "(?i)allow-http-request-headers-from domain=\"\\*\""
+        condition: or

@@ -1,0 +1,25 @@
+id: whai-open-redirect-params
+
+info:
+  name: Open Redirect via Common Parameters
+  author: whitehat-ai
+  severity: medium
+  description: Tests open redirect in common URL parameters
+  tags: open-redirect,medium
+  classification:
+    cwe-id: CWE-601
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?url=https://evil.com"
+      - "{{BaseURL}}/?redirect=https://evil.com"
+      - "{{BaseURL}}/?next=https://evil.com"
+      - "{{BaseURL}}/?return=https://evil.com"
+      - "{{BaseURL}}/?goto=https://evil.com"
+
+    matchers:
+      - type: regex
+        part: header
+        regex:
+          - "(?i)location:.*evil\\.com"

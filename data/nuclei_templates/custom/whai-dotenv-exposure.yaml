@@ -1,0 +1,29 @@
+id: whai-dotenv-exposure
+
+info:
+  name: .env File Exposure
+  author: whitehat-ai
+  severity: critical
+  description: Detects exposed .env files with sensitive configuration
+  tags: misconfig,env,secrets,critical
+  classification:
+    cwe-id: CWE-538
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/.env"
+      - "{{BaseURL}}/.env.local"
+      - "{{BaseURL}}/.env.production"
+      - "{{BaseURL}}/.env.backup"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(DB_PASSWORD|DATABASE_URL|SECRET_KEY|API_KEY|AWS_)"
+        condition: or

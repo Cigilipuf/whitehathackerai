@@ -1,0 +1,30 @@
+id: whai-ds-store-htaccess
+
+info:
+  name: Exposed .DS_Store / .htaccess
+  author: whitehat-ai
+  severity: medium
+  description: Detects exposed OS/server config files
+  tags: misconfig,info-disclosure,medium
+  classification:
+    cwe-id: CWE-538
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/.DS_Store"
+      - "{{BaseURL}}/.htaccess"
+      - "{{BaseURL}}/.htpasswd"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "Bud1"
+          - "RewriteEngine"
+          - ":"
+        condition: or

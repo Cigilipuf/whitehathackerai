@@ -1,0 +1,28 @@
+id: whai-ci-cd-file-exposure
+
+info:
+  name: CI/CD Configuration File Exposure
+  author: whitehat-ai
+  severity: high
+  description: Detects exposed CI/CD config files with potential secrets
+  tags: integrity,cicd,exposure,high
+  classification:
+    cwe-id: CWE-538
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/.github/workflows/main.yml"
+      - "{{BaseURL}}/.gitlab-ci.yml"
+      - "{{BaseURL}}/Jenkinsfile"
+      - "{{BaseURL}}/.circleci/config.yml"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(steps:|jobs:|pipeline|stages:)"

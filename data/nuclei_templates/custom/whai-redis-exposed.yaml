@@ -1,0 +1,24 @@
+id: whai-redis-exposed
+
+info:
+  name: Redis Exposed via HTTP
+  author: whitehat-ai
+  severity: critical
+  description: Detects Redis accessible via HTTP
+  tags: redis,database,misconfig,critical
+  classification:
+    cwe-id: CWE-306
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/redis"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "-ERR"
+          - "redis_version"
+          - "PONG"
+        condition: or

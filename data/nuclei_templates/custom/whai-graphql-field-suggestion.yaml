@@ -1,0 +1,26 @@
+id: whai-graphql-field-suggestion
+
+info:
+  name: GraphQL Field Suggestion Leak
+  author: whitehat-ai
+  severity: low
+  description: GraphQL field suggestions reveal schema info
+  tags: graphql,info-disclosure,low
+  classification:
+    cwe-id: CWE-200
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/graphql"
+
+    headers:
+      Content-Type: application/json
+
+    body: '{"query":"{ __typ }"}'
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "Did you mean"

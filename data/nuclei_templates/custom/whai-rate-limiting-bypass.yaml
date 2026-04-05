@@ -1,0 +1,72 @@
+id: whai-rate-limiting-bypass
+
+info:
+  name: Rate Limiting Bypass Detection
+  author: whitehat-ai
+  severity: medium
+  description: Tests for rate limiting bypass via header manipulation
+  tags: rate-limit,bypass,brute-force,authentication
+  reference:
+    - https://owasp.org/www-community/controls/Blocking_Brute_Force_Attacks
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/login"
+      - "{{BaseURL}}/login"
+      - "{{BaseURL}}/auth/login"
+      - "{{BaseURL}}/api/v1/auth/login"
+    headers:
+      Content-Type: "application/json"
+      X-Forwarded-For: "{{randstr}}.{{randstr}}.{{randstr}}.{{randstr}}"
+      X-Real-IP: "{{randstr}}.{{randstr}}.{{randstr}}.{{randstr}}"
+      X-Originating-IP: "{{randstr}}.{{randstr}}.{{randstr}}.{{randstr}}"
+      X-Client-IP: "{{randstr}}.{{randstr}}.{{randstr}}.{{randstr}}"
+      X-Remote-Addr: "{{randstr}}.{{randstr}}.{{randstr}}.{{randstr}}"
+    body: '{"username":"admin","password":"wrongpassword123"}'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+          - 401
+          - 403
+
+      - type: word
+        negative: true
+        part: body
+        words:
+          - "rate limit"
+          - "too many requests"
+          - "try again later"
+          - "blocked"
+          - "throttled"
+        condition: and
+
+      - type: status
+        negative: true
+        status:
+          - 429
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/user/1"
+      - "{{BaseURL}}/api/user/2"  
+      - "{{BaseURL}}/api/user/3"
+      - "{{BaseURL}}/api/user/4"
+      - "{{BaseURL}}/api/user/5"
+      - "{{BaseURL}}/api/user/10"
+      - "{{BaseURL}}/api/user/100"
+      - "{{BaseURL}}/api/user/1000"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: status
+        negative: true
+        status:
+          - 429

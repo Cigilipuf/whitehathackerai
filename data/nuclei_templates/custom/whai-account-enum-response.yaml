@@ -1,0 +1,30 @@
+id: whai-account-enum-response
+
+info:
+  name: Account Enumeration via Response Differences
+  author: whitehat-ai
+  severity: medium
+  description: Detects account enumeration by different error messages for valid/invalid users
+  tags: insecure-design,enumeration,medium
+  classification:
+    cwe-id: CWE-204
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/login"
+      - "{{BaseURL}}/login"
+
+    headers:
+      Content-Type: application/json
+
+    body: '{"username":"admin","password":"wrong_password_12345"}'
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "invalid password"
+          - "wrong password"
+          - "password is incorrect"
+        condition: or

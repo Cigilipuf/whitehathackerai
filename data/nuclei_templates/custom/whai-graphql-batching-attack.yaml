@@ -1,0 +1,31 @@
+id: whai-graphql-batching-attack
+
+info:
+  name: GraphQL Batching Attack
+  author: whitehat-ai
+  severity: medium
+  description: Tests GraphQL batch queries for rate limit bypass
+  tags: graphql,api,rate-limit,medium
+  classification:
+    cwe-id: CWE-770
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/graphql"
+      - "{{BaseURL}}/api/graphql"
+
+    headers:
+      Content-Type: application/json
+
+    body: '[{"query":"{ __typename }"},{"query":"{ __typename }"},{"query":"{ __typename }"},{"query":"{ __typename }"},{"query":"{ __typename }"}]'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: regex
+        part: body
+        regex:
+          - '\\[.*"data".*"data".*\\]'

@@ -1,0 +1,38 @@
+id: whai-sqli-json-body
+
+info:
+  name: SQL Injection via JSON Body Parameters
+  author: whitehat-ai
+  severity: critical
+  description: Tests JSON API endpoints for SQL injection in body parameters
+  tags: sqli,json,api,critical
+  classification:
+    cwe-id: CWE-89
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/login"
+      - "{{BaseURL}}/api/search"
+      - "{{BaseURL}}/api/users"
+
+    headers:
+      Content-Type: application/json
+
+    body: '{"username":"admin\'","password":"test\'"}'
+
+    matchers-condition: and
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(sql|syntax error|mysql|postgres|oracle|ORA-[0-9]|unterminated)"
+          - "(?i)(you have an error in your SQL|quoted string not properly terminated)"
+        condition: or
+
+      - type: word
+        part: body
+        words:
+          - "admin"
+        negative: true
+        condition: or

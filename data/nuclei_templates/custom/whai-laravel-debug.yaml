@@ -1,0 +1,25 @@
+id: whai-laravel-debug
+
+info:
+  name: Laravel Debug Mode Enabled
+  author: whitehat-ai
+  severity: high
+  description: Detects Laravel debug mode
+  tags: misconfig,laravel,php,debug,high
+  classification:
+    cwe-id: CWE-209
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/{{randstr}}"
+      - "{{BaseURL}}/_ignition/health-check"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "Whoops!"
+          - "Ignition"
+          - "APP_KEY"
+        condition: or

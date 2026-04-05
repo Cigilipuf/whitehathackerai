@@ -1,0 +1,20 @@
+id: whai-wordpress-version
+
+info:
+  name: WordPress Version Disclosure
+  author: whitehat-ai
+  severity: info
+  description: Detects WordPress version from meta tags
+  tags: wordpress,cms,version,info
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+      - "{{BaseURL}}/readme.html"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "WordPress ([0-9]+\\.[0-9]+\\.?[0-9]*)"

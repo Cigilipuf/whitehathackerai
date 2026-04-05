@@ -1,0 +1,26 @@
+id: whai-csp-header-missing
+
+info:
+  name: Missing Content-Security-Policy Header
+  author: whitehat-ai
+  severity: low
+  description: Web application missing CSP header
+  tags: header,csp,security,low
+  classification:
+    cwe-id: CWE-693
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: header
+        negative: true
+        words:
+          - "content-security-policy"
+      - type: status
+        status:
+          - 200

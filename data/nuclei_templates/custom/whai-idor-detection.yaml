@@ -1,0 +1,52 @@
+id: whai-idor-detection
+
+info:
+  name: IDOR Pattern Detection
+  author: whitehat-ai
+  severity: high
+  description: Detects Insecure Direct Object Reference patterns in API endpoints
+  tags: idor,authorization,access-control,bola
+  reference:
+    - https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/user/1"
+      - "{{BaseURL}}/api/user/2"
+      - "{{BaseURL}}/api/users/1"
+      - "{{BaseURL}}/api/users/2"
+      - "{{BaseURL}}/api/v1/user/1"
+      - "{{BaseURL}}/api/v1/user/2"
+      - "{{BaseURL}}/api/profile/1"
+      - "{{BaseURL}}/api/profile/2"
+      - "{{BaseURL}}/api/account/1"
+      - "{{BaseURL}}/api/account/2"
+      - "{{BaseURL}}/api/order/1"
+      - "{{BaseURL}}/api/order/2"
+      - "{{BaseURL}}/api/invoice/1"
+      - "{{BaseURL}}/api/invoice/2"
+      - "{{BaseURL}}/api/document/1"
+      - "{{BaseURL}}/api/document/2"
+      - "{{BaseURL}}/api/file/1"
+      - "{{BaseURL}}/api/file/2"
+
+    stop-at-first-match: false
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(\"id\":\\s*\\d+|\"user_id\"|\"email\"|\"name\"|\"username\")"
+          - "(?i)(\"address\"|\"phone\"|\"ssn\"|\"credit_card\"|\"account\")"
+          - "(?i)(\"order_id\"|\"total\"|\"amount\"|\"items\")"
+        condition: or
+
+      - type: word
+        part: header
+        words:
+          - "application/json"

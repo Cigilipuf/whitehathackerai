@@ -1,0 +1,31 @@
+id: whai-admin-api-exposed
+
+info:
+  name: Admin API Endpoints Accessible
+  author: whitehat-ai
+  severity: high
+  description: Detects accessible admin API endpoints
+  tags: admin,api,access-control,high
+  classification:
+    cwe-id: CWE-284
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/admin/users"
+      - "{{BaseURL}}/api/admin/settings"
+      - "{{BaseURL}}/api/v1/admin"
+      - "{{BaseURL}}/internal/api"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"users"'
+          - '"settings"'
+          - '"data"'
+        condition: or

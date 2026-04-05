@@ -1,0 +1,59 @@
+id: whai-sensitive-file-exposure
+
+info:
+  name: Sensitive File Exposure
+  author: whitehat-ai
+  severity: high
+  description: Detects exposed sensitive files like .env, .git/config, backup files, etc.
+  tags: exposure,sensitive,file,misconfiguration
+  reference:
+    - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/.env"
+      - "{{BaseURL}}/.env.local"
+      - "{{BaseURL}}/.env.production"
+      - "{{BaseURL}}/.env.backup"
+      - "{{BaseURL}}/.git/config"
+      - "{{BaseURL}}/.git/HEAD"
+      - "{{BaseURL}}/.gitignore"
+      - "{{BaseURL}}/.svn/entries"
+      - "{{BaseURL}}/.svn/wc.db"
+      - "{{BaseURL}}/.DS_Store"
+      - "{{BaseURL}}/.htpasswd"
+      - "{{BaseURL}}/.htaccess"
+      - "{{BaseURL}}/wp-config.php.bak"
+      - "{{BaseURL}}/web.config"
+      - "{{BaseURL}}/config.php.bak"
+      - "{{BaseURL}}/database.yml"
+      - "{{BaseURL}}/config/database.yml"
+      - "{{BaseURL}}/.npmrc"
+      - "{{BaseURL}}/.dockerenv"
+      - "{{BaseURL}}/Dockerfile"
+      - "{{BaseURL}}/docker-compose.yml"
+      - "{{BaseURL}}/composer.json"
+      - "{{BaseURL}}/package.json"
+      - "{{BaseURL}}/Gemfile"
+      - "{{BaseURL}}/requirements.txt"
+
+    stop-at-first-match: false
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(DB_PASSWORD|DB_HOST|DATABASE_URL|MYSQL_ROOT_PASSWORD|POSTGRES_PASSWORD)"
+          - "(?i)(AWS_ACCESS_KEY|AWS_SECRET|AZURE_|GCP_|GOOGLE_APPLICATION)"
+          - "(?i)(API_KEY|API_SECRET|SECRET_KEY|PRIVATE_KEY|JWT_SECRET)"
+          - "(?i)(SMTP_PASSWORD|MAIL_PASSWORD|EMAIL_PASSWORD)"
+          - "(?i)(STRIPE_|PAYPAL_|TWILIO_|SENDGRID_)"
+          - "\\[core\\]"
+          - "ref: refs/heads/"
+          - "(?i)(password|passwd|pwd)\\s*[:=]\\s*['\"]?[^\\s'\"]{3,}"
+        condition: or

@@ -1,0 +1,28 @@
+id: whai-elasticsearch-open
+
+info:
+  name: Open Elasticsearch Instance
+  author: whitehat-ai
+  severity: critical
+  description: Detects unauthenticated Elasticsearch
+  tags: elasticsearch,database,misconfig,critical
+  classification:
+    cwe-id: CWE-306
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}:9200"
+      - "{{BaseURL}}:9200/_cat/indices"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"cluster_name"'
+          - "You Know, for Search"
+        condition: or

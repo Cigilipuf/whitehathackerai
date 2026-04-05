@@ -1,0 +1,51 @@
+id: whai-security-headers-missing
+
+info:
+  name: Missing Security Headers
+  author: whitehat-ai
+  severity: info
+  description: Detects missing critical security headers (HSTS, CSP, X-Frame-Options, X-Content-Type-Options)
+  tags: headers,security,misconfiguration
+  reference:
+    - https://owasp.org/www-project-secure-headers/
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers-condition: or
+    matchers:
+      - type: regex
+        negative: true
+        part: header
+        regex:
+          - "(?i)strict-transport-security:"
+        condition: and
+
+      - type: regex
+        negative: true
+        part: header
+        regex:
+          - "(?i)content-security-policy:"
+        condition: and
+
+      - type: regex
+        negative: true
+        part: header
+        regex:
+          - "(?i)x-frame-options:"
+        condition: and
+
+      - type: regex
+        negative: true
+        part: header
+        regex:
+          - "(?i)x-content-type-options:"
+        condition: and
+
+    extractors:
+      - type: kval
+        kval:
+          - server
+          - x_powered_by

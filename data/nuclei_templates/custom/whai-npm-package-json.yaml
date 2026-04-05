@@ -1,0 +1,28 @@
+id: whai-npm-package-json
+
+info:
+  name: NPM Package.json Exposure
+  author: whitehat-ai
+  severity: low
+  description: Detects exposed package.json
+  tags: npm,nodejs,info-disclosure,low
+  classification:
+    cwe-id: CWE-200
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/package.json"
+      - "{{BaseURL}}/package-lock.json"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"dependencies"'
+          - '"name"'
+        condition: and

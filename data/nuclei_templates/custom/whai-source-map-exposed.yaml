@@ -1,0 +1,30 @@
+id: whai-source-map-exposed
+
+info:
+  name: JavaScript Source Map Exposure
+  author: whitehat-ai
+  severity: medium
+  description: Detects exposed JavaScript source maps
+  tags: sourcemap,javascript,info-disclosure,medium
+  classification:
+    cwe-id: CWE-540
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/main.js.map"
+      - "{{BaseURL}}/app.js.map"
+      - "{{BaseURL}}/bundle.js.map"
+      - "{{BaseURL}}/static/js/main.js.map"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"sources"'
+          - '"mappings"'
+        condition: and

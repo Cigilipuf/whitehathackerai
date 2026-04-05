@@ -1,0 +1,47 @@
+id: whai-websocket-security
+
+info:
+  name: WebSocket Security Check
+  author: whitehat-ai
+  severity: medium
+  description: Detects WebSocket endpoints and checks for cross-site WebSocket hijacking
+  tags: websocket,cswsh,security
+  reference:
+    - https://portswigger.net/web-security/websockets
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/ws"
+      - "{{BaseURL}}/websocket"
+      - "{{BaseURL}}/socket.io/"
+      - "{{BaseURL}}/sockjs/"
+      - "{{BaseURL}}/cable"
+      - "{{BaseURL}}/hub"
+      - "{{BaseURL}}/signalr"
+      - "{{BaseURL}}/realtime"
+    headers:
+      Upgrade: "websocket"
+      Connection: "Upgrade"
+      Sec-WebSocket-Version: "13"
+      Sec-WebSocket-Key: "dGhlIHNhbXBsZSBub25jZQ=="
+      Origin: "https://evil-whaitest.com"
+
+    matchers-condition: or
+    matchers:
+      - type: status
+        status:
+          - 101
+
+      - type: word
+        part: header
+        words:
+          - "Upgrade: websocket"
+          - "Connection: Upgrade"
+          - "Sec-WebSocket-Accept"
+        condition: or
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(\"sid\":|\"pingTimeout\":|\"pingInterval\":)"

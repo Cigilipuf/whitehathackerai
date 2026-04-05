@@ -1,0 +1,27 @@
+id: whai-s3-bucket-listing
+
+info:
+  name: AWS S3 Bucket Listing
+  author: whitehat-ai
+  severity: high
+  description: Detects publicly listable S3 buckets
+  tags: s3,aws,cloud,misconfig,high
+  classification:
+    cwe-id: CWE-732
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "<ListBucketResult"
+          - "<Contents>"
+        condition: and

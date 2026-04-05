@@ -1,0 +1,25 @@
+id: whai-trace-method-enabled
+
+info:
+  name: HTTP TRACE Method Enabled
+  author: whitehat-ai
+  severity: medium
+  description: Detects enabled TRACE method (Cross-Site Tracing)
+  tags: trace,xst,method,medium
+  classification:
+    cwe-id: CWE-693
+
+http:
+  - method: TRACE
+    path:
+      - "{{BaseURL}}"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "TRACE"

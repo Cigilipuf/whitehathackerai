@@ -1,0 +1,160 @@
+{
+  "_meta": {
+    "description": "WhiteHatHacker AI Benchmark Lab — Expected Findings Manifests",
+    "version": "1.0.0",
+    "updated": "2026-03-17",
+    "usage": "python scripts/benchmark_runner.py --lab dvwa --findings output/scans/dvwa_findings.json"
+  },
+  "dvwa": {
+    "url": "http://127.0.0.1:8081",
+    "docker_service": "dvwa",
+    "health_endpoint": "/login.php",
+    "health_status": [200, 302],
+    "setup_notes": "Visit /setup.php to create DB. Default auth: admin/password. Set security=low via DVWA menu.",
+    "expected_vulns": [
+      {"class": "sql_injection", "min_count": 2, "severity": ["MEDIUM", "HIGH", "CRITICAL"]},
+      {"class": "xss_reflected", "min_count": 1, "severity": ["MEDIUM", "HIGH"]},
+      {"class": "xss_stored", "min_count": 1, "severity": ["MEDIUM", "HIGH"]},
+      {"class": "command_injection", "min_count": 1, "severity": ["HIGH", "CRITICAL"]},
+      {"class": "lfi", "min_count": 1, "severity": ["HIGH", "CRITICAL"]},
+      {"class": "csrf", "min_count": 1, "severity": ["MEDIUM"]},
+      {"class": "file_upload", "min_count": 1, "severity": ["HIGH", "CRITICAL"]},
+      {"class": "brute_force", "min_count": 1, "severity": ["LOW", "MEDIUM"]},
+      {"class": "information_disclosure", "min_count": 1, "severity": ["LOW", "MEDIUM"]}
+    ],
+    "acceptable_noise": [
+      "missing_security_headers", "missing_csp", "missing_hsts",
+      "cookie_no_httponly", "cookie_no_secure", "cookie_no_samesite",
+      "server_version_disclosure", "directory_listing", "http_only",
+      "missing_x_frame_options", "missing_x_content_type_options",
+      "weak_tls", "no_tls", "default_credentials"
+    ]
+  },
+  "juiceshop": {
+    "url": "http://127.0.0.1:8082",
+    "docker_service": "juiceshop",
+    "health_endpoint": "/",
+    "health_status": [200],
+    "setup_notes": "No setup required. App starts in vulnerable-by-default mode.",
+    "expected_vulns": [
+      {"class": "sql_injection", "min_count": 1, "severity": ["HIGH", "CRITICAL"]},
+      {"class": "xss_reflected", "min_count": 1, "severity": ["MEDIUM", "HIGH"]},
+      {"class": "xss_dom", "min_count": 1, "severity": ["MEDIUM", "HIGH"]},
+      {"class": "idor", "min_count": 1, "severity": ["MEDIUM", "HIGH"]},
+      {"class": "information_disclosure", "min_count": 2, "severity": ["LOW", "MEDIUM", "HIGH"]},
+      {"class": "broken_auth", "min_count": 1, "severity": ["HIGH", "CRITICAL"]},
+      {"class": "security_misconfiguration", "min_count": 1, "severity": ["LOW", "MEDIUM"]}
+    ],
+    "acceptable_noise": [
+      "missing_security_headers", "missing_csp", "missing_hsts",
+      "cookie_no_httponly", "cookie_no_secure", "cookie_no_samesite",
+      "server_version_disclosure", "http_only", "weak_tls", "no_tls",
+      "missing_x_frame_options", "missing_x_content_type_options"
+    ]
+  },
+  "webgoat": {
+    "url": "http://127.0.0.1:8083",
+    "docker_service": "webgoat",
+    "health_endpoint": "/WebGoat/login",
+    "health_status": [200],
+    "setup_notes": "Register with any username/password. Each lesson is a separate target.",
+    "expected_vulns": [
+      {"class": "sql_injection", "min_count": 1, "severity": ["HIGH", "CRITICAL"]},
+      {"class": "xss_reflected", "min_count": 1, "severity": ["MEDIUM", "HIGH"]},
+      {"class": "xxe", "min_count": 1, "severity": ["HIGH", "CRITICAL"]},
+      {"class": "broken_auth", "min_count": 1, "severity": ["HIGH"]},
+      {"class": "deserialization", "min_count": 1, "severity": ["HIGH", "CRITICAL"]},
+      {"class": "information_disclosure", "min_count": 1, "severity": ["LOW", "MEDIUM"]},
+      {"class": "csrf", "min_count": 1, "severity": ["MEDIUM"]},
+      {"class": "path_traversal", "min_count": 1, "severity": ["HIGH"]}
+    ],
+    "acceptable_noise": [
+      "missing_security_headers", "missing_csp", "missing_hsts",
+      "cookie_no_httponly", "cookie_no_secure", "cookie_no_samesite",
+      "server_version_disclosure", "http_only", "weak_tls", "no_tls",
+      "missing_x_frame_options", "missing_x_content_type_options"
+    ]
+  },
+  "vampi": {
+    "url": "http://127.0.0.1:8084",
+    "docker_service": "vampi",
+    "health_endpoint": "/",
+    "health_status": [200],
+    "setup_notes": "env variable 'vulnerable=1' already configured in docker-compose.",
+    "expected_vulns": [
+      {"class": "idor", "min_count": 1, "severity": ["MEDIUM", "HIGH"]},
+      {"class": "broken_auth", "min_count": 1, "severity": ["HIGH"]},
+      {"class": "mass_assignment", "min_count": 1, "severity": ["MEDIUM", "HIGH"]},
+      {"class": "sql_injection", "min_count": 1, "severity": ["HIGH", "CRITICAL"]},
+      {"class": "information_disclosure", "min_count": 1, "severity": ["LOW", "MEDIUM"]}
+    ],
+    "acceptable_noise": [
+      "missing_security_headers", "missing_csp", "missing_hsts",
+      "cookie_no_httponly", "cookie_no_secure", "http_only",
+      "weak_tls", "no_tls", "missing_x_frame_options",
+      "missing_x_content_type_options", "cors_misconfiguration"
+    ]
+  },
+  "crapi": {
+    "url": "http://127.0.0.1:8085",
+    "docker_service": "crapi-web",
+    "health_endpoint": "/",
+    "health_status": [200],
+    "setup_notes": "App takes ~30s to initialize. Multiple microservices boot up.",
+    "expected_vulns": [
+      {"class": "idor", "min_count": 2, "severity": ["HIGH", "CRITICAL"]},
+      {"class": "broken_auth", "min_count": 1, "severity": ["HIGH", "CRITICAL"]},
+      {"class": "excessive_data_exposure", "min_count": 1, "severity": ["MEDIUM", "HIGH"]},
+      {"class": "sql_injection", "min_count": 1, "severity": ["HIGH", "CRITICAL"]},
+      {"class": "ssrf", "min_count": 1, "severity": ["HIGH", "CRITICAL"]},
+      {"class": "mass_assignment", "min_count": 1, "severity": ["MEDIUM", "HIGH"]},
+      {"class": "rate_limiting", "min_count": 1, "severity": ["LOW", "MEDIUM"]}
+    ],
+    "acceptable_noise": [
+      "missing_security_headers", "missing_csp", "missing_hsts",
+      "cookie_no_httponly", "cookie_no_secure", "http_only",
+      "weak_tls", "no_tls", "missing_x_frame_options",
+      "missing_x_content_type_options", "cors_misconfiguration"
+    ]
+  },
+  "dvga": {
+    "url": "http://127.0.0.1:8086",
+    "docker_service": "dvga",
+    "health_endpoint": "/",
+    "health_status": [200],
+    "setup_notes": "No setup required. GraphQL endpoint at /graphql.",
+    "expected_vulns": [
+      {"class": "graphql_introspection", "min_count": 1, "severity": ["LOW", "MEDIUM"]},
+      {"class": "graphql_batch_query", "min_count": 1, "severity": ["MEDIUM"]},
+      {"class": "sql_injection", "min_count": 1, "severity": ["HIGH", "CRITICAL"]},
+      {"class": "information_disclosure", "min_count": 1, "severity": ["LOW", "MEDIUM"]},
+      {"class": "idor", "min_count": 1, "severity": ["MEDIUM", "HIGH"]}
+    ],
+    "acceptable_noise": [
+      "missing_security_headers", "missing_csp", "missing_hsts",
+      "cookie_no_httponly", "cookie_no_secure", "http_only",
+      "weak_tls", "no_tls", "missing_x_frame_options",
+      "missing_x_content_type_options"
+    ]
+  },
+  "nodegoat": {
+    "url": "http://127.0.0.1:8087",
+    "docker_service": "nodegoat",
+    "health_endpoint": "/",
+    "health_status": [200, 302],
+    "setup_notes": "Register with any credentials. MongoDB-backed (NoSQL injection).",
+    "expected_vulns": [
+      {"class": "xss_reflected", "min_count": 1, "severity": ["MEDIUM", "HIGH"]},
+      {"class": "sql_injection", "min_count": 1, "severity": ["HIGH", "CRITICAL"]},
+      {"class": "server_side_js_injection", "min_count": 1, "severity": ["CRITICAL"]},
+      {"class": "information_disclosure", "min_count": 1, "severity": ["LOW", "MEDIUM"]},
+      {"class": "broken_auth", "min_count": 1, "severity": ["HIGH"]}
+    ],
+    "acceptable_noise": [
+      "missing_security_headers", "missing_csp", "missing_hsts",
+      "cookie_no_httponly", "cookie_no_secure", "cookie_no_samesite",
+      "server_version_disclosure", "http_only", "weak_tls", "no_tls",
+      "missing_x_frame_options", "missing_x_content_type_options"
+    ]
+  }
+}

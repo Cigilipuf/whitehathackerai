@@ -1,0 +1,33 @@
+id: whai-graphql-introspection-full
+
+info:
+  name: GraphQL Full Introspection Enabled
+  author: whitehat-ai
+  severity: medium
+  description: Tests if GraphQL introspection exposes full schema
+  tags: graphql,introspection,api,medium
+  classification:
+    cwe-id: CWE-200
+
+http:
+  - method: POST
+    path:
+      - "{{BaseURL}}/graphql"
+      - "{{BaseURL}}/api/graphql"
+
+    headers:
+      Content-Type: application/json
+
+    body: '{"query":"{ __schema { types { name fields { name } } } }"}'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"__schema"'
+          - '"types"'
+        condition: and

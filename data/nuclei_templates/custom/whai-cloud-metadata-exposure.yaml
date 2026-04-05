@@ -1,0 +1,69 @@
+id: whai-cloud-metadata-exposure
+
+info:
+  name: Cloud Metadata Endpoint Exposure
+  author: whitehat-ai
+  severity: critical
+  description: Detects accessible cloud metadata endpoints (AWS, GCP, Azure, DigitalOcean)
+  tags: cloud,metadata,ssrf,aws,gcp,azure
+  reference:
+    - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/latest/meta-data/"
+      - "{{BaseURL}}/latest/meta-data/iam/security-credentials/"
+      - "{{BaseURL}}/latest/user-data/"
+      - "{{BaseURL}}/latest/dynamic/instance-identity/document"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(ami-id|instance-id|instance-type|placement|security-groups)"
+          - "(?i)(AccessKeyId|SecretAccessKey|Token)"
+        condition: or
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/computeMetadata/v1/"
+      - "{{BaseURL}}/computeMetadata/v1/project/"
+      - "{{BaseURL}}/computeMetadata/v1/instance/"
+    headers:
+      Metadata-Flavor: "Google"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(project-id|numeric-project-id|zone|instance)"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/metadata/instance?api-version=2021-02-01"
+    headers:
+      Metadata: "true"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        part: body
+        words:
+          - "compute"
+          - "vmId"
+        condition: or

@@ -1,0 +1,26 @@
+id: whai-ssti-jinja2
+
+info:
+  name: SSTI Detection (Jinja2/Twig)
+  author: whitehat-ai
+  severity: critical
+  description: Detects Jinja2 and Twig SSTI via math expression evaluation
+  tags: ssti,injection,jinja2,twig,critical
+  classification:
+    cwe-id: CWE-1336
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?name={{7*7}}"
+      - "{{BaseURL}}/?q={{7*'7'}}"
+      - "{{BaseURL}}/?template={{config}}"
+      - "{{BaseURL}}/?input=${7*7}"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "49"
+          - "7777777"
+        condition: or

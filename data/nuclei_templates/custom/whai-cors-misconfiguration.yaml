@@ -1,0 +1,29 @@
+id: whai-cors-misconfiguration
+
+info:
+  name: CORS Misconfiguration Detection
+  author: whitehat-ai
+  severity: high
+  description: Detects permissive CORS configurations that allow arbitrary origins
+  tags: cors,misconfiguration,header
+  reference:
+    - https://portswigger.net/web-security/cors
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+    headers:
+      Origin: "https://evil-whaitest.com"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: header
+        words:
+          - "Access-Control-Allow-Origin: https://evil-whaitest.com"
+
+      - type: word
+        part: header
+        words:
+          - "Access-Control-Allow-Credentials: true"

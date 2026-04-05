@@ -1,0 +1,22 @@
+id: whai-crlf-header-injection
+
+info:
+  name: CRLF Header Injection
+  author: whitehat-ai
+  severity: medium
+  description: Tests for CRLF injection in HTTP responses
+  tags: crlf,injection,medium
+  classification:
+    cwe-id: CWE-113
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/%0d%0aX-Injected: true"
+      - "{{BaseURL}}/?url=http://example.com%0d%0aX-Injected:%20true"
+
+    matchers:
+      - type: word
+        part: header
+        words:
+          - "X-Injected: true"

@@ -1,0 +1,26 @@
+id: whai-apikey-in-url
+
+info:
+  name: API Key Exposed in URL Parameters
+  author: whitehat-ai
+  severity: medium
+  description: Detects API keys passed via URL query parameters
+  tags: api,secrets,medium
+  classification:
+    cwe-id: CWE-598
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers-condition: and
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - '(?i)href=["''][^"'']*[?&](api_?key|access_?token|auth_?token|secret)=[a-zA-Z0-9_\-]{8,}'
+
+      - type: status
+        status:
+          - 200

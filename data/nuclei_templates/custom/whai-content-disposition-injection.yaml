@@ -1,0 +1,21 @@
+id: whai-content-disposition-injection
+
+info:
+  name: Content-Disposition Header Injection
+  author: whitehat-ai
+  severity: medium
+  description: Tests for content-disposition header injection via filename
+  tags: injection,header,upload,medium
+  classification:
+    cwe-id: CWE-113
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/download?file=test%0d%0aContent-Type:%20text/html"
+
+    matchers:
+      - type: word
+        part: header
+        words:
+          - "Content-Type: text/html"

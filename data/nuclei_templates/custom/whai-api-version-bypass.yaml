@@ -1,0 +1,29 @@
+id: whai-api-version-bypass
+
+info:
+  name: API Version Bypass to Older Insecure Version
+  author: whitehat-ai
+  severity: medium
+  description: Tests if older API versions with fewer security controls exist
+  tags: api,version,bypass,medium
+  classification:
+    cwe-id: CWE-284
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/v1/users"
+      - "{{BaseURL}}/api/v0/users"
+      - "{{BaseURL}}/v1/users"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"users"'
+          - '"data"'
+        condition: or

@@ -1,0 +1,27 @@
+id: whai-xss-dom-sources
+
+info:
+  name: DOM-Based XSS via URL Parameters
+  author: whitehat-ai
+  severity: high
+  description: Tests for DOM XSS through URL parameters
+  tags: xss,dom,high
+  classification:
+    cwe-id: CWE-79
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?q=<svg/onload=alert(1)>"
+      - "{{BaseURL}}/?search=<img src=x onerror=alert(1)>"
+      - "{{BaseURL}}/?callback=<script>alert(1)</script>"
+      - "{{BaseURL}}/?debug=<img src=x onerror=fetch('x')>"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "<svg/onload=alert(1)>"
+          - "<img src=x onerror=alert(1)>"
+          - "<script>alert(1)</script>"
+        condition: or

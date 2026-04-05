@@ -1,0 +1,22 @@
+id: whai-csp-bypass-jsonp
+
+info:
+  name: CSP Bypass via JSONP Endpoints
+  author: whitehat-ai
+  severity: medium
+  description: Identifies JSONP endpoints usable for CSP bypass
+  tags: csp,bypass,jsonp,medium
+  classification:
+    cwe-id: CWE-79
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/jsonp?callback=alert"
+      - "{{BaseURL}}/api?callback=alert"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "^\\s*alert\\s*\\("

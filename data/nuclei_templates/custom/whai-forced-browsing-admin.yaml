@@ -1,0 +1,36 @@
+id: whai-forced-browsing-admin
+
+info:
+  name: Forced Browsing to Admin Endpoints
+  author: whitehat-ai
+  severity: high
+  description: Detects accessible admin endpoints without proper authentication
+  tags: broken-access-control,admin,forced-browsing,high
+  classification:
+    cwe-id: CWE-425
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/admin"
+      - "{{BaseURL}}/admin/dashboard"
+      - "{{BaseURL}}/admin/users"
+      - "{{BaseURL}}/administrator"
+      - "{{BaseURL}}/_admin"
+      - "{{BaseURL}}/management"
+      - "{{BaseURL}}/panel"
+      - "{{BaseURL}}/internal"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        part: body
+        words:
+          - "dashboard"
+          - "admin panel"
+          - "management"
+        condition: or

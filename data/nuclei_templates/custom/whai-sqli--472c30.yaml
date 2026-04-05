@@ -1,0 +1,65 @@
+id: custom-sqli-gravatar-api  
+info:  
+  name: Gravatar API SQL Injection Check  
+  author: whitehat-ai  
+  severity: high  
+  description: Tests the Gravatar API endpoint for potential SQL injection vulnerabilities using common payloads and pattern matching  
+  tags: sqli, sql-injection  
+http:  
+  - method: GET  
+    path:  
+      - "{{BaseURL}}/api?id='"  
+    matchers-condition: and  
+    matchers:  
+      - type: word  
+        words:  
+          - "SQL syntax"  
+          - "mysql_error"  
+          - "syntax error"  
+      - type: status  
+        status:  
+          - 500  
+    extractors:  
+      - type: regex  
+        name: sql_error  
+        regex:  
+          - "SQL Error \\\\d+:.*"  
+          - "error in your SQL syntax near '"  
+  
+  - method: GET  
+    path:  
+      - "{{BaseURL}}/api?user=' OR '1'='1"  
+    matchers-condition: and  
+    matchers:  
+      - type: word  
+        words:  
+          - "unexpected query result"  
+          - "database error"  
+      - type: status  
+        status:  
+          - 500  
+    extractors:  
+      - type: regex  
+        name: boolean_injection  
+        regex:  
+          - "unexpected result set size"  
+          - "query execution failed"  
+  
+  - method: GET  
+    path:  
+      - "{{BaseURL}}/api?email=1 UNION SELECT NULL--"  
+    matchers-condition: and  
+    matchers:  
+      - type: word  
+        words:  
+          - "union error"  
+          - "column count mismatch"  
+      - type: status  
+        status:  
+          - 500  
+    extractors:  
+      - type: regex  
+        name: union_injection  
+        regex:  
+          - "SELECT command denied"  
+          - "column number mismatch"

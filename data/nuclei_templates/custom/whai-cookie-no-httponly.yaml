@@ -1,0 +1,27 @@
+id: whai-cookie-no-httponly
+
+info:
+  name: Cookie Without HttpOnly Flag
+  author: whitehat-ai
+  severity: low
+  description: Detects session cookies missing HttpOnly flag
+  tags: cookie,security,low
+  classification:
+    cwe-id: CWE-1004
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: header
+        words:
+          - "Set-Cookie"
+      - type: word
+        part: header
+        negative: true
+        words:
+          - "HttpOnly"

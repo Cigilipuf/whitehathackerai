@@ -1,0 +1,41 @@
+# ============================================================
+# WhiteHatHacker AI — Balanced Scan Profile
+# ============================================================
+# Dengeli hız/derinlik. Varsayılan profil.
+
+name: "balanced"
+description: "Balanced speed and depth — default profile"
+
+timing:
+  requests_per_second: 10
+  requests_per_host: 3
+  delay_between_tools: 2
+  jitter: false
+
+nmap:
+  flags: "-sV -sC -T3 --top-ports 1000 -Pn"
+  
+ffuf:
+  rate: 30
+  threads: 10
+  
+sqlmap:
+  level: 2
+  risk: 2
+  threads: 4
+  random_agent: true
+  
+gobuster:
+  threads: 10
+
+tool_selection:
+  disabled: []
+  preferred:
+    port_scan: "nmap"
+    directory: "ffuf"
+    
+concurrency:
+  max_parallel_tools: 5
+  
+timeouts:
+  multiplier: 1.0

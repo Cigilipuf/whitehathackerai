@@ -1,0 +1,32 @@
+id: whai-actuator-exposure
+
+info:
+  name: Spring Boot Actuator Endpoints
+  author: whitehat-ai
+  severity: high
+  description: Detects exposed Spring Boot Actuator management endpoints
+  tags: misconfig,spring,java,actuator,high
+  classification:
+    cwe-id: CWE-200
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/actuator"
+      - "{{BaseURL}}/actuator/env"
+      - "{{BaseURL}}/actuator/health"
+      - "{{BaseURL}}/actuator/heapdump"
+      - "{{BaseURL}}/manage/env"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"_links"'
+          - '"status":"UP"'
+          - '"propertySources"'
+        condition: or

@@ -1,0 +1,23 @@
+id: whai-verbose-error-logging
+
+info:
+  name: Verbose Error Messages in Production
+  author: whitehat-ai
+  severity: medium
+  description: Detects verbose error messages exposing internals
+  tags: logging,error,info-disclosure,medium
+  classification:
+    cwe-id: CWE-209
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/{{randstr}}"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(at line \\d+|file:.*\\.py|file:.*\\.java)"
+          - "(?i)(ECONNREFUSED|ETIMEDOUT|MongoError)"
+        condition: or

@@ -1,0 +1,54 @@
+id: whai-api-key-exposure
+
+info:
+  name: API Key Exposure in JavaScript/HTML
+  author: whitehat-ai
+  severity: high
+  description: Detects exposed API keys, tokens, and secrets in client-side code
+  tags: api-key,secret,exposure,information-disclosure
+  reference:
+    - https://owasp.org/www-project-web-security-testing-guide/
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+      - "{{BaseURL}}/app.js"
+      - "{{BaseURL}}/main.js"
+      - "{{BaseURL}}/bundle.js"
+      - "{{BaseURL}}/config.js"
+      - "{{BaseURL}}/env.js"
+      - "{{BaseURL}}/static/js/main.js"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(AKIA[0-9A-Z]{16})"
+          - "(?i)(AIza[0-9A-Za-z\\-_]{35})"
+          - "(?i)(sk-[a-zA-Z0-9]{20,})"
+          - "(?i)(sk_live_[a-zA-Z0-9]{20,})"
+          - "(?i)(pk_live_[a-zA-Z0-9]{20,})"
+          - "(?i)(ghp_[a-zA-Z0-9]{36})"
+          - "(?i)(gho_[a-zA-Z0-9]{36})"
+          - "(?i)(xox[bpsa]-[a-zA-Z0-9-]{10,})"
+          - "(?i)(sq0[a-z]{3}-[a-zA-Z0-9\\-_]{22,})"
+          - "(?i)(SG\\.[a-zA-Z0-9\\-_]{22,}\\.[a-zA-Z0-9\\-_]{22,})"
+          - "(?i)(eyJ[a-zA-Z0-9\\-_]{30,}\\.eyJ[a-zA-Z0-9\\-_]{30,})"
+          - "(?i)(glpat-[a-zA-Z0-9\\-_]{20,})"
+          - "(?i)(Bearer\\s+[a-zA-Z0-9\\-_.~+/]{20,})"
+          - "(?i)(api[_-]?key|api[_-]?secret|api[_-]?token)\\s*[:=]\\s*['\"][a-zA-Z0-9\\-_]{16,}['\"]"
+        condition: or
+
+    extractors:
+      - type: regex
+        part: body
+        regex:
+          - "AKIA[0-9A-Z]{16}"
+          - "AIza[0-9A-Za-z\\-_]{35}"
+          - "(?i)(api[_-]?key|api[_-]?secret)\\s*[:=]\\s*['\"][^'\"]{16,}['\"]"

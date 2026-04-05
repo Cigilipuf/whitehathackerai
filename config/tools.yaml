@@ -1,0 +1,482 @@
+# ============================================================
+# WhiteHatHacker AI — Güvenlik Araç Tanımları
+# ============================================================
+# Bu dosya sistemde kullanılan tüm güvenlik araçlarını,
+# kategorilerini, parametrelerini ve risk seviyelerini tanımlar.
+
+# ============================================================
+# Recon — Keşif Araçları
+# ============================================================
+recon:
+  subdomain:
+    amass:
+      binary: "amass"
+      category: "subdomain_enum"
+      risk_level: "safe"
+      requires_root: false
+      timeout: 1200
+      description: "Kapsamlı subdomain keşfi ve OSINT"
+      default_options:
+        passive_only: true
+        
+    subfinder:
+      binary: "subfinder"
+      category: "subdomain_enum"
+      risk_level: "safe"
+      requires_root: false
+      timeout: 1200
+      description: "Hızlı pasif subdomain keşfi"
+      available: false  # Go runtime gerekli
+      
+    assetfinder:
+      binary: "assetfinder"
+      category: "subdomain_enum"
+      risk_level: "safe"
+      requires_root: false
+      timeout: 1200
+      available: false  # Go runtime gerekli
+      
+    crt_sh:
+      binary: null  # API-based
+      category: "subdomain_enum"
+      risk_level: "safe"
+      requires_root: false
+      timeout: 1200
+      description: "Certificate Transparency log sorgusu"
+
+  port_scan:
+    nmap:
+      binary: "nmap"
+      category: "port_scan"
+      risk_level: "low"
+      requires_root: true  # SYN scan için
+      timeout: 1200
+      description: "Ağ tarama ve port keşfi"
+      profiles:
+        stealth:
+          flags: "-sS -T2 --top-ports 100 -Pn"
+        balanced:
+          flags: "-sV -sC -T3 --top-ports 1000 -Pn"
+        aggressive:
+          flags: "-sV -sC -A -T4 -p- -Pn"
+          
+    masscan:
+      binary: "masscan"
+      category: "port_scan"
+      risk_level: "medium"
+      requires_root: true
+      timeout: 1200
+      description: "Çok hızlı port tarama"
+      default_options:
+        rate: 1000  # paket/saniye
+        
+    rustscan:
+      binary: "rustscan"
+      category: "port_scan"
+      risk_level: "low"
+      requires_root: false
+      timeout: 1200
+      available: false  # Rust binary gerekli
+
+  web_discovery:
+    httpx:
+      binary: "httpx"
+      category: "web_probe"
+      risk_level: "safe"
+      requires_root: false
+      timeout: 1200
+      description: "HTTP probe ve canlılık kontrolü"
+      
+    waybackurls:
+      binary: "waybackurls"
+      category: "url_discovery"
+      risk_level: "safe"
+      requires_root: false
+      timeout: 1200
+      available: false  # Go
+      
+    gau:
+      binary: "gau"
+      category: "url_discovery"
+      risk_level: "safe"
+      requires_root: false
+      timeout: 1200
+      available: false  # Go
+      
+    katana:
+      binary: "katana"
+      category: "web_crawler"
+      risk_level: "low"
+      requires_root: false
+      timeout: 1200
+      available: false  # Go
+      
+    gospider:
+      binary: "gospider"
+      category: "web_crawler"
+      risk_level: "low"
+      requires_root: false
+      timeout: 1200
+      available: false  # Go
+      
+    hakrawler:
+      binary: "hakrawler"
+      category: "web_crawler"
+      risk_level: "low"
+      requires_root: false
+      timeout: 1200
+      available: false  # Go
+
+  dns:
+    dnsrecon:
+      binary: "dnsrecon"
+      category: "dns_enum"
+      risk_level: "safe"
+      requires_root: false
+      timeout: 1200
+      description: "DNS enumeration"
+      
+    dnsx:
+      binary: "dnsx"
+      category: "dns_enum"
+      risk_level: "safe"
+      requires_root: false
+      timeout: 1200
+      available: false  # Go
+      
+    dig:
+      binary: "dig"
+      category: "dns_query"
+      risk_level: "safe"
+      requires_root: false
+      timeout: 1200
+      
+    fierce:
+      binary: "fierce"
+      category: "dns_enum"
+      risk_level: "safe"
+      requires_root: false
+      timeout: 1200
+
+  osint:
+    theHarvester:
+      binary: "theHarvester"
+      category: "osint"
+      risk_level: "safe"
+      requires_root: false
+      timeout: 1200
+      description: "Email, subdomain ve bilgi toplama"
+      
+    shodan:
+      binary: null  # API-based
+      category: "osint"
+      risk_level: "safe"
+      requires_root: false
+      timeout: 1200
+      requires_api_key: true
+      env_var: "SHODAN_API_KEY"
+      
+    whois:
+      binary: "whois"
+      category: "osint"
+      risk_level: "safe"
+      requires_root: false
+      timeout: 1200
+
+  tech_detect:
+    whatweb:
+      binary: "whatweb"
+      category: "tech_detection"
+      risk_level: "safe"
+      requires_root: false
+      timeout: 1200
+      description: "Web teknoloji tespiti"
+      
+    wafw00f:
+      binary: "wafw00f"
+      category: "waf_detection"
+      risk_level: "safe"
+      requires_root: false
+      timeout: 1200
+      description: "WAF tespit aracı"
+
+# ============================================================
+# Scanners — Zafiyet Tarayıcıları
+# ============================================================
+scanners:
+  nuclei:
+    binary: "nuclei"
+    category: "vuln_scanner"
+    risk_level: "medium"
+    requires_root: false
+    timeout: 1800
+    available: false  # Go
+    description: "Template bazlı zafiyet tarama"
+    
+  nikto:
+    binary: "nikto"
+    category: "web_scanner"
+    risk_level: "medium"
+    requires_root: false
+    timeout: 1200
+    description: "Web sunucu zafiyet tarama"
+    
+  wpscan:
+    binary: "wpscan"
+    category: "cms_scanner"
+    risk_level: "low"
+    requires_root: false
+    timeout: 1200
+    description: "WordPress zafiyet tarama"
+    requires_api_key: true
+    env_var: "WPSCAN_API_TOKEN"
+    
+  sqlmap:
+    binary: "sqlmap"
+    category: "injection"
+    risk_level: "high"
+    requires_root: false
+    timeout: 1200
+    description: "SQL injection tespit ve exploit"
+    profiles:
+      stealth:
+        flags: "--level=1 --risk=1 --batch --random-agent"
+      balanced:
+        flags: "--level=2 --risk=2 --batch --threads=4"
+      aggressive:
+        flags: "--level=5 --risk=3 --batch --threads=8"
+        
+  commix:
+    binary: "commix"
+    category: "injection"
+    risk_level: "high"
+    requires_root: false
+    timeout: 1200
+    description: "Command injection tespit"
+    
+  xsstrike:
+    binary: "xsstrike"
+    category: "xss"
+    risk_level: "medium"
+    requires_root: false
+    timeout: 1200
+    available: false  # Özel Python paketi
+    
+  dalfox:
+    binary: "dalfox"
+    category: "xss"
+    risk_level: "medium"
+    requires_root: false
+    timeout: 1200
+    available: false  # Go
+    
+  ssrfmap:
+    binary: "ssrfmap"
+    category: "ssrf"
+    risk_level: "high"
+    requires_root: false
+    timeout: 1200
+    available: false
+    
+  tplmap:
+    binary: "tplmap"
+    category: "ssti"
+    risk_level: "high"
+    requires_root: false
+    timeout: 1200
+    available: false
+    
+  nosqlmap:
+    binary: "nosqlmap"
+    category: "injection"
+    risk_level: "high"
+    requires_root: false
+    timeout: 1200
+    available: false
+    
+  crlfuzz:
+    binary: "crlfuzz"
+    category: "crlf"
+    risk_level: "medium"
+    requires_root: false
+    timeout: 1200
+    available: false  # Go
+
+# ============================================================
+# Fuzzing
+# ============================================================
+fuzzing:
+  ffuf:
+    binary: "ffuf"
+    category: "fuzzing"
+    risk_level: "low"
+    requires_root: false
+    timeout: 1200
+    description: "Hızlı web fuzzer"
+    profiles:
+      stealth:
+        flags: "-rate 5 -t 2"
+      balanced:
+        flags: "-rate 30 -t 10"
+      aggressive:
+        flags: "-rate 100 -t 40"
+        
+  gobuster:
+    binary: "gobuster"
+    category: "directory_brute"
+    risk_level: "low"
+    requires_root: false
+    timeout: 1200
+    description: "Directory/DNS brute force"
+    
+  dirb:
+    binary: "dirb"
+    category: "directory_brute"
+    risk_level: "low"
+    requires_root: false
+    timeout: 1200
+    
+  feroxbuster:
+    binary: "feroxbuster"
+    category: "directory_brute"
+    risk_level: "low"
+    requires_root: false
+    timeout: 1200
+    available: false  # Rust
+    
+  wfuzz:
+    binary: "wfuzz"
+    category: "fuzzing"
+    risk_level: "low"
+    requires_root: false
+    timeout: 1200
+
+# ============================================================
+# Exploit
+# ============================================================
+exploit:
+  metasploit:
+    binary: "msfconsole"
+    category: "exploit_framework"
+    risk_level: "critical"
+    requires_root: false
+    timeout: 0  # interactive
+    description: "Penetration test framework"
+    
+  searchsploit:
+    binary: "searchsploit"
+    category: "exploit_db"
+    risk_level: "safe"
+    requires_root: false
+    timeout: 1200
+    description: "Exploit-DB arama"
+
+# ============================================================
+# Network
+# ============================================================
+network:
+  enum4linux:
+    binary: "enum4linux"
+    category: "smb_enum"
+    risk_level: "low"
+    requires_root: false
+    timeout: 1200
+    
+  smbclient:
+    binary: "smbclient"
+    category: "smb"
+    risk_level: "low"
+    requires_root: false
+    timeout: 1200
+    
+  snmpwalk:
+    binary: "snmpwalk"
+    category: "snmp"
+    risk_level: "safe"
+    requires_root: false
+    timeout: 1200
+    
+  ldapsearch:
+    binary: "ldapsearch"
+    category: "ldap"
+    risk_level: "safe"
+    requires_root: false
+    timeout: 1200
+    
+  netexec:
+    binary: "nxc"
+    category: "multi_service"
+    risk_level: "medium"
+    requires_root: false
+    timeout: 1200
+    description: "Network attack toolkit (CrackMapExec successor)"
+
+# ============================================================
+# Crypto / SSL
+# ============================================================
+crypto:
+  sslscan:
+    binary: "sslscan"
+    category: "ssl_analysis"
+    risk_level: "safe"
+    requires_root: false
+    timeout: 1200
+    
+  sslyze:
+    binary: "sslyze"
+    category: "ssl_analysis"
+    risk_level: "safe"
+    requires_root: false
+    timeout: 1200
+    
+  hydra:
+    binary: "hydra"
+    category: "password_attack"
+    risk_level: "high"
+    requires_root: false
+    timeout: 1200
+
+# ============================================================
+# Proxy
+# ============================================================
+proxy:
+  mitmproxy:
+    binary: "mitmdump"
+    category: "http_proxy"
+    risk_level: "low"
+    requires_root: false
+    timeout: 0  # interactive
+    description: "HTTP/HTTPS interception proxy"
+
+# ============================================================
+# Güvenlik Kuralları
+# ============================================================
+safety:
+  # Her komut öncesi kontroller
+  pre_execution_checks:
+    - scope_validation
+    - rate_limit_check
+    - risk_level_check
+    
+  # Tehlike seviyesine göre onay gereksinimi
+  approval_required:
+    safe: false
+    low: false
+    medium: false          # autonomous modda otonom
+    high: true             # semi-auto modda insan onayı
+    critical: true         # Her zaman insan onayı
+    
+  # Global limitler
+  limits:
+    max_parallel_tools: 5
+    max_requests_per_second: 10
+    max_requests_per_host: 3
+    
+  # Timeout varsayılanları (saniye)
+  timeouts:
+    recon_tool: 300
+    scanner: 600
+    nuclei_full: 1800
+    sqlmap: 900
+    nmap_full: 1200
+    fuzzer: 600

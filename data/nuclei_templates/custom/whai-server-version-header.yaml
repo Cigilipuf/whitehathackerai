@@ -1,0 +1,21 @@
+id: whai-server-version-header
+
+info:
+  name: Server Version Disclosure via Headers
+  author: whitehat-ai
+  severity: info
+  description: Server version leaked in response headers
+  tags: info-disclosure,header,info
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers:
+      - type: regex
+        part: header
+        regex:
+          - "(?i)Server:\\s*[a-zA-Z]+/[0-9]+\\.[0-9]+"
+          - "(?i)X-Powered-By:\\s*.+"
+        condition: or

@@ -1,0 +1,143 @@
+app:
+  name: WhiteHatHacker AI
+  version: 2.8.8
+  description: Autonomous Bug Bounty Hunter Bot
+mode: semi-autonomous
+scan_profile: balanced
+brain:
+  # ── BaronLLM v2 — Offensive Security LLM (Qwen3-14B, Q8_0) ──
+  # Tek model, dual-brain: /think (primary) ve /no_think (secondary)
+  # Base: Qwen3-14B | Params: 15B | SecBench MCQ: 86.9% | CS-Eval: 80.93
+  # HuggingFace: AlicanKiraz0/BaronLLM-v2-OffensiveSecurity-GGUF
+  primary:
+    name: BaronLLM-v2-Think
+    backend: remote
+    api_url: ${WHAI_PRIMARY_API_URL:-http://127.0.0.1:1239}
+    api_key: ${WHAI_PRIMARY_API_KEY:-}
+    model_name: baronllm-v2-offensivesecurityllm
+    model_path: ${WHAI_PRIMARY_MODEL_PATH:-}
+    context_length: 32768
+    gpu_layers: -1
+    threads: 8
+    temperature: 0.1
+    top_p: 0.9
+    top_k: 20
+    repeat_penalty: 1.1
+    max_tokens: 16384
+    batch_size: 512
+    timeout: 1200.0
+    thinking_mode: true           # /think prefix eklenir
+  secondary:
+    name: BaronLLM-v2-Fast
+    backend: remote
+    api_url: ${WHAI_SECONDARY_API_URL:-http://127.0.0.1:1239}
+    api_key: ${WHAI_SECONDARY_API_KEY:-}
+    model_name: baronllm-v2-offensivesecurityllm
+    model_path: ${WHAI_SECONDARY_MODEL_PATH:-}
+    context_length: 32768
+    gpu_layers: -1
+    threads: 8
+    temperature: 0.2
+    top_p: 0.95
+    top_k: 20
+    repeat_penalty: 1.05
+    max_tokens: 4096
+    batch_size: 512
+    timeout: 1200.0
+    thinking_mode: false           # /no_think prefix eklenir
+  # DeepHat-V1-7B — Lightweight fallback (Qwen2.5-Coder-7B base, Q4_K_M)
+  # Used ONLY when both primary & secondary are down
+  # HuggingFace: Neanderthal/DeepHat-V1-7B-GGUF
+  fallback:
+    name: DeepHat-V1-7B
+    backend: local                   # local (llama-cpp-python) or remote
+    api_url: ""                      # only if backend=remote
+    api_key: ""
+    model_name: ""
+    model_path: ${WHAI_FALLBACK_MODEL_PATH:-}  # e.g. models/deephat-v1-7b-q4_k_m.gguf
+    context_length: 8192
+    gpu_layers: -1
+    threads: 4
+    temperature: 0.3
+    top_p: 0.9
+    top_k: 40
+    repeat_penalty: 1.1
+    max_tokens: 1024
+    batch_size: 256
+    timeout: 60.0
+    thinking_mode: false
+  router:
+    default_brain: secondary
+    ensemble_strategy: majority_vote
+    fallback_brain: primary
+tools:
+  max_parallel: 5
+  default_timeout: 1200
+  retry_count: 2
+  retry_delay: 5
+  output_dir: output
+  rate_limit:
+    max_requests_per_second: 10
+    max_requests_per_host: 3
+    burst_size: 20
+    cooldown_period: 60
+scope:
+  strict_mode: true
+  verify_redirects: true
+  verify_ip_resolution: true
+  wildcard_subdomain_check: true
+  excluded_ports:
+  - 0
+  excluded_paths:
+  - /logout
+  - /delete
+  - /admin/destroy
+fp_engine:
+  confidence_thresholds:
+    auto_report: 90
+    high_confidence: 70
+    medium_confidence: 50
+    low_confidence: 30
+    fp_threshold: 29
+  multi_tool_verify:
+    enabled: true
+    min_confirmations: 2
+  waf_detection:
+    enabled: true
+    auto_compensate: true
+reporting:
+  default_format: markdown
+  default_platform: generic
+  auto_screenshot: true
+  include_http_logs: true
+  include_timeline: true
+  output_dir: output/reports
+notifications:
+  enabled: true
+  channels:
+    terminal: true
+    slack:
+      enabled: false
+      webhook_url: ${SLACK_WEBHOOK_URL}
+    telegram:
+      enabled: false
+      bot_token: ${TELEGRAM_BOT_TOKEN}
+      chat_id: ${TELEGRAM_CHAT_ID}
+database:
+  path: ${DATABASE_URL:-output/whai.db}
+  echo: false
+logging:
+  level: DEBUG
+  format: structured
+  log_dir: output/logs
+  rotation: 50 MB
+  retention: 30 days
+  serialize: true
+  dev_mode: true
+api:
+  host: 127.0.0.1
+  port: 8443
+  reload: false
+  workers: 1
+  cors_origins:
+  - http://localhost:3000

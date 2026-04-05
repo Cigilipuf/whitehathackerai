@@ -1,0 +1,28 @@
+id: whai-git-exposure
+
+info:
+  name: Git Repository Exposure
+  author: whitehat-ai
+  severity: high
+  description: Detects exposed .git directories
+  tags: misconfig,git,source-code,high
+  classification:
+    cwe-id: CWE-538
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/.git/config"
+      - "{{BaseURL}}/.git/HEAD"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "[core]"
+          - "ref: refs/"
+        condition: or

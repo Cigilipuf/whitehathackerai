@@ -1,0 +1,39 @@
+id: custom-idor-vimeo-video-api
+info:
+  name: Vimeo Video API IDOR Vulnerability Check
+  author: whitehat-ai
+  severity: high
+  description: Tests for Insecure Direct Object Reference vulnerability in Vimeo's video endpoint through user_id parameter manipulation
+  tags: idor,broken-access-control
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/v1/videos"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "\"success\":true"
+          - "video_id"
+        part: body
+      - type: status
+        status:
+          - 200
+    extractors:
+      - type: regex
+        name: video-data
+        regex:
+          - "(?i)\"video_id\":\\s*\"([^\"]+)\""
+        part: body
+
+payloads:
+  user_id:
+    - "1234567890" # Test with numeric payload
+    - "user-12345" # Test with alphanumeric format
+    - "-1"         # Test negative value access
+    - "admin"      # Test string-based privilege escalation
+
+encoders:
+  encode: base64-url
+  iterations: 2

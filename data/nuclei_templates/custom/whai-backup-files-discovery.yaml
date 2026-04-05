@@ -1,0 +1,57 @@
+id: whai-backup-files-discovery
+
+info:
+  name: Backup and Archive File Discovery
+  author: whitehat-ai
+  severity: medium
+  description: Discovers exposed backup/archive files that may contain sensitive data
+  tags: backup,exposure,file,misconfiguration
+  reference:
+    - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/04-Review_Old_Backup_and_Unreferenced_Files_for_Sensitive_Information
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/backup.sql"
+      - "{{BaseURL}}/backup.sql.gz"
+      - "{{BaseURL}}/backup.zip"
+      - "{{BaseURL}}/backup.tar.gz"
+      - "{{BaseURL}}/db_backup.sql"
+      - "{{BaseURL}}/database.sql"
+      - "{{BaseURL}}/dump.sql"
+      - "{{BaseURL}}/site.zip"
+      - "{{BaseURL}}/www.zip"
+      - "{{BaseURL}}/web.zip"
+      - "{{BaseURL}}/archive.zip"
+      - "{{BaseURL}}/old.zip"
+      - "{{BaseURL}}/public.zip"
+      - "{{BaseURL}}/backup.tar"
+      - "{{BaseURL}}/site.tar.gz"
+      - "{{BaseURL}}/files.tar.gz"
+      - "{{BaseURL}}/backup.rar"
+      - "{{BaseURL}}/1.sql"
+      - "{{BaseURL}}/data.sql"
+      - "{{BaseURL}}/export.sql"
+
+    stop-at-first-match: false
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(CREATE TABLE|INSERT INTO|DROP TABLE|ALTER TABLE)"
+          - "(?i)(mysqldump|pg_dump|-- Dump)"
+          - "^PK\\x03\\x04"
+          - "^\\x1f\\x8b"
+          - "^Rar!"
+        condition: or
+
+      - type: word
+        negative: true
+        part: header
+        words:
+          - "text/html"

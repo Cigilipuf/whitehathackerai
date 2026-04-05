@@ -1,0 +1,61 @@
+id: whai-debug-endpoints
+
+info:
+  name: Debug Endpoint Exposure
+  author: whitehat-ai
+  severity: high
+  description: Detects exposed debug endpoints, stack traces, and development tools
+  tags: debug,exposure,information-disclosure
+  reference:
+    - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/__debug__/"
+      - "{{BaseURL}}/debug/"
+      - "{{BaseURL}}/debug/default/view"
+      - "{{BaseURL}}/debug/pprof/"
+      - "{{BaseURL}}/_debugbar"
+      - "{{BaseURL}}/_profiler/"
+      - "{{BaseURL}}/actuator"
+      - "{{BaseURL}}/actuator/env"
+      - "{{BaseURL}}/actuator/health"
+      - "{{BaseURL}}/actuator/info"
+      - "{{BaseURL}}/actuator/configprops"
+      - "{{BaseURL}}/actuator/beans"
+      - "{{BaseURL}}/actuator/mappings"
+      - "{{BaseURL}}/actuator/heapdump"
+      - "{{BaseURL}}/trace"
+      - "{{BaseURL}}/metrics"
+      - "{{BaseURL}}/info"
+      - "{{BaseURL}}/health"
+      - "{{BaseURL}}/env"
+      - "{{BaseURL}}/.well-known/openid-configuration"
+      - "{{BaseURL}}/server-status"
+      - "{{BaseURL}}/server-info"
+      - "{{BaseURL}}/phpinfo.php"
+      - "{{BaseURL}}/info.php"
+      - "{{BaseURL}}/test.php"
+      - "{{BaseURL}}/elmah.axd"
+      - "{{BaseURL}}/telescope"
+      - "{{BaseURL}}/_ignition/health-check"
+
+    stop-at-first-match: false
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(phpinfo|php version|configuration|environment)"
+          - "(?i)(debug|debugbar|profiler|stack.?trace|traceback)"
+          - "(?i)(actuator|spring|heapdump|beans|mappings)"
+          - "(?i)(server.?status|apache|nginx|version)"
+          - "(?i)(pprof|goroutine|allocs|heap)"
+          - "(?i)(telescope|ignition)"
+          - "(?i)(application\\.properties|spring\\.datasource)"
+        condition: or

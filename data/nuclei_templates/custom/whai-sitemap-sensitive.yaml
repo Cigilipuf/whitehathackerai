@@ -1,0 +1,20 @@
+id: whai-sitemap-sensitive
+
+info:
+  name: Sensitive URLs in Sitemap/Robots
+  author: whitehat-ai
+  severity: info
+  description: Finds sensitive paths in robots.txt and sitemap.xml
+  tags: discovery,info
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/robots.txt"
+      - "{{BaseURL}}/sitemap.xml"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(admin|secret|internal|staging|test|debug|backup)"

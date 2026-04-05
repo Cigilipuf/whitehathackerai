@@ -1,0 +1,211 @@
+# ============================================================
+# WhiteHatHacker AI — Comprehensive .gitignore
+# ============================================================
+# Bu dosya, hassas bilgiler, büyük dosyalar ve runtime verileri
+# git'e eklenmesini önler. HER ZAMAN gözden geçirilmelidir.
+# ============================================================
+
+# ─────────────────────────────────────────────────────────
+# 1. ENVIRONMENT & SECRETS — KRİTİK
+# ─────────────────────────────────────────────────────────
+# Gerçek API anahtarları, tokenler, şifreler içerir
+.env
+.env.*
+!.env.example
+*.secret
+*.secrets
+.secrets/
+credentials/
+*.credential
+
+# ─────────────────────────────────────────────────────────
+# 2. PRIVATE KEYS & CERTIFICATES
+# ─────────────────────────────────────────────────────────
+*.key
+*.pem
+*.cert
+*.crt
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.truststore
+id_rsa
+id_ed25519
+id_ecdsa
+*.ppk
+
+# ─────────────────────────────────────────────────────────
+# 3. LLM MODELS (büyük dosyalar, 1-20+ GB)
+# ─────────────────────────────────────────────────────────
+models/*.gguf
+models/*.bin
+models/*.safetensors
+models/*.ggml
+models/*.pt
+models/*.pth
+models/*.onnx
+models/*.tflite
+models/*.h5
+models/*.hdf5
+
+# ─────────────────────────────────────────────────────────
+# 4. OUTPUT & RUNTIME DATA
+# ─────────────────────────────────────────────────────────
+# Tarama sonuçları, raporlar, oturumlar, kanıtlar
+output/
+*.log
+
+# ─────────────────────────────────────────────────────────
+# 5. DATABASES
+# ─────────────────────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+*.sqlite-shm
+*.sqlite-wal
+*.db-journal
+
+# ─────────────────────────────────────────────────────────
+# 6. SCOPE FILES (gerçek hedefler — sadece örnek dosya izlenir)
+# ─────────────────────────────────────────────────────────
+config/scopes/*
+!config/scopes/example_scope.yaml
+
+# ─────────────────────────────────────────────────────────
+# 7. Python
+# ─────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+*.whl
+
+# ─────────────────────────────────────────────────────────
+# 8. Virtual Environment
+# ─────────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+# ─────────────────────────────────────────────────────────
+# 9. IDE / Editors
+# ─────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+.project
+.classpath
+.settings/
+nbproject/
+
+# ─────────────────────────────────────────────────────────
+# 10. OS Files
+# ─────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ─────────────────────────────────────────────────────────
+# 11. Docker
+# ─────────────────────────────────────────────────────────
+docker/data/
+
+# ─────────────────────────────────────────────────────────
+# 12. External Wordlists (indirilen büyük dosyalar)
+# ─────────────────────────────────────────────────────────
+data/wordlists/seclists/
+data/wordlists/custom/
+
+# ─────────────────────────────────────────────────────────
+# 13. Test / Coverage / Typing
+# ─────────────────────────────────────────────────────────
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.hypothesis/
+*.cover
+*.py,cover
+nosetests.xml
+coverage.xml
+junit.xml
+test-results/
+
+# ─────────────────────────────────────────────────────────
+# 14. Package Managers
+# ─────────────────────────────────────────────────────────
+pip-log.txt
+pip-delete-this-directory.txt
+*.lock
+!poetry.lock
+!Pipfile.lock
+
+# ─────────────────────────────────────────────────────────
+# 15. Benchmark / Calibration Data
+# ─────────────────────────────────────────────────────────
+data/benchmark/results/
+data/benchmark/*.json
+!data/benchmark/manifests.json
+
+# ─────────────────────────────────────────────────────────
+# 16. Misc
+# ─────────────────────────────────────────────────────────
+*.bak
+*.orig
+*.tmp
+*.temp
+*.pid
+core
+core.*
+/-
+
+# ─────────────────────────────────────────────────────────
+# 17. INTERNAL DEVELOPMENT ARTIFACTS
+# ─────────────────────────────────────────────────────────
+# One-time hotfix scripts — not part of the running tool
+scripts/archive/
+
+# Internal iteration plans, code audits, archived prompts
+docs/plans/
+docs/audits/
+docs/archive/
+
+# Disabled / broken nuclei templates
+data/nuclei_templates/custom/_disabled/
+
+# Target-specific nuclei templates (real bug bounty targets)
+data/nuclei_templates/custom/*coinbase*
+data/nuclei_templates/custom/*uber*
+data/nuclei_templates/custom/*vimeo*
+data/nuclei_templates/custom/*gravatar*
+data/nuclei_templates/custom/*shopify*
+data/nuclei_templates/custom/*dropbox*
+data/nuclei_templates/custom/*gitlab*
+
+# Local desktop shortcut with hardcoded paths
+*.desktop
+
+# Password wordlists
+data/wordlists/passwords.txt

@@ -1,0 +1,32 @@
+id: whai-csrf-no-token
+
+info:
+  name: Missing CSRF Token on State-Changing Form
+  author: whitehat-ai
+  severity: medium
+  description: Detects forms without CSRF protection
+  tags: csrf,auth,medium
+  classification:
+    cwe-id: CWE-352
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/settings"
+      - "{{BaseURL}}/profile/edit"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: body
+        words:
+          - '<form'
+          - 'method="post"'
+        condition: and
+      - type: word
+        part: body
+        negative: true
+        words:
+          - "csrf"
+          - "_token"
+          - "authenticity_token"

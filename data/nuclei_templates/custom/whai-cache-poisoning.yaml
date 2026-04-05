@@ -1,0 +1,75 @@
+id: whai-cache-poisoning
+
+info:
+  name: Web Cache Poisoning Detection
+  author: whitehat-ai
+  severity: high
+  description: Detects web cache poisoning via unkeyed headers and parameters
+  tags: cache-poisoning,web-cache,xss
+  reference:
+    - https://portswigger.net/research/practical-web-cache-poisoning
+    - https://portswigger.net/research/web-cache-entanglement
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+    headers:
+      X-Forwarded-Host: "evil-whaitest.com"
+      X-Forwarded-Scheme: "nothttps"
+      X-Forwarded-Port: "1337"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)evil-whaitest\\.com"
+          - "(?i)nothttps"
+          - "(?i):1337"
+        condition: or
+
+      - type: regex
+        part: header
+        regex:
+          - "(?i)(x-cache|cf-cache-status|age|x-varnish|x-proxy-cache):"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/?cb={{randstr}}"
+    headers:
+      X-Original-URL: "/whai-cache-test"
+      X-Rewrite-URL: "/whai-cache-test"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)whai-cache-test"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/?utm_content=whai<test>"
+      - "{{BaseURL}}/?_=${whai}"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "whai<test>"
+          - "\\$\\{whai\\}"
+        condition: or

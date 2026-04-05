@@ -1,0 +1,28 @@
+id: whai-wp-debug-log
+
+info:
+  name: WordPress Debug Log Exposure
+  author: whitehat-ai
+  severity: high
+  description: Detects exposed WordPress debug.log
+  tags: wordpress,log,info-disclosure,high
+  classification:
+    cwe-id: CWE-532
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/wp-content/debug.log"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "PHP Notice"
+          - "PHP Warning"
+          - "PHP Fatal"
+        condition: or

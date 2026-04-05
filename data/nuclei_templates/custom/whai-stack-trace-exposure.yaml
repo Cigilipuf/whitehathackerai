@@ -1,0 +1,27 @@
+id: whai-stack-trace-exposure
+
+info:
+  name: Stack Trace Information Disclosure
+  author: whitehat-ai
+  severity: medium
+  description: Detects stack trace exposure in error pages
+  tags: misconfig,stack-trace,info-disclosure,medium
+  classification:
+    cwe-id: CWE-209
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/{{randstr}}"
+      - "{{BaseURL}}/api/{{randstr}}"
+      - "{{BaseURL}}/%00"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(Traceback \\(most recent call last\\))"
+          - "(?i)(at [a-zA-Z0-9_]+\\.[a-zA-Z0-9_]+\\(.*\\.java:\\d+\\))"
+          - "(?i)(in .+\\.php on line \\d+)"
+          - "(?i)(node_modules|at Module\\._compile)"
+        condition: or

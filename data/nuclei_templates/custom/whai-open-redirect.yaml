@@ -1,0 +1,49 @@
+id: whai-open-redirect
+
+info:
+  name: Open Redirect Detection
+  author: whitehat-ai
+  severity: medium
+  description: Detects open redirect vulnerabilities via common redirect parameters
+  tags: redirect,open-redirect,owasp
+  reference:
+    - https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?url=https://evil-whaitest.com"
+      - "{{BaseURL}}/?redirect=https://evil-whaitest.com"
+      - "{{BaseURL}}/?redirect_url=https://evil-whaitest.com"
+      - "{{BaseURL}}/?redirect_uri=https://evil-whaitest.com"
+      - "{{BaseURL}}/?return=https://evil-whaitest.com"
+      - "{{BaseURL}}/?return_url=https://evil-whaitest.com"
+      - "{{BaseURL}}/?returnTo=https://evil-whaitest.com"
+      - "{{BaseURL}}/?next=https://evil-whaitest.com"
+      - "{{BaseURL}}/?goto=https://evil-whaitest.com"
+      - "{{BaseURL}}/?dest=https://evil-whaitest.com"
+      - "{{BaseURL}}/?destination=https://evil-whaitest.com"
+      - "{{BaseURL}}/?continue=https://evil-whaitest.com"
+      - "{{BaseURL}}/?target=https://evil-whaitest.com"
+      - "{{BaseURL}}/?rurl=https://evil-whaitest.com"
+      - "{{BaseURL}}/?forward=https://evil-whaitest.com"
+      - "{{BaseURL}}/login?next=https://evil-whaitest.com"
+      - "{{BaseURL}}/logout?redirect=https://evil-whaitest.com"
+      - "{{BaseURL}}/auth?callback=https://evil-whaitest.com"
+
+    redirects: false
+    max-redirects: 0
+    matchers-condition: or
+    matchers:
+      - type: regex
+        part: header
+        regex:
+          - "(?i)location:\\s*https?://evil-whaitest\\.com"
+
+      - type: status
+        status:
+          - 301
+          - 302
+          - 303
+          - 307
+          - 308

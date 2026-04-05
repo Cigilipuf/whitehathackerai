@@ -1,0 +1,24 @@
+id: whai-insecure-cors-subdomain
+
+info:
+  name: CORS Trusts All Subdomains
+  author: whitehat-ai
+  severity: medium
+  description: Tests if CORS trusts any subdomain (*.target.com)
+  tags: cors,subdomain,medium
+  classification:
+    cwe-id: CWE-942
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/user"
+
+    headers:
+      Origin: "https://evil.{{Hostname}}"
+
+    matchers:
+      - type: regex
+        part: header
+        regex:
+          - "Access-Control-Allow-Origin:.*evil\\."

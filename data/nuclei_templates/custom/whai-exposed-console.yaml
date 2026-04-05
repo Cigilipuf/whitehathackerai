@@ -1,0 +1,30 @@
+id: whai-exposed-console
+
+info:
+  name: Exposed Web Console (Werkzeug/Rails/H2)
+  author: whitehat-ai
+  severity: critical
+  description: Detects exposed debug consoles
+  tags: console,rce,debug,critical
+  classification:
+    cwe-id: CWE-489
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/console"
+      - "{{BaseURL}}/__debugger__"
+      - "{{BaseURL}}/h2-console"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "Console"
+          - "debugger"
+          - "h2-console"
+        condition: or

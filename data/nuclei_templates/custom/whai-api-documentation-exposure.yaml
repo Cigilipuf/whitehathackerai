@@ -1,0 +1,53 @@
+id: whai-api-documentation-exposure
+
+info:
+  name: API Documentation Exposure
+  author: whitehat-ai
+  severity: low
+  description: Detects exposed API documentation endpoints (Swagger, OpenAPI, Redoc, Postman)
+  tags: api,documentation,swagger,openapi,exposure
+  reference:
+    - https://owasp.org/www-project-api-security/
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/swagger"
+      - "{{BaseURL}}/swagger/"
+      - "{{BaseURL}}/swagger-ui.html"
+      - "{{BaseURL}}/swagger-ui/"
+      - "{{BaseURL}}/swagger/v1/swagger.json"
+      - "{{BaseURL}}/swagger/v2/swagger.json"
+      - "{{BaseURL}}/api-docs"
+      - "{{BaseURL}}/api-docs/"
+      - "{{BaseURL}}/v2/api-docs"
+      - "{{BaseURL}}/v3/api-docs"
+      - "{{BaseURL}}/openapi.json"
+      - "{{BaseURL}}/openapi.yaml"
+      - "{{BaseURL}}/api/openapi.json"
+      - "{{BaseURL}}/api/swagger.json"
+      - "{{BaseURL}}/api/docs"
+      - "{{BaseURL}}/docs"
+      - "{{BaseURL}}/redoc"
+      - "{{BaseURL}}/api/redoc"
+      - "{{BaseURL}}/apidocs"
+      - "{{BaseURL}}/_catalog"
+      - "{{BaseURL}}/api/v1/swagger.json"
+      - "{{BaseURL}}/api/v2/swagger.json"
+      - "{{BaseURL}}/api/spec"
+
+    stop-at-first-match: false
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(swagger|openapi|\"info\".*\"title\"|\"paths\")"
+          - "(?i)(api-docs|swagger-ui|swagger-resources)"
+          - "(?i)(\"basePath\"|\"host\"|\"schemes\")"
+          - "(?i)(swagger-ui-bundle|swagger-editor)"
+        condition: or

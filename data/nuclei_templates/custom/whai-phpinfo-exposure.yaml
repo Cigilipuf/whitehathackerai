@@ -1,0 +1,29 @@
+id: whai-phpinfo-exposure
+
+info:
+  name: PHP Info Page Exposure
+  author: whitehat-ai
+  severity: medium
+  description: Detects exposed phpinfo() pages
+  tags: misconfig,php,info-disclosure,medium
+  classification:
+    cwe-id: CWE-200
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/phpinfo.php"
+      - "{{BaseURL}}/info.php"
+      - "{{BaseURL}}/php_info.php"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "phpinfo()"
+          - "PHP Version"
+        condition: and

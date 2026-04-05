@@ -1,0 +1,56 @@
+id: whai-oauth-misconfiguration
+
+info:
+  name: OAuth Misconfiguration Detection
+  author: whitehat-ai
+  severity: high
+  description: Detects OAuth/OIDC misconfigurations including open redirect in callbacks and token leakage
+  tags: oauth,authentication,misconfiguration,oidc
+  reference:
+    - https://portswigger.net/web-security/oauth
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/oauth/authorize?response_type=code&client_id=test&redirect_uri=https://evil-whaitest.com/callback"
+      - "{{BaseURL}}/oauth2/authorize?response_type=code&client_id=test&redirect_uri=https://evil-whaitest.com/callback"
+      - "{{BaseURL}}/auth/authorize?response_type=code&client_id=test&redirect_uri=https://evil-whaitest.com/callback"
+      - "{{BaseURL}}/connect/authorize?response_type=code&client_id=test&redirect_uri=https://evil-whaitest.com/callback"
+
+    redirects: false
+    max-redirects: 0
+    matchers-condition: or
+    matchers:
+      - type: regex
+        part: header
+        regex:
+          - "(?i)location:.*evil-whaitest\\.com"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/.well-known/openid-configuration"
+      - "{{BaseURL}}/.well-known/oauth-authorization-server"
+      - "{{BaseURL}}/oauth/token"
+      - "{{BaseURL}}/.well-known/jwks.json"
+      - "{{BaseURL}}/oauth2/.well-known/openid-configuration"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(issuer|authorization_endpoint|token_endpoint|jwks_uri)"
+          - "(?i)(\"keys\".*\"kty\".*\"n\")"
+        condition: or
+
+    extractors:
+      - type: regex
+        part: body
+        regex:
+          - "\"issuer\":\\s*\"([^\"]+)\""
+          - "\"token_endpoint\":\\s*\"([^\"]+)\""
+          - "\"authorization_endpoint\":\\s*\"([^\"]+)\""

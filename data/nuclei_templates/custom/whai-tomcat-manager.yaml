@@ -1,0 +1,29 @@
+id: whai-tomcat-manager
+
+info:
+  name: Apache Tomcat Manager Exposure
+  author: whitehat-ai
+  severity: high
+  description: Detects Tomcat manager application
+  tags: tomcat,java,misconfig,high
+  classification:
+    cwe-id: CWE-306
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/manager/html"
+      - "{{BaseURL}}/host-manager/html"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+          - 401
+      - type: word
+        part: body
+        words:
+          - "Tomcat"
+          - "Manager App"
+        condition: or

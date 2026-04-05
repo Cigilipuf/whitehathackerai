@@ -1,0 +1,140 @@
+# WhiteHatHacker AI — Custom Scan Profile
+# Copy this file and modify for your specific needs
+# Usage: python -m src.main scan --target example.com --profile custom
+
+profile:
+  name: custom
+  description: "Fully customizable scan profile"
+
+# ── Timing & Rate Limits ──
+timing:
+  requests_per_second: 5          # Global rate limit
+  requests_per_host: 3            # Per-host rate limit
+  delay_between_tools_ms: 500     # Delay between tool invocations
+  max_scan_duration_minutes: 180  # Total scan timeout (0 = unlimited)
+
+# ── Tool Timeouts (seconds) ──
+timeouts:
+  recon_tool: 300
+  port_scan: 600
+  web_crawler: 300
+  vulnerability_scanner: 600
+  nuclei_full: 1800
+  sqlmap: 900
+  fuzzer: 600
+  default: 300
+
+# ── Concurrency ──
+concurrency:
+  max_parallel_tools: 5
+  max_parallel_hosts: 3
+  max_threads_per_tool: 10
+
+# ── Stage Configuration ──
+stages:
+  scope_analysis:
+    enabled: true
+
+  passive_recon:
+    enabled: true
+    subdomain_tools:
+      - amass
+      - subfinder
+      - crt_sh
+      - assetfinder
+    osint_tools:
+      - theHarvester
+      - shodan
+      - whois
+    dns_tools:
+      - dnsrecon
+      - dnsx
+    archive_tools:
+      - waybackurls
+      - gau
+
+  active_recon:
+    enabled: true
+    http_probe: true
+    port_scan:
+      enabled: true
+      strategy: "top_1000"        # top_100 | top_1000 | full | custom
+      custom_ports: ""            # e.g., "80,443,8080,8443"
+    web_crawl:
+      enabled: true
+      max_depth: 3
+      max_pages: 500
+    tech_detect: true
+    directory_brute:
+      enabled: true
+      wordlist: "data/wordlists/directories.txt"
+      extensions: ".php,.asp,.aspx,.jsp,.html,.js,.json,.xml,.txt,.bak,.old"
+
+  enumeration:
+    enabled: true
+    parameter_discovery: true
+    javascript_analysis: true
+    api_discovery: true
+    auth_analysis: true
+
+  attack_surface_mapping:
+    enabled: true
+
+  vulnerability_scan:
+    enabled: true
+    scan_types:
+      sqli: true
+      xss: true
+      ssrf: true
+      ssti: true
+      command_injection: true
+      idor: true
+      cors: true
+      open_redirect: true
+      crlf: true
+      jwt: true
+      request_smuggling: true
+      business_logic: true
+      race_condition: true
+      rate_limit_bypass: true
+    nuclei:
+      enabled: true
+      severity: "low,medium,high,critical"
+      templates: "default"        # default | all | custom
+      custom_template_dir: "data/nuclei_templates/custom/"
+
+  fp_elimination:
+    enabled: true
+    min_confidence_to_report: 70
+    require_multi_tool_confirm: true
+    min_tools_to_confirm: 2
+
+  reporting:
+    enabled: true
+    format: "markdown"            # markdown | html | pdf | json
+    template: "hackerone"         # hackerone | bugcrowd | generic
+    include_evidence: true
+    include_screenshots: true
+
+  platform_submit:
+    enabled: false                # Enable when ready for auto-submit
+    platform: "hackerone"
+    min_confidence_auto_submit: 90
+    draft_mode: true              # true = save as draft only
+
+  knowledge_update:
+    enabled: true
+
+# ── Brain Configuration Override ──
+brain:
+  primary_temperature: 0.1
+  secondary_temperature: 0.2
+  max_tokens: 2048
+  use_both_for_critical: true
+
+# ── Notification ──
+notification:
+  on_finding: true                # Notify on each verified finding
+  on_stage_complete: false        # Notify on stage completion
+  on_scan_complete: true          # Notify when scan finishes
+  min_severity_to_notify: "medium"  # low | medium | high | critical

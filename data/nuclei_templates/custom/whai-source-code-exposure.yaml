@@ -1,0 +1,66 @@
+id: whai-source-code-exposure
+
+info:
+  name: Source Code Exposure via Source Maps and Backup Extensions
+  author: whitehat-ai
+  severity: high
+  description: Detects exposed source maps, backup files, and source code artifacts
+  tags: source-code,exposure,sourcemap,information-disclosure
+  reference:
+    - https://owasp.org/www-project-web-security-testing-guide/
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/main.js.map"
+      - "{{BaseURL}}/app.js.map"
+      - "{{BaseURL}}/bundle.js.map"
+      - "{{BaseURL}}/vendor.js.map"
+      - "{{BaseURL}}/static/js/main.js.map"
+      - "{{BaseURL}}/static/js/bundle.js.map"
+      - "{{BaseURL}}/assets/js/app.js.map"
+      - "{{BaseURL}}/dist/main.js.map"
+
+    stop-at-first-match: false
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "\"sources\":\\s*\\["
+          - "\"sourcesContent\":\\s*\\["
+          - "\"mappings\":\\s*\""
+        condition: or
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/index.php~"
+      - "{{BaseURL}}/index.php.bak"
+      - "{{BaseURL}}/index.php.old"
+      - "{{BaseURL}}/index.php.save"
+      - "{{BaseURL}}/index.php.swp"
+      - "{{BaseURL}}/.index.php.swp"
+      - "{{BaseURL}}/index.php.orig"
+      - "{{BaseURL}}/config.php~"
+      - "{{BaseURL}}/config.php.bak"
+      - "{{BaseURL}}/application.yml.bak"
+      - "{{BaseURL}}/settings.py.bak"
+      - "{{BaseURL}}/settings.py~"
+
+    stop-at-first-match: false
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: regex
+        part: body
+        regex:
+          - "(?i)(<\\?php|function\\s+\\w+|class\\s+\\w+|import\\s+|from\\s+.*import|require\\()"
+          - "(?i)(password|secret|database|DB_|api_key)"
+        condition: or

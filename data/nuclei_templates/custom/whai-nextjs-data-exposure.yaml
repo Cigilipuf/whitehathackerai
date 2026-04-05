@@ -1,0 +1,21 @@
+id: whai-nextjs-data-exposure
+
+info:
+  name: Next.js Data Exposure
+  author: whitehat-ai
+  severity: medium
+  description: Probes Next.js __NEXT_DATA__ for data leaks
+  tags: nextjs,react,javascript,medium
+  classification:
+    cwe-id: CWE-200
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - '__NEXT_DATA__.*"props".*"pageProps"'

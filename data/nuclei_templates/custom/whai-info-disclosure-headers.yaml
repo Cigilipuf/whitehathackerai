@@ -1,0 +1,52 @@
+id: whai-information-disclosure-headers
+
+info:
+  name: Server Information Disclosure via Headers
+  author: whitehat-ai
+  severity: info
+  description: Extracts server version, technology stack, and internal IP information from response headers
+  tags: information-disclosure,headers,fingerprint
+  reference:
+    - https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/01-Information_Gathering/
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers-condition: or
+    matchers:
+      - type: regex
+        part: header
+        regex:
+          - "(?i)server:\\s*(apache|nginx|iis|lighttpd|tomcat|jetty|gunicorn|uvicorn|werkzeug)"
+      
+      - type: regex
+        part: header
+        regex:
+          - "(?i)x-powered-by:\\s*(php|asp\\.net|express|django|flask|ruby|spring)"
+
+      - type: regex
+        part: header
+        regex:
+          - "(?i)(x-aspnet-version|x-aspnetmvc-version):"
+
+      - type: regex
+        part: header
+        regex:
+          - "(?i)x-debug-token:"
+
+      - type: regex
+        part: header
+        regex:
+          - "(10\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|172\\.(1[6-9]|2[0-9]|3[01])\\.\\d{1,3}\\.\\d{1,3}|192\\.168\\.\\d{1,3}\\.\\d{1,3})"
+
+    extractors:
+      - type: regex
+        part: header
+        regex:
+          - "(?i)server:\\s*(.+)"
+          - "(?i)x-powered-by:\\s*(.+)"
+          - "(?i)x-aspnet-version:\\s*(.+)"
+          - "(?i)x-aspnetmvc-version:\\s*(.+)"
+          - "(?i)x-generator:\\s*(.+)"

@@ -1,0 +1,20 @@
+id: custom-nodejs-module-exposure-check
+info:
+  name: Node.js Module Exposure via Path Traversal
+  author: custom
+  severity: medium
+  description: Detects exposure of Node.js modules through path traversal in module loading endpoints.
+  tags: nodejs,module-exposure,path-traversal
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/node_modules/express/package.json"
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "express"
+        part: body
+      - type: status
+        status:
+          - 200

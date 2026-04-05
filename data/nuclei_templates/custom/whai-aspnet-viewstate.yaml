@@ -1,0 +1,22 @@
+id: whai-aspnet-viewstate
+
+info:
+  name: ASP.NET ViewState Detection
+  author: whitehat-ai
+  severity: high
+  description: Detects ASP.NET ViewState which may be vulnerable to deserialization
+  tags: aspnet,dotnet,viewstate,high
+  classification:
+    cwe-id: CWE-502
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+      - "{{BaseURL}}/default.aspx"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - '__VIEWSTATE.*value="[a-zA-Z0-9+/=]{20,}"'

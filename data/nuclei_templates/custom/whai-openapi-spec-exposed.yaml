@@ -1,0 +1,32 @@
+id: whai-openapi-spec-exposed
+
+info:
+  name: OpenAPI/Swagger Specification Exposed
+  author: whitehat-ai
+  severity: medium
+  description: Detects exposed OpenAPI/Swagger spec files
+  tags: api,swagger,openapi,medium
+  classification:
+    cwe-id: CWE-200
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/swagger.json"
+      - "{{BaseURL}}/openapi.json"
+      - "{{BaseURL}}/v1/swagger.json"
+      - "{{BaseURL}}/v2/swagger.json"
+      - "{{BaseURL}}/api/swagger.json"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - '"openapi"'
+          - '"swagger"'
+          - '"paths"'
+        condition: or
